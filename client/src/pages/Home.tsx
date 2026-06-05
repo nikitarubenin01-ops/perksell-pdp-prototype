@@ -72,21 +72,18 @@ function SellerAvatar({ seller, size = 32 }: { seller: Seller; size?: number }) 
   );
 }
 
+// DeliveryBadge: instant is the norm — only flag the exception (manual)
+// Baymard: marking the standard creates noise; mark the deviation instead
 function DeliveryBadge({ mode }: { mode: "instant" | "manual" }) {
-  if (mode === "instant") {
+  if (mode === "manual") {
     return (
-      <span className="inline-flex items-center gap-1 text-[11px] font-medium text-[oklch(0.52_0.18_145)] bg-[oklch(0.95_0.05_145)] px-1.5 py-0.5 rounded-full">
-        <Zap size={9} strokeWidth={2.5} />
-        Instant
+      <span className="inline-flex items-center gap-1 text-[11px] font-medium text-[oklch(0.55_0.18_255)] bg-[oklch(0.94_0.04_255)] px-1.5 py-0.5 rounded-full">
+        <Clock size={9} />
+        ~15 min
       </span>
     );
   }
-  return (
-    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-[oklch(0.55_0.18_255)] bg-[oklch(0.94_0.04_255)] px-1.5 py-0.5 rounded-full">
-      <Clock size={9} />
-      Manual
-    </span>
-  );
+  return null; // instant is default — no badge needed
 }
 
 // Numeric seller rating badge — more differentiating than stars alone (Eneba pattern)
@@ -802,7 +799,6 @@ export default function Home() {
                         <NumericRatingBadge rating={selectedSeller.rating} label={selectedSeller.ratingLabel} />
                       </div>
                     </div>
-                    <DeliveryBadge mode={selectedSeller.deliveryMode} />
                   </div>
 
                   {selectedSeller.isRecommended && (
@@ -841,21 +837,16 @@ export default function Home() {
                     </button>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-2">
+                  {/* 2 protection icons — removed Instant delivery (it’s the norm, not a feature) */}
+                  <div className="grid grid-cols-2 gap-2">
                     <ProtectionTooltip title={PROTECTION_TOOLTIPS.delivery.title} description={PROTECTION_TOOLTIPS.delivery.description} side="bottom">
-                      <button className="flex flex-col items-center gap-1 p-2 rounded-lg bg-[oklch(0.97_0.003_240)] hover:bg-[oklch(0.95_0.04_145)] transition-colors text-center">
+                      <button className="flex flex-col items-center gap-1 p-2.5 rounded-lg bg-[oklch(0.97_0.003_240)] hover:bg-[oklch(0.95_0.04_145)] transition-colors text-center">
                         <ShieldCheck size={16} className="text-[oklch(0.52_0.18_145)]" />
                         <span className="text-[10px] font-medium text-muted-foreground leading-tight">Delivery guarantee</span>
                       </button>
                     </ProtectionTooltip>
-                    <ProtectionTooltip title="Instant delivery" description="Codes and credentials are delivered automatically after payment. Usually under 1 minute for instant sellers." side="bottom">
-                      <button className="flex flex-col items-center gap-1 p-2 rounded-lg bg-[oklch(0.97_0.003_240)] hover:bg-[oklch(0.96_0.05_75)] transition-colors text-center">
-                        <Zap size={16} className="text-[oklch(0.78_0.16_75)]" />
-                        <span className="text-[10px] font-medium text-muted-foreground leading-tight">Instant delivery</span>
-                      </button>
-                    </ProtectionTooltip>
                     <ProtectionTooltip title={PROTECTION_TOOLTIPS.verified.title} description={PROTECTION_TOOLTIPS.verified.description} side="bottom">
-                      <button className="flex flex-col items-center gap-1 p-2 rounded-lg bg-[oklch(0.97_0.003_240)] hover:bg-[oklch(0.94_0.04_255)] transition-colors text-center">
+                      <button className="flex flex-col items-center gap-1 p-2.5 rounded-lg bg-[oklch(0.97_0.003_240)] hover:bg-[oklch(0.94_0.04_255)] transition-colors text-center">
                         <Lock size={16} className="text-[oklch(0.55_0.18_255)]" />
                         <span className="text-[10px] font-medium text-muted-foreground leading-tight">Verified sellers</span>
                       </button>
