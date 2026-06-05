@@ -72,27 +72,31 @@ function SellerAvatar({ seller, size = 32 }: { seller: Seller; size?: number }) 
   );
 }
 
-// DeliveryBadge: instant is the norm — only flag the exception (manual)
-// Baymard: marking the standard creates noise; mark the deviation instead
 function DeliveryBadge({ mode }: { mode: "instant" | "manual" }) {
-  if (mode === "manual") {
+  if (mode === "instant") {
     return (
-      <span className="inline-flex items-center gap-1 text-[11px] font-medium text-[oklch(0.55_0.18_255)] bg-[oklch(0.94_0.04_255)] px-1.5 py-0.5 rounded-full">
-        <Clock size={9} />
-        ~15 min
+      <span className="inline-flex items-center gap-1 text-[11px] font-medium text-[oklch(0.52_0.18_145)] bg-[oklch(0.95_0.05_145)] px-1.5 py-0.5 rounded-full">
+        <Zap size={9} strokeWidth={2.5} />
+        Instant
       </span>
     );
   }
-  return null; // instant is default — no badge needed
+  return (
+    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-[oklch(0.55_0.18_255)] bg-[oklch(0.94_0.04_255)] px-1.5 py-0.5 rounded-full">
+      <Clock size={9} />
+      ~15 min
+    </span>
+  );
 }
 
 // Numeric seller rating badge — more differentiating than stars alone (Eneba pattern)
 function NumericRatingBadge({ rating, label }: { rating: number; label: string }) {
-  const score = (rating / 5) * 10; // convert 5-star to 10-point scale
+  const score = (rating / 5) * 10;
   const color =
     score >= 9.0 ? "oklch(0.52 0.18 145)" : score >= 8.5 ? "oklch(0.78 0.16 75)" : "oklch(0.55 0.18 255)";
   const bg =
     score >= 9.0 ? "oklch(0.95 0.05 145)" : score >= 8.5 ? "oklch(0.96 0.05 75)" : "oklch(0.94 0.04 255)";
+  void label; // label removed — number speaks for itself
   return (
     <span
       className="inline-flex items-center gap-1 text-[11px] font-semibold px-1.5 py-0.5 rounded-full"
@@ -100,7 +104,6 @@ function NumericRatingBadge({ rating, label }: { rating: number; label: string }
     >
       <span className="text-[12px] font-bold">{score.toFixed(1)}</span>
       <span className="opacity-70">/10</span>
-      <span className="opacity-60 text-[10px]">· {label}</span>
     </span>
   );
 }
@@ -795,10 +798,12 @@ export default function Home() {
                         )}
                       </div>
                       {/* Numeric rating in purchase card — Eneba pattern */}
-                      <div className="flex items-center gap-1.5 mt-0.5">
+                                            <div className="flex items-center gap-1.5 mt-0.5">
                         <NumericRatingBadge rating={selectedSeller.rating} label={selectedSeller.ratingLabel} />
+                        <DeliveryBadge mode={selectedSeller.deliveryMode} />
                       </div>
                     </div>
+                    
                   </div>
 
                   {selectedSeller.isRecommended && (
