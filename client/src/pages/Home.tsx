@@ -15,7 +15,6 @@ import {
   Star,
   ThumbsUp,
   TrendingUp,
-  Users,
   Zap,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -321,18 +320,7 @@ export default function Home() {
                     <span className="text-sm text-muted-foreground">in the last 30 days</span>
                   </div>
 
-                  {/* Trust badges */}
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    <ProtectionTooltip title={PROTECTION_TOOLTIPS.delivery.title} description={PROTECTION_TOOLTIPS.delivery.description} side="bottom">
-                      <button className="trust-badge"><Zap size={11} className="text-[oklch(0.52_0.18_145)]" />Instant Delivery</button>
-                    </ProtectionTooltip>
-                    <ProtectionTooltip title={PROTECTION_TOOLTIPS.secure.title} description={PROTECTION_TOOLTIPS.secure.description} side="bottom">
-                      <button className="trust-badge"><Lock size={11} className="text-[oklch(0.55_0.18_255)]" />Secure Purchase</button>
-                    </ProtectionTooltip>
-                    <ProtectionTooltip title={PROTECTION_TOOLTIPS.verified.title} description={PROTECTION_TOOLTIPS.verified.description} side="bottom">
-                      <button className="trust-badge"><ShieldCheck size={11} className="text-[oklch(0.52_0.18_145)]" />Verified Sellers</button>
-                    </ProtectionTooltip>
-                  </div>
+
                 </div>
               </div>
             </div>
@@ -770,25 +758,6 @@ export default function Home() {
                     : "0 1px 3px oklch(0 0 0 / 0.06)",
                 }}
               >
-                {/* Platform trust row — Hong & Cho 2011: platform trust > seller trust in B2C e-marketplaces */}
-                <div className="px-5 pt-4 pb-3 border-b border-border bg-[oklch(0.98_0.01_145)]">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5">
-                      <ShieldCheck size={13} className="text-[oklch(0.52_0.18_145)]" />
-                      <span className="text-[11px] font-semibold text-[oklch(0.38_0.16_145)]">Trusted by Perksell</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Users size={11} className="text-muted-foreground" />
-                      <span className="text-[11px] text-muted-foreground">
-                        50,000+ buyers ·{" "}
-                        <span className="font-semibold text-[oklch(0.78_0.16_75)]">
-                          {productStats.platformRating} ★
-                        </span>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
                 {/* Price header */}
                 <div className="px-5 pt-4 pb-4 border-b border-border">
                   <div className="flex items-baseline gap-2 mb-1">
@@ -837,11 +806,9 @@ export default function Home() {
                   </div>
 
                   {selectedSeller.isRecommended && (
-                    <div className="mt-3 p-2.5 bg-[oklch(0.97_0.03_145)] rounded-lg border border-[oklch(0.88_0.08_145)]">
-                      <p className="text-xs text-[oklch(0.38_0.16_145)] font-medium leading-relaxed">
-                        Best price among verified sellers · {selectedSeller.successRate}% delivery success · {selectedSeller.totalOrders.toLocaleString()} completed orders
-                      </p>
-                    </div>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      {selectedSeller.successRate}% delivery success · {selectedSeller.totalOrders.toLocaleString()} completed orders
+                    </p>
                   )}
                 </div>
 
