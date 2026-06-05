@@ -1,12 +1,11 @@
 export interface Variant {
   id: string;
-  name: string;
   region: string;
-  type: string;
-  duration?: string;
+  duration: string;
   price: number;
   available: boolean;
   popular?: boolean;
+  sellersCount: number;
 }
 
 export interface Seller {
@@ -23,7 +22,6 @@ export interface Seller {
   deliveryTime: string;
   price: number;
   isRecommended?: boolean;
-  recommendedLabel?: string;
   verifiedSince: string;
   verificationDetails: string[];
   disputeRate: number;
@@ -42,44 +40,34 @@ export interface Review {
   variant: string;
 }
 
+// All regions available for this product
+export const REGIONS = ["Global", "Spain", "US", "EU"];
+
+// All durations available for this product
+export const DURATIONS = ["1 Month", "3 Months", "6 Months", "12 Months"];
+
+// Full variant matrix — not every combination exists
 export const variants: Variant[] = [
-  {
-    id: "v1",
-    name: "MAX (HBO) Action",
-    region: "Global",
-    type: "Subscription",
-    duration: "1 Month",
-    price: 14.67,
-    available: true,
-    popular: true,
-  },
-  {
-    id: "v2",
-    name: "MAX (HBO) Action",
-    region: "Global",
-    type: "Subscription",
-    duration: "3 Months",
-    price: 16.19,
-    available: true,
-  },
-  {
-    id: "v3",
-    name: "MAX (HBO) Premium",
-    region: "Global",
-    type: "Subscription",
-    duration: "1 Month",
-    price: 38.99,
-    available: true,
-  },
-  {
-    id: "v4",
-    name: "MAX (HBO) Action",
-    region: "US Only",
-    type: "Subscription",
-    duration: "1 Month",
-    price: 12.49,
-    available: false,
-  },
+  // Global
+  { id: "global-1m", region: "Global", duration: "1 Month",  price: 14.67, available: true,  popular: true,  sellersCount: 51 },
+  { id: "global-3m", region: "Global", duration: "3 Months", price: 16.19, available: true,  popular: false, sellersCount: 28 },
+  { id: "global-6m", region: "Global", duration: "6 Months", price: 28.99, available: true,  popular: false, sellersCount: 14 },
+  { id: "global-12m",region: "Global", duration: "12 Months",price: 49.99, available: false, popular: false, sellersCount: 0  },
+  // Spain
+  { id: "es-1m",     region: "Spain",  duration: "1 Month",  price: 11.49, available: true,  popular: false, sellersCount: 18 },
+  { id: "es-3m",     region: "Spain",  duration: "3 Months", price: 13.20, available: true,  popular: false, sellersCount: 9  },
+  { id: "es-6m",     region: "Spain",  duration: "6 Months", price: 23.50, available: false, popular: false, sellersCount: 0  },
+  { id: "es-12m",    region: "Spain",  duration: "12 Months",price: 39.99, available: false, popular: false, sellersCount: 0  },
+  // US
+  { id: "us-1m",     region: "US",     duration: "1 Month",  price: 12.49, available: true,  popular: false, sellersCount: 11 },
+  { id: "us-3m",     region: "US",     duration: "3 Months", price: 14.80, available: false, popular: false, sellersCount: 0  },
+  { id: "us-6m",     region: "US",     duration: "6 Months", price: 25.99, available: false, popular: false, sellersCount: 0  },
+  { id: "us-12m",    region: "US",     duration: "12 Months",price: 44.99, available: false, popular: false, sellersCount: 0  },
+  // EU
+  { id: "eu-1m",     region: "EU",     duration: "1 Month",  price: 12.99, available: true,  popular: false, sellersCount: 22 },
+  { id: "eu-3m",     region: "EU",     duration: "3 Months", price: 15.50, available: true,  popular: false, sellersCount: 12 },
+  { id: "eu-6m",     region: "EU",     duration: "6 Months", price: 26.99, available: true,  popular: false, sellersCount: 7  },
+  { id: "eu-12m",    region: "EU",     duration: "12 Months",price: 46.99, available: false, popular: false, sellersCount: 0  },
 ];
 
 export const sellers: Seller[] = [
@@ -97,7 +85,6 @@ export const sellers: Seller[] = [
     deliveryTime: "< 1 min",
     price: 14.67,
     isRecommended: true,
-    recommendedLabel: "Best price · Verified",
     verifiedSince: "Mar 2022",
     verificationDetails: [
       "Identity verified by Perksell",
@@ -184,8 +171,8 @@ export const sellers: Seller[] = [
   },
   {
     id: "s5",
-    name: "KeyVault",
-    initials: "KV",
+    name: "SubStore",
+    initials: "SS",
     color: "#059669",
     rating: 4.48,
     ratingLabel: "Very Good",
@@ -246,7 +233,7 @@ export const reviews: Review[] = [
     date: "May 15, 2026",
     text: "Best price I found anywhere. Perksell buyer protection gave me confidence to try. Smooth experience.",
     verified: true,
-    variant: "1 Month · Global",
+    variant: "1 Month · Spain",
   },
 ];
 
@@ -291,22 +278,7 @@ export const protectionItems = [
 ];
 
 export const relatedProducts = [
-  {
-    id: "rp1",
-    name: "MAX (HBO) VOD Account",
-    fromPrice: 15.0,
-    image: null,
-  },
-  {
-    id: "rp2",
-    name: "DAZN VOD Account",
-    fromPrice: 12.99,
-    image: null,
-  },
-  {
-    id: "rp3",
-    name: "Disney Premium Account",
-    fromPrice: 14.99,
-    image: null,
-  },
+  { id: "rp1", name: "MAX (HBO) VOD Account", fromPrice: 15.0 },
+  { id: "rp2", name: "DAZN VOD Account",       fromPrice: 12.99 },
+  { id: "rp3", name: "Disney Premium Account",  fromPrice: 14.99 },
 ];
