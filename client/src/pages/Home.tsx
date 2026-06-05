@@ -433,9 +433,17 @@ export default function Home() {
                         {exists ? (
                           isAvailable ? (
                             <>
-                              <span className={`text-sm font-bold leading-none ${isSelected ? "text-[oklch(0.38_0.16_145)]" : "text-foreground"}`}>
-                                ${variant!.price.toFixed(2)}
-                              </span>
+                              <div className="flex items-baseline gap-1.5">
+                                <span className={`text-sm font-bold leading-none ${isSelected ? "text-[oklch(0.38_0.16_145)]" : "text-foreground"}`}>
+                                  ${variant!.price.toFixed(2)}
+                                </span>
+                                {/* Retail strikethrough — only for 1-month (multi-month savings shown via /mo badge) */}
+                                {variant!.monthCount === 1 && variant!.retailPrice > variant!.price && (
+                                  <span className="text-[10px] font-medium text-muted-foreground line-through leading-none">
+                                    ${variant!.retailPrice.toFixed(2)}
+                                  </span>
+                                )}
+                              </div>
                               {variant!.monthCount > 1 && (
                                 <span className={`text-[10px] font-medium leading-none ${
                                   isSelected ? "text-[oklch(0.52_0.18_145)]" : "text-muted-foreground"
@@ -760,8 +768,18 @@ export default function Home() {
               >
                 {/* Price header */}
                 <div className="px-5 pt-4 pb-4 border-b border-border">
-                  <div className="flex items-baseline gap-2 mb-1">
+                  <div className="flex items-baseline gap-2.5 mb-1">
                     <span className="price-display">${currentPrice.toFixed(2)}</span>
+                    {activeVariant?.retailPrice && activeVariant.retailPrice > currentPrice && (
+                      <span className="text-base font-medium text-muted-foreground line-through">
+                        ${activeVariant.retailPrice.toFixed(2)}
+                      </span>
+                    )}
+                    {activeVariant?.retailPrice && activeVariant.retailPrice > currentPrice && (
+                      <span className="text-xs font-bold text-white bg-[oklch(0.52_0.18_145)] px-1.5 py-0.5 rounded-full">
+                        -{Math.round((1 - currentPrice / activeVariant.retailPrice) * 100)}% vs retail
+                      </span>
+                    )}
                   </div>
                   <div className="flex items-baseline gap-2 mt-0.5">
                     {activeVariant && activeVariant.monthCount > 1 && (
