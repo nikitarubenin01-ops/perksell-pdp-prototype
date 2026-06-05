@@ -373,9 +373,18 @@ export default function Home() {
 
                         {exists ? (
                           isAvailable ? (
-                            <span className={`text-sm font-bold ${isSelected ? "text-[oklch(0.38_0.16_145)]" : "text-foreground"}`}>
-                              ${variant!.price.toFixed(2)}
-                            </span>
+                            <>
+                              <span className={`text-sm font-bold leading-none ${isSelected ? "text-[oklch(0.38_0.16_145)]" : "text-foreground"}`}>
+                                ${variant!.price.toFixed(2)}
+                              </span>
+                              {variant!.monthCount > 1 && (
+                                <span className={`text-[10px] font-medium leading-none ${
+                                  isSelected ? "text-[oklch(0.52_0.18_145)]" : "text-muted-foreground"
+                                }`}>
+                                  ${(variant!.price / variant!.monthCount).toFixed(2)}/mo
+                                </span>
+                              )}
+                            </>
                           ) : (
                             <span className="text-xs text-muted-foreground">Out of stock</span>
                           )
@@ -613,7 +622,14 @@ export default function Home() {
                   <div className="flex items-baseline gap-2 mb-1">
                     <span className="price-display">${currentPrice.toFixed(2)}</span>
                   </div>
-                  <p className="text-xs text-muted-foreground">
+                  <div className="flex items-baseline gap-2 mt-0.5">
+                    {activeVariant && activeVariant.monthCount > 1 && (
+                      <span className="text-sm text-[oklch(0.52_0.18_145)] font-semibold">
+                        ${(activeVariant.price / activeVariant.monthCount).toFixed(2)}/mo
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-0.5">
                     Best price of {activeVariant?.sellersCount ?? productStats.sellerCount} sellers
                     {" · "}<span className="font-medium text-foreground">{selectedDuration} · {selectedRegion}</span>
                   </p>

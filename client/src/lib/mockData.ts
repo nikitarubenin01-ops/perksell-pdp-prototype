@@ -2,6 +2,7 @@ export interface Variant {
   id: string;
   region: string;
   duration: string;
+  monthCount: number;
   price: number;
   available: boolean;
   popular?: boolean;
@@ -49,25 +50,25 @@ export const DURATIONS = ["1 Month", "3 Months", "6 Months", "12 Months"];
 // Full variant matrix — not every combination exists
 export const variants: Variant[] = [
   // Global
-  { id: "global-1m", region: "Global", duration: "1 Month",  price: 14.67, available: true,  popular: true,  sellersCount: 51 },
-  { id: "global-3m", region: "Global", duration: "3 Months", price: 16.19, available: true,  popular: false, sellersCount: 28 },
-  { id: "global-6m", region: "Global", duration: "6 Months", price: 28.99, available: true,  popular: false, sellersCount: 14 },
-  { id: "global-12m",region: "Global", duration: "12 Months",price: 49.99, available: false, popular: false, sellersCount: 0  },
+  { id: "global-1m", region: "Global", duration: "1 Month",  monthCount: 1,  price: 14.67, available: true,  popular: true,  sellersCount: 51 },
+  { id: "global-3m", region: "Global", duration: "3 Months", monthCount: 3,  price: 16.19, available: true,  popular: false, sellersCount: 28 },
+  { id: "global-6m", region: "Global", duration: "6 Months", monthCount: 6,  price: 28.99, available: true,  popular: false, sellersCount: 14 },
+  { id: "global-12m",region: "Global", duration: "12 Months",monthCount: 12, price: 49.99, available: false, popular: false, sellersCount: 0  },
   // Spain
-  { id: "es-1m",     region: "Spain",  duration: "1 Month",  price: 11.49, available: true,  popular: false, sellersCount: 18 },
-  { id: "es-3m",     region: "Spain",  duration: "3 Months", price: 13.20, available: true,  popular: false, sellersCount: 9  },
-  { id: "es-6m",     region: "Spain",  duration: "6 Months", price: 23.50, available: false, popular: false, sellersCount: 0  },
-  { id: "es-12m",    region: "Spain",  duration: "12 Months",price: 39.99, available: false, popular: false, sellersCount: 0  },
+  { id: "es-1m",     region: "Spain",  duration: "1 Month",  monthCount: 1,  price: 11.49, available: true,  popular: false, sellersCount: 18 },
+  { id: "es-3m",     region: "Spain",  duration: "3 Months", monthCount: 3,  price: 13.20, available: true,  popular: false, sellersCount: 9  },
+  { id: "es-6m",     region: "Spain",  duration: "6 Months", monthCount: 6,  price: 23.50, available: false, popular: false, sellersCount: 0  },
+  { id: "es-12m",    region: "Spain",  duration: "12 Months",monthCount: 12, price: 39.99, available: false, popular: false, sellersCount: 0  },
   // US
-  { id: "us-1m",     region: "US",     duration: "1 Month",  price: 12.49, available: true,  popular: false, sellersCount: 11 },
-  { id: "us-3m",     region: "US",     duration: "3 Months", price: 14.80, available: false, popular: false, sellersCount: 0  },
-  { id: "us-6m",     region: "US",     duration: "6 Months", price: 25.99, available: false, popular: false, sellersCount: 0  },
-  { id: "us-12m",    region: "US",     duration: "12 Months",price: 44.99, available: false, popular: false, sellersCount: 0  },
+  { id: "us-1m",     region: "US",     duration: "1 Month",  monthCount: 1,  price: 12.49, available: true,  popular: false, sellersCount: 11 },
+  { id: "us-3m",     region: "US",     duration: "3 Months", monthCount: 3,  price: 14.80, available: false, popular: false, sellersCount: 0  },
+  { id: "us-6m",     region: "US",     duration: "6 Months", monthCount: 6,  price: 25.99, available: false, popular: false, sellersCount: 0  },
+  { id: "us-12m",    region: "US",     duration: "12 Months",monthCount: 12, price: 44.99, available: false, popular: false, sellersCount: 0  },
   // EU
-  { id: "eu-1m",     region: "EU",     duration: "1 Month",  price: 12.99, available: true,  popular: false, sellersCount: 22 },
-  { id: "eu-3m",     region: "EU",     duration: "3 Months", price: 15.50, available: true,  popular: false, sellersCount: 12 },
-  { id: "eu-6m",     region: "EU",     duration: "6 Months", price: 26.99, available: true,  popular: false, sellersCount: 7  },
-  { id: "eu-12m",    region: "EU",     duration: "12 Months",price: 46.99, available: false, popular: false, sellersCount: 0  },
+  { id: "eu-1m",     region: "EU",     duration: "1 Month",  monthCount: 1,  price: 12.99, available: true,  popular: false, sellersCount: 22 },
+  { id: "eu-3m",     region: "EU",     duration: "3 Months", monthCount: 3,  price: 15.50, available: true,  popular: false, sellersCount: 12 },
+  { id: "eu-6m",     region: "EU",     duration: "6 Months", monthCount: 6,  price: 26.99, available: true,  popular: false, sellersCount: 7  },
+  { id: "eu-12m",    region: "EU",     duration: "12 Months",monthCount: 12, price: 46.99, available: false, popular: false, sellersCount: 0  },
 ];
 
 export const sellers: Seller[] = [
