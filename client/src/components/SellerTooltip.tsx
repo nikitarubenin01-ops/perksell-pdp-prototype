@@ -129,20 +129,35 @@ export default function SellerTooltip({ seller, children }: SellerTooltipProps) 
             <StarBar value={seller.rating} />
           </div>
 
-          {/* Delivery */}
-          <div className="px-4 py-3 border-b border-white/10">
+          {/* Delivery + Replacements */}
+          <div className="px-4 py-3 border-b border-white/10 space-y-2.5">
             <div className="flex items-center gap-2">
               <Clock size={13} className="text-white/40 flex-shrink-0" />
               <div>
                 <p className="text-xs font-medium text-white">
                   {seller.deliveryMode === "instant"
-                    ? "Instant delivery"
+                    ? "Instant access"
                     : "Manual delivery"}
                 </p>
                 <p className="text-[11px] text-white/50">
                   {seller.deliveryMode === "instant"
-                    ? "Code sent automatically after payment"
+                    ? "Login credentials sent automatically after payment"
                     : `Seller sends manually · ${seller.deliveryTime}`}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <ShieldCheck size={13} className="text-[oklch(0.75_0.18_145)] flex-shrink-0" />
+              <div>
+                <p className="text-xs font-medium text-white">
+                  {seller.replacements === "unlimited"
+                    ? "Unlimited replacements"
+                    : `Up to ${seller.replacements} replacement${seller.replacements !== 1 ? "s" : ""}`}
+                </p>
+                <p className="text-[11px] text-white/50">
+                  {seller.replacements === "unlimited"
+                    ? "If access stops working, seller replaces at no cost"
+                    : "Replacement available if access fails during subscription"}
                 </p>
               </div>
             </div>

@@ -45,14 +45,14 @@ import {
 
 const PROTECTION_TOOLTIPS: Record<string, { title: string; description: string }> = {
   delivery: {
-    title: "Delivery guarantee",
+    title: "Access guarantee",
     description:
-      "If you don't receive your order within the stated delivery time, Perksell will provide a replacement or full refund. Applies to all verified sellers.",
+      "If your access stops working at any point during the subscription period, the seller provides a replacement at no extra cost. If unresolved within 24h, Perksell issues a full refund.",
   },
   secure: {
-    title: "Secure payment",
+    title: "Escrow payment",
     description:
-      "Your payment is held by Perksell and only released to the seller after you confirm delivery. We use 3DS-verified payment processing.",
+      "Your payment is held securely by Perksell and only released to the seller after access is confirmed. Sellers cannot access funds until you receive your order.",
   },
   verified: {
     title: "Verified sellers",
@@ -128,7 +128,7 @@ function getAvailableRegions(): string[] {
 
 export default function Home() {
   const [selectedRegion, setSelectedRegion] = useState<string>("Global");
-  const [selectedDuration, setSelectedDuration] = useState<string>("1 Month");
+  const [selectedDuration, setSelectedDuration] = useState<string>("12 Months");
   const [selectedSeller, setSelectedSeller] = useState<Seller>(sellers[0]);
   const [showAllOffers, setShowAllOffers] = useState(false);
   const [showProtectionDetails, setShowProtectionDetails] = useState(false);
@@ -489,7 +489,7 @@ export default function Home() {
                   { label: "Category", value: "Subscriptions" },
                   { label: "Region", value: selectedRegion },
                   { label: "Duration", value: selectedDuration },
-                  { label: "Delivery", value: "Instant (digital code)" },
+                  { label: "Delivery", value: "Instant · Login credentials" },
                   { label: "Total sales", value: `${productStats.totalSold.toLocaleString()} orders` },
                   {
                     label: "Sold last 30 days",

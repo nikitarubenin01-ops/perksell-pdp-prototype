@@ -29,6 +29,7 @@ export interface Seller {
   disputeRate: number;
   lastSale: string;
   memberSince: string;
+  replacements: "unlimited" | number; // replacements policy for account-type products
 }
 
 export interface Review {
@@ -61,15 +62,15 @@ export const DURATIONS = ["1 Month", "3 Months", "6 Months", "12 Months"];
 // Full variant matrix — not every combination exists
 export const variants: Variant[] = [
   // Global — retailPrice = MAX Standard plan official price × months (max.com: $15.99/mo)
-  { id: "global-1m",  region: "Global", duration: "1 Month",   monthCount: 1,  price: 14.67, retailPrice: 15.99, available: true,  popular: true,  sellersCount: 51 },
-  { id: "global-3m",  region: "Global", duration: "3 Months",  monthCount: 3,  price: 16.19, retailPrice: 47.97, available: true,  popular: false, sellersCount: 28 },
-  { id: "global-6m",  region: "Global", duration: "6 Months",  monthCount: 6,  price: 28.99, retailPrice: 95.94, available: true,  popular: false, sellersCount: 14 },
-  { id: "global-12m", region: "Global", duration: "12 Months", monthCount: 12, price: 49.99, retailPrice: 191.88, available: false, popular: false, sellersCount: 0  },
+  { id: "global-1m",  region: "Global", duration: "1 Month",   monthCount: 1,  price: 14.67, retailPrice: 15.99,  available: true,  popular: false, sellersCount: 51 },
+  { id: "global-3m",  region: "Global", duration: "3 Months",  monthCount: 3,  price: 16.19, retailPrice: 47.97,  available: true,  popular: false, sellersCount: 28 },
+  { id: "global-6m",  region: "Global", duration: "6 Months",  monthCount: 6,  price: 28.99, retailPrice: 95.94,  available: true,  popular: false, sellersCount: 14 },
+  { id: "global-12m", region: "Global", duration: "12 Months", monthCount: 12, price: 49.99, retailPrice: 191.88, available: true,  popular: true,  sellersCount: 31 },
   // Spain — MAX Standard ES: €13.99/mo (max.com/es)
-  { id: "es-1m",      region: "Spain",  duration: "1 Month",   monthCount: 1,  price: 11.49, retailPrice: 13.99, available: true,  popular: false, sellersCount: 18 },
-  { id: "es-3m",      region: "Spain",  duration: "3 Months",  monthCount: 3,  price: 13.20, retailPrice: 41.97, available: true,  popular: false, sellersCount: 9  },
-  { id: "es-6m",      region: "Spain",  duration: "6 Months",  monthCount: 6,  price: 23.50, retailPrice: 83.94, available: false, popular: false, sellersCount: 0  },
-  { id: "es-12m",     region: "Spain",  duration: "12 Months", monthCount: 12, price: 39.99, retailPrice: 167.88, available: false, popular: false, sellersCount: 0  },
+  { id: "es-1m",      region: "Spain",  duration: "1 Month",   monthCount: 1,  price: 11.49, retailPrice: 13.99,  available: true,  popular: false, sellersCount: 18 },
+  { id: "es-3m",      region: "Spain",  duration: "3 Months",  monthCount: 3,  price: 13.20, retailPrice: 41.97,  available: true,  popular: false, sellersCount: 9  },
+  { id: "es-6m",      region: "Spain",  duration: "6 Months",  monthCount: 6,  price: 23.50, retailPrice: 83.94,  available: false, popular: false, sellersCount: 0  },
+  { id: "es-12m",     region: "Spain",  duration: "12 Months", monthCount: 12, price: 39.99, retailPrice: 167.88, available: true,  popular: true,  sellersCount: 14 },
   // US — MAX Standard US: $15.99/mo (max.com)
   { id: "us-1m",      region: "US",     duration: "1 Month",   monthCount: 1,  price: 12.49, retailPrice: 15.99, available: true,  popular: false, sellersCount: 11 },
   { id: "us-3m",      region: "US",     duration: "3 Months",  monthCount: 3,  price: 14.80, retailPrice: 47.97, available: false, popular: false, sellersCount: 0  },
@@ -108,6 +109,7 @@ export const sellers: Seller[] = [
     disputeRate: 0.8,
     lastSale: "3 min ago",
     memberSince: "March 2022",
+    replacements: "unlimited",
   },
   {
     id: "s2",
@@ -132,6 +134,7 @@ export const sellers: Seller[] = [
     disputeRate: 1.1,
     lastSale: "8 min ago",
     memberSince: "June 2022",
+    replacements: "unlimited",
   },
   {
     id: "s3",
@@ -156,6 +159,7 @@ export const sellers: Seller[] = [
     disputeRate: 1.4,
     lastSale: "12 min ago",
     memberSince: "August 2022",
+    replacements: "unlimited",
   },
   {
     id: "s4",
@@ -180,6 +184,7 @@ export const sellers: Seller[] = [
     disputeRate: 2.2,
     lastSale: "1h ago",
     memberSince: "January 2023",
+    replacements: 3,
   },
   {
     id: "s5",
@@ -203,6 +208,7 @@ export const sellers: Seller[] = [
     disputeRate: 2.9,
     lastSale: "2h ago",
     memberSince: "April 2023",
+    replacements: "unlimited",
   },
 ];
 
@@ -289,30 +295,30 @@ export const productStats = {
 export const protectionItems = [
   {
     icon: "shield",
-    title: "Delivery guarantee",
+    title: "Access guarantee",
     description:
-      "If delivery fails, Perksell provides a replacement or full refund. No questions asked within 24h.",
+      "If your access stops working at any point during the subscription period, the seller provides a replacement at no extra cost. If unresolved within 24h, Perksell issues a full refund.",
     color: "green",
   },
   {
     icon: "zap",
-    title: "Instant delivery",
+    title: "Instant access delivery",
     description:
-      "Codes and access credentials are delivered automatically after payment confirmation. Usually under 1 minute.",
+      "Login credentials are delivered automatically after payment confirmation. You get immediate access — usually under 1 minute for instant sellers.",
     color: "amber",
   },
   {
     icon: "lock",
-    title: "Secure payment",
+    title: "Escrow payment",
     description:
-      "Payment is held by Perksell until delivery is confirmed. Sellers cannot access funds until you receive your order.",
+      "Your payment is held securely by Perksell until access is confirmed. Sellers receive funds only after successful delivery — your money is protected at every step.",
     color: "blue",
   },
   {
     icon: "headphones",
     title: "Support within 2h",
     description:
-      "Our team responds to delivery issues within 2 hours. Disputes are resolved within 24–48 hours.",
+      "Our team responds to access issues within 2 hours. Replacement requests and disputes are resolved within 24–48 hours.",
     color: "purple",
   },
 ];
