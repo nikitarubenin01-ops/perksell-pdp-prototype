@@ -39,6 +39,16 @@ export interface Review {
   text: string;
   verified: boolean;
   variant: string;
+  helpfulCount: number;
+}
+
+export interface AlsoAvailableItem {
+  id: string;
+  region: string;
+  duration: string;
+  price: number;
+  sellersCount: number;
+  flag: string;
 }
 
 // All regions available for this product
@@ -100,27 +110,27 @@ export const sellers: Seller[] = [
   },
   {
     id: "s2",
-    name: "CineCD",
-    initials: "CI",
-    color: "#2563EB",
-    rating: 4.66,
+    name: "StreamVault",
+    initials: "SV",
+    color: "#0891B2",
+    rating: 4.58,
     ratingLabel: "Excellent",
-    totalOrders: 12847,
-    itemSalesLast30: 124,
-    successRate: 99.2,
+    totalOrders: 9341,
+    itemSalesLast30: 89,
+    successRate: 98.9,
     deliveryMode: "instant",
-    deliveryTime: "< 1 min",
-    price: 15.99,
-    verifiedSince: "Mar 2022",
+    deliveryTime: "< 2 min",
+    price: 15.20,
+    verifiedSince: "Jun 2022",
     verificationDetails: [
       "Identity verified by Perksell",
       "Payment method verified",
-      "12,847 completed orders",
-      "99.2% successful delivery rate",
+      "9,341 completed orders",
+      "98.9% successful delivery rate",
     ],
-    disputeRate: 0.8,
-    lastSale: "3 min ago",
-    memberSince: "March 2022",
+    disputeRate: 1.1,
+    lastSale: "8 min ago",
+    memberSince: "June 2022",
   },
   {
     id: "s3",
@@ -205,6 +215,7 @@ export const reviews: Review[] = [
     text: "Instant delivery, worked perfectly. Already activated on my account. CineCD is reliable as always.",
     verified: true,
     variant: "1 Month · Global",
+    helpfulCount: 34,
   },
   {
     id: "r2",
@@ -215,6 +226,7 @@ export const reviews: Review[] = [
     text: "Got the subscription code in under 30 seconds. No issues with activation. Will buy again.",
     verified: true,
     variant: "1 Month · Global",
+    helpfulCount: 21,
   },
   {
     id: "r3",
@@ -225,6 +237,7 @@ export const reviews: Review[] = [
     text: "Good price, delivery was instant. Minor issue with first activation attempt but support resolved it in 10 minutes.",
     verified: true,
     variant: "3 Months · Global",
+    helpfulCount: 18,
   },
   {
     id: "r4",
@@ -235,6 +248,29 @@ export const reviews: Review[] = [
     text: "Best price I found anywhere. Perksell buyer protection gave me confidence to try. Smooth experience.",
     verified: true,
     variant: "1 Month · Spain",
+    helpfulCount: 29,
+  },
+  {
+    id: "r5",
+    author: "Thomas B.",
+    country: "DE",
+    rating: 5,
+    date: "Jun 1, 2026",
+    text: "Third time buying here. Always instant, always works. The protection policy is what keeps me coming back.",
+    verified: true,
+    variant: "3 Months · EU",
+    helpfulCount: 12,
+  },
+  {
+    id: "r6",
+    author: "Elena V.",
+    country: "ES",
+    rating: 4,
+    date: "Jun 3, 2026",
+    text: "Delivery was fast, activation worked first try. Price was better than official store by a good margin.",
+    verified: true,
+    variant: "1 Month · Spain",
+    helpfulCount: 7,
   },
 ];
 
@@ -245,6 +281,8 @@ export const productStats = {
   reviewCount: 258,
   sellerCount: 51,
   successRate: 98.7,
+  platformBuyersTotal: 50000,
+  platformRating: 4.8,
 };
 
 export const protectionItems = [
@@ -276,6 +314,15 @@ export const protectionItems = [
       "Our team responds to delivery issues within 2 hours. Disputes are resolved within 24–48 hours.",
     color: "purple",
   },
+];
+
+// "Also available" — other regions of the same product for cross-navigation
+export const alsoAvailableItems: AlsoAvailableItem[] = [
+  { id: "aa1", region: "Spain",  duration: "1 Month",  price: 11.49, sellersCount: 18, flag: "🇪🇸" },
+  { id: "aa2", region: "EU",     duration: "1 Month",  price: 12.99, sellersCount: 22, flag: "🇪🇺" },
+  { id: "aa3", region: "US",     duration: "1 Month",  price: 12.49, sellersCount: 11, flag: "🇺🇸" },
+  { id: "aa4", region: "Global", duration: "3 Months", price: 16.19, sellersCount: 28, flag: "🌍" },
+  { id: "aa5", region: "EU",     duration: "3 Months", price: 15.50, sellersCount: 12, flag: "🇪🇺" },
 ];
 
 export const relatedProducts = [

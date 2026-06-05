@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import {
+  AlertTriangle,
   ChevronDown,
   ChevronRight,
   ChevronUp,
@@ -12,7 +13,9 @@ import {
   ShieldCheck,
   ShoppingCart,
   Star,
+  ThumbsUp,
   TrendingUp,
+  Users,
   Zap,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -25,13 +28,20 @@ import {
   DURATIONS,
   productStats,
   protectionItems,
-  relatedProducts,
+  alsoAvailableItems,
   reviews,
   sellers,
   variants,
   type Seller,
   type Variant,
 } from "@/lib/mockData";
+
+// ─── Design tokens (Perksell PDP) ───────────────────────────────────────────
+// Primary green: oklch(0.52 0.18 145)  — CTA, success, verified
+// Amber:         oklch(0.78 0.16 75)   — ratings, best-value
+// Blue:          oklch(0.55 0.18 255)  — info, region notes
+// Background:    oklch(0.98 0.002 240) — page bg
+// ─────────────────────────────────────────────────────────────────────────────
 
 const PROTECTION_TOOLTIPS: Record<string, { title: string; description: string }> = {
   delivery: {
@@ -79,15 +89,21 @@ function DeliveryBadge({ mode }: { mode: "instant" | "manual" }) {
   );
 }
 
-function RatingBadge({ rating, label }: { rating: number; label: string }) {
+// Numeric seller rating badge — more differentiating than stars alone (Eneba pattern)
+function NumericRatingBadge({ rating, label }: { rating: number; label: string }) {
+  const score = (rating / 5) * 10; // convert 5-star to 10-point scale
   const color =
-    rating >= 4.6 ? "oklch(0.52 0.18 145)" : rating >= 4.3 ? "oklch(0.78 0.16 75)" : "oklch(0.55 0.18 255)";
+    score >= 9.0 ? "oklch(0.52 0.18 145)" : score >= 8.5 ? "oklch(0.78 0.16 75)" : "oklch(0.55 0.18 255)";
   const bg =
-    rating >= 4.6 ? "oklch(0.95 0.05 145)" : rating >= 4.3 ? "oklch(0.96 0.05 75)" : "oklch(0.94 0.04 255)";
+    score >= 9.0 ? "oklch(0.95 0.05 145)" : score >= 8.5 ? "oklch(0.96 0.05 75)" : "oklch(0.94 0.04 255)";
   return (
-    <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-1.5 py-0.5 rounded-full" style={{ color, background: bg }}>
-      <Star size={9} fill={color} strokeWidth={0} />
-      {rating.toFixed(2)} · {label}
+    <span
+      className="inline-flex items-center gap-1 text-[11px] font-semibold px-1.5 py-0.5 rounded-full"
+      style={{ color, background: bg }}
+    >
+      <span className="text-[12px] font-bold">{score.toFixed(1)}</span>
+      <span className="opacity-70">/10</span>
+      <span className="opacity-60 text-[10px]">· {label}</span>
     </span>
   );
 }
@@ -116,9 +132,13 @@ export default function Home() {
   const [selectedSeller, setSelectedSeller] = useState<Seller>(sellers[0]);
   const [showAllOffers, setShowAllOffers] = useState(false);
   const [showProtectionDetails, setShowProtectionDetails] = useState(false);
-  const [showAllReviews, setShowAllReviews] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
   const [cardFlash, setCardFlash] = useState(false);
+  // Helpful votes state — local, per review id
+  const [helpfulVotes, setHelpfulVotes] = useState<Record<string, boolean>>({});
+  const [helpfulCounts, setHelpfulCounts] = useState<Record<string, number>>(
+    Object.fromEntries(reviews.map((r) => [r.id, r.helpfulCount]))
+  );
 
   function flashCard() {
     setCardFlash(true);
@@ -137,10 +157,15 @@ export default function Home() {
   // All regions
   const availableRegions = useMemo(() => getAvailableRegions(), []);
 
+  // Savings comparison for duration chips
+  const baseMonthlyPrice = useMemo(() => {
+    const oneMonth = findVariant(selectedRegion, "1 Month");
+    return oneMonth?.available ? oneMonth.price : null;
+  }, [selectedRegion]);
+
   function handleRegionChange(region: string) {
     setSelectedRegion(region);
     flashCard();
-    // If current duration not available in new region, pick first available
     const durations = getAvailableDurations(region);
     if (!durations.includes(selectedDuration)) {
       const firstAvailable = durations.find((d) => {
@@ -160,8 +185,27 @@ export default function Home() {
     flashCard();
   }
 
-  const displayedSellers = showAllOffers ? sellers : sellers.slice(0, 3);
-  const displayedReviews = showAllReviews ? reviews : reviews.slice(0, 2);
+  function handleHelpful(reviewId: string) {
+    if (helpfulVotes[reviewId]) return; // already voted
+    setHelpfulVotes((prev) => ({ ...prev, [reviewId]: true }));
+    setHelpfulCounts((prev) => ({ ...prev, [reviewId]: (prev[reviewId] ?? 0) + 1 }));
+  }
+
+  // Split reviews: most helpful (by helpfulCount desc) and most recent (by date desc)
+  const sortedByHelpful = useMemo(
+    () => [...reviews].sort((a, b) => b.helpfulCount - a.helpfulCount),
+    []
+  );
+  const sortedByRecent = useMemo(
+    () =>
+      [...reviews].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
+    []
+  );
+
+  // Recommended seller (first with isRecommended) and other sellers
+  const recommendedSeller = sellers.find((s) => s.isRecommended) ?? sellers[0];
+  const otherSellers = sellers.filter((s) => s.id !== recommendedSeller.id);
+  const displayedOtherSellers = showAllOffers ? otherSellers : otherSellers.slice(0, 2);
 
   function handleBuyNow() {
     toast.success(`Redirecting to checkout — ${selectedSeller.name} · $${selectedSeller.price}`, {
@@ -210,7 +254,9 @@ export default function Home() {
       <main className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 pb-32 lg:pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 lg:gap-10">
 
-          {/* LEFT COLUMN */}
+          {/* ═══════════════════════════════════════════════════════════════
+              LEFT COLUMN
+          ═══════════════════════════════════════════════════════════════ */}
           <div className="space-y-6">
 
             {/* Product header */}
@@ -263,6 +309,15 @@ export default function Home() {
                         <Info size={12} className="text-muted-foreground/60" />
                       </span>
                     </ProtectionTooltip>
+                  </div>
+
+                  {/* FOMO: activations today — Ye, Cheng & Fang: sales history drives purchase choice */}
+                  <div className="flex items-center gap-1.5 mt-2">
+                    <TrendingUp size={13} className="text-[oklch(0.52_0.18_145)]" />
+                    <span className="text-sm text-[oklch(0.38_0.16_145)] font-semibold">
+                      {productStats.soldLast30Days} activations
+                    </span>
+                    <span className="text-sm text-muted-foreground">in the last 30 days</span>
                   </div>
 
                   {/* Trust badges */}
@@ -345,6 +400,14 @@ export default function Home() {
                     const isAvailable = variant?.available ?? false;
                     const isSelected = selectedDuration === duration && exists;
 
+                    // Savings vs 1-month price — Baymard: variations must explain differences
+                    const savingsPct =
+                      baseMonthlyPrice && variant?.monthCount && variant.monthCount > 1 && isAvailable
+                        ? Math.round(
+                            ((baseMonthlyPrice - variant.price / variant.monthCount) / baseMonthlyPrice) * 100
+                          )
+                        : null;
+
                     return (
                       <button
                         key={duration}
@@ -364,6 +427,13 @@ export default function Home() {
                         {variant?.popular && (
                           <span className="absolute -top-2 left-3 text-[9px] font-bold text-white bg-[oklch(0.52_0.18_145)] px-1.5 py-0.5 rounded-full uppercase tracking-wide">
                             Popular
+                          </span>
+                        )}
+
+                        {/* Savings badge — Baymard: show value difference */}
+                        {savingsPct && savingsPct > 0 && (
+                          <span className="absolute -top-2 right-2 text-[9px] font-bold text-white bg-[oklch(0.78_0.16_75)] px-1.5 py-0.5 rounded-full">
+                            -{savingsPct}%
                           </span>
                         )}
 
@@ -396,14 +466,19 @@ export default function Home() {
                   })}
                 </div>
 
-                {/* Region-specific note */}
+                {/* Region-specific warning — NN/g: page must prevent wrong-item purchase */}
                 {selectedRegion !== "Global" && (
-                  <div className="mt-3 flex items-start gap-2 p-3 bg-[oklch(0.96_0.04_255)] border border-[oklch(0.85_0.08_255)] rounded-lg">
-                    <Info size={13} className="text-[oklch(0.55_0.18_255)] flex-shrink-0 mt-0.5" />
-                    <p className="text-xs text-[oklch(0.35_0.12_255)] leading-relaxed">
-                      <strong>{selectedRegion} region</strong> — works only with {selectedRegion} accounts.
-                      Make sure your MAX account was created in {selectedRegion}.
-                    </p>
+                  <div className="mt-4 flex items-start gap-2.5 p-3.5 bg-[oklch(0.97_0.04_75)] border border-[oklch(0.88_0.10_75)] rounded-lg">
+                    <AlertTriangle size={14} className="text-[oklch(0.60_0.18_75)] flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-xs font-semibold text-[oklch(0.40_0.14_75)] mb-0.5">
+                        {selectedRegion} region only
+                      </p>
+                      <p className="text-xs text-[oklch(0.45_0.12_75)] leading-relaxed">
+                        This subscription activates only on accounts registered in <strong>{selectedRegion}</strong>.
+                        Make sure your MAX account was created in {selectedRegion} before purchasing.
+                      </p>
+                    </div>
                   </div>
                 )}
               </div>
@@ -437,7 +512,7 @@ export default function Home() {
               </div>
             </section>
 
-            {/* Offers list */}
+            {/* ── OFFERS LIST ── Recommended / Other split (Baymard: visual hierarchy) */}
             <section className="animate-fade-in-up" style={{ animationDelay: "150ms" }} id="offers">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="section-label">
@@ -458,75 +533,143 @@ export default function Home() {
                 </ProtectionTooltip>
               </div>
 
-              <div className="space-y-2">
-                {displayedSellers.map((seller, idx) => (
-                  <div
-                    key={seller.id + idx}
-                    className={`seller-row ${selectedSeller.id === seller.id && selectedSeller.price === seller.price ? "selected" : ""}`}
-                    onClick={() => { setSelectedSeller(seller); flashCard(); }}
+              {/* Recommended offer — Baymard: platform as curator reduces decision anxiety */}
+              <div className="mb-2">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="text-[11px] font-bold text-[oklch(0.52_0.18_145)] uppercase tracking-wide">
+                    Recommended
+                  </span>
+                  <ProtectionTooltip
+                    title="How we recommend"
+                    description="Recommended offer is selected by Perksell based on price, seller reliability, delivery success rate, and dispute history — not by payment."
+                    side="right"
                   >
-                    <SellerTooltip seller={seller}>
-                      <button onClick={(e) => e.stopPropagation()} className="flex-shrink-0">
-                        <SellerAvatar seller={seller} size={36} />
-                      </button>
-                    </SellerTooltip>
+                    <Info size={11} className="text-muted-foreground/50 cursor-help" />
+                  </ProtectionTooltip>
+                </div>
+                <div
+                  className={`seller-row border-[oklch(0.85_0.10_145)] bg-[oklch(0.99_0.01_145)] ${selectedSeller.id === recommendedSeller.id ? "selected" : ""}`}
+                  onClick={() => { setSelectedSeller(recommendedSeller); flashCard(); }}
+                >
+                  <SellerTooltip seller={recommendedSeller}>
+                    <button onClick={(e) => e.stopPropagation()} className="flex-shrink-0">
+                      <SellerAvatar seller={recommendedSeller} size={36} />
+                    </button>
+                  </SellerTooltip>
 
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <SellerTooltip seller={seller}>
-                          <button onClick={(e) => e.stopPropagation()} className="flex items-center gap-1.5 hover:underline">
-                            <span className="text-sm font-semibold text-foreground">{seller.name}</span>
-                            <Info size={12} className="text-muted-foreground/60" />
-                          </button>
-                        </SellerTooltip>
-                        {seller.isRecommended && (
-                          <span className="text-[10px] font-bold text-[oklch(0.78_0.16_75)] bg-[oklch(0.96_0.05_75)] border border-[oklch(0.85_0.12_75)] px-1.5 py-0.5 rounded-full uppercase tracking-wide">
-                            Best price
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-2 mt-1 flex-wrap">
-                        <RatingBadge rating={seller.rating} label={seller.ratingLabel} />
-                        <DeliveryBadge mode={seller.deliveryMode} />
-                        <span className="text-[11px] text-muted-foreground">{seller.totalOrders.toLocaleString()} orders</span>
-                      </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <SellerTooltip seller={recommendedSeller}>
+                        <button onClick={(e) => e.stopPropagation()} className="flex items-center gap-1.5 hover:underline">
+                          <span className="text-sm font-semibold text-foreground">{recommendedSeller.name}</span>
+                          <Info size={12} className="text-muted-foreground/60" />
+                        </button>
+                      </SellerTooltip>
+                      <span className="text-[10px] font-bold text-[oklch(0.52_0.18_145)] bg-[oklch(0.95_0.05_145)] border border-[oklch(0.85_0.10_145)] px-1.5 py-0.5 rounded-full uppercase tracking-wide">
+                        Best price
+                      </span>
                     </div>
-
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      <div className="text-right mr-1">
-                        <div className="text-base font-bold text-foreground leading-tight">${seller.price.toFixed(2)}</div>
-                        {seller.isRecommended && <div className="text-[10px] text-[oklch(0.52_0.18_145)] font-medium">Best price</div>}
-                      </div>
-                      <button
-                        className="offer-cart-btn"
-                        onClick={(e) => { e.stopPropagation(); toast.success("Added to cart", { duration: 1500 }); }}
-                        title="Add to cart"
-                      >
-                        <ShoppingCart size={14} />
-                      </button>
-                      <button
-                        className="offer-buy-btn"
-                        onClick={(e) => { e.stopPropagation(); handleOfferBuy(seller); }}
-                      >
-                        <Zap size={12} strokeWidth={2.5} />
-                        Buy Now
-                      </button>
+                    <div className="flex items-center gap-2 mt-1 flex-wrap">
+                      <NumericRatingBadge rating={recommendedSeller.rating} label={recommendedSeller.ratingLabel} />
+                      <DeliveryBadge mode={recommendedSeller.deliveryMode} />
+                      <span className="text-[11px] text-muted-foreground">{recommendedSeller.itemSalesLast30} sold this month</span>
                     </div>
                   </div>
-                ))}
+
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <div className="text-right mr-1">
+                      <div className="text-base font-bold text-foreground leading-tight">${recommendedSeller.price.toFixed(2)}</div>
+                      <div className="text-[10px] text-[oklch(0.52_0.18_145)] font-medium">Best price</div>
+                    </div>
+                    <button
+                      className="offer-cart-btn"
+                      onClick={(e) => { e.stopPropagation(); toast.success("Added to cart", { duration: 1500 }); }}
+                      title="Add to cart"
+                    >
+                      <ShoppingCart size={14} />
+                    </button>
+                    <button
+                      className="offer-buy-btn"
+                      onClick={(e) => { e.stopPropagation(); handleOfferBuy(recommendedSeller); }}
+                    >
+                      <Zap size={12} strokeWidth={2.5} />
+                      Buy Now
+                    </button>
+                  </div>
+                </div>
               </div>
 
-              {sellers.length > 3 && (
-                <button
-                  className="w-full mt-3 py-3 text-sm font-medium text-muted-foreground hover:text-foreground border border-border rounded-xl hover:border-[oklch(0.75_0.12_145)] hover:bg-[oklch(0.99_0.01_145)] transition-all flex items-center justify-center gap-2"
-                  onClick={() => setShowAllOffers(!showAllOffers)}
-                >
-                  {showAllOffers ? <><ChevronUp size={15} />Show less</> : <><ChevronDown size={15} />Show {sellers.length - 3} more offers</>}
-                </button>
-              )}
+              {/* Other offers */}
+              <div>
+                <div className="flex items-center gap-2 mb-1.5 mt-3">
+                  <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wide">
+                    Other offers
+                  </span>
+                </div>
+                <div className="space-y-2">
+                  {displayedOtherSellers.map((seller, idx) => (
+                    <div
+                      key={seller.id + idx}
+                      className={`seller-row ${selectedSeller.id === seller.id && selectedSeller.price === seller.price ? "selected" : ""}`}
+                      onClick={() => { setSelectedSeller(seller); flashCard(); }}
+                    >
+                      <SellerTooltip seller={seller}>
+                        <button onClick={(e) => e.stopPropagation()} className="flex-shrink-0">
+                          <SellerAvatar seller={seller} size={36} />
+                        </button>
+                      </SellerTooltip>
+
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <SellerTooltip seller={seller}>
+                            <button onClick={(e) => e.stopPropagation()} className="flex items-center gap-1.5 hover:underline">
+                              <span className="text-sm font-semibold text-foreground">{seller.name}</span>
+                              <Info size={12} className="text-muted-foreground/60" />
+                            </button>
+                          </SellerTooltip>
+                        </div>
+                        <div className="flex items-center gap-2 mt-1 flex-wrap">
+                          <NumericRatingBadge rating={seller.rating} label={seller.ratingLabel} />
+                          <DeliveryBadge mode={seller.deliveryMode} />
+                          <span className="text-[11px] text-muted-foreground">{seller.totalOrders.toLocaleString()} orders</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <div className="text-right mr-1">
+                          <div className="text-base font-bold text-foreground leading-tight">${seller.price.toFixed(2)}</div>
+                        </div>
+                        <button
+                          className="offer-cart-btn"
+                          onClick={(e) => { e.stopPropagation(); toast.success("Added to cart", { duration: 1500 }); }}
+                          title="Add to cart"
+                        >
+                          <ShoppingCart size={14} />
+                        </button>
+                        <button
+                          className="offer-buy-btn"
+                          onClick={(e) => { e.stopPropagation(); handleOfferBuy(seller); }}
+                        >
+                          <Zap size={12} strokeWidth={2.5} />
+                          Buy Now
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {otherSellers.length > 2 && (
+                  <button
+                    className="w-full mt-3 py-3 text-sm font-medium text-muted-foreground hover:text-foreground border border-border rounded-xl hover:border-[oklch(0.75_0.12_145)] hover:bg-[oklch(0.99_0.01_145)] transition-all flex items-center justify-center gap-2"
+                    onClick={() => setShowAllOffers(!showAllOffers)}
+                  >
+                    {showAllOffers ? <><ChevronUp size={15} />Show less</> : <><ChevronDown size={15} />Show {otherSellers.length - 2} more offers</>}
+                  </button>
+                )}
+              </div>
             </section>
 
-            {/* Reviews */}
+            {/* ── REVIEWS — two-column desktop layout (Instant Gaming pattern) ── */}
             <section className="animate-fade-in-up" style={{ animationDelay: "200ms" }} id="reviews">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="section-label">
@@ -541,7 +684,8 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl border border-border p-4 mb-4">
+              {/* Rating summary */}
+              <div className="bg-white rounded-xl border border-border p-4 mb-5">
                 <div className="grid grid-cols-2 gap-4 items-center">
                   <div className="text-center">
                     <div className="text-4xl font-bold text-foreground tracking-tight">{productStats.rating}</div>
@@ -563,49 +707,53 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="space-y-3">
-                {displayedReviews.map((review) => (
-                  <div key={review.id} className="bg-white rounded-xl border border-border p-4">
-                    <div className="flex items-start gap-2.5">
-                      <div className="w-8 h-8 rounded-full bg-[oklch(0.94_0.04_255)] flex items-center justify-center text-xs font-bold text-[oklch(0.55_0.18_255)] flex-shrink-0">
-                        {review.author.charAt(0)}
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-semibold text-foreground">{review.author}</span>
-                          <span className="text-xs text-muted-foreground">{review.country}</span>
-                          {review.verified && (
-                            <span className="flex items-center gap-0.5 text-[10px] font-medium text-[oklch(0.52_0.18_145)]">
-                              <ShieldCheck size={10} />Verified
-                            </span>
-                          )}
-                        </div>
-                        <div className="flex items-center gap-2 mt-0.5">
-                          <StarRating rating={review.rating} size={11} />
-                          <span className="text-xs text-muted-foreground">{review.date}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <p className="text-sm text-foreground/80 mt-3 leading-relaxed">{review.text}</p>
-                    <div className="mt-2">
-                      <span className="text-[11px] text-muted-foreground bg-muted px-2 py-0.5 rounded-full">{review.variant}</span>
-                    </div>
+              {/* Two-column reviews on desktop — Instant Gaming pattern */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Left: Most helpful */}
+                <div>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2.5">Most helpful</p>
+                  <div className="space-y-3">
+                    {sortedByHelpful.slice(0, 3).map((review) => (
+                      <ReviewCard
+                        key={review.id}
+                        review={review}
+                        helpfulCount={helpfulCounts[review.id] ?? review.helpfulCount}
+                        voted={helpfulVotes[review.id] ?? false}
+                        onHelpful={() => handleHelpful(review.id)}
+                      />
+                    ))}
                   </div>
-                ))}
+                </div>
+
+                {/* Right: Most recent */}
+                <div>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2.5">Most recent</p>
+                  <div className="space-y-3">
+                    {sortedByRecent.slice(0, 3).map((review) => (
+                      <ReviewCard
+                        key={review.id}
+                        review={review}
+                        helpfulCount={helpfulCounts[review.id] ?? review.helpfulCount}
+                        voted={helpfulVotes[review.id] ?? false}
+                        onHelpful={() => handleHelpful(review.id)}
+                      />
+                    ))}
+                  </div>
+                </div>
               </div>
 
-              {reviews.length > 2 && (
-                <button
-                  className="w-full mt-3 py-3 text-sm font-medium text-muted-foreground hover:text-foreground border border-border rounded-xl hover:border-[oklch(0.75_0.12_145)] transition-all flex items-center justify-center gap-2"
-                  onClick={() => setShowAllReviews(!showAllReviews)}
-                >
-                  {showAllReviews ? <><ChevronUp size={15} />Show less</> : <><ChevronDown size={15} />Show all {productStats.reviewCount} reviews</>}
-                </button>
-              )}
+              <button
+                className="w-full mt-4 py-3 text-sm font-medium text-muted-foreground hover:text-foreground border border-border rounded-xl hover:border-[oklch(0.75_0.12_145)] transition-all flex items-center justify-center gap-2"
+                onClick={() => toast.info(`All ${productStats.reviewCount} reviews`, { description: "Full review page coming soon", duration: 2000 })}
+              >
+                <ChevronDown size={15} />Show all {productStats.reviewCount} reviews
+              </button>
             </section>
           </div>
 
-          {/* RIGHT COLUMN — Purchase Card */}
+          {/* ═══════════════════════════════════════════════════════════════
+              RIGHT COLUMN — Purchase Card
+          ═══════════════════════════════════════════════════════════════ */}
           <aside className="hidden lg:block">
             <div className="sticky top-20 space-y-4">
               <div
@@ -617,8 +765,27 @@ export default function Home() {
                     : "0 1px 3px oklch(0 0 0 / 0.06)",
                 }}
               >
+                {/* Platform trust row — Hong & Cho 2011: platform trust > seller trust in B2C e-marketplaces */}
+                <div className="px-5 pt-4 pb-3 border-b border-border bg-[oklch(0.98_0.01_145)]">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5">
+                      <ShieldCheck size={13} className="text-[oklch(0.52_0.18_145)]" />
+                      <span className="text-[11px] font-semibold text-[oklch(0.38_0.16_145)]">Trusted by Perksell</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Users size={11} className="text-muted-foreground" />
+                      <span className="text-[11px] text-muted-foreground">
+                        50,000+ buyers ·{" "}
+                        <span className="font-semibold text-[oklch(0.78_0.16_75)]">
+                          {productStats.platformRating} ★
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Price header */}
-                <div className="px-5 pt-5 pb-4 border-b border-border">
+                <div className="px-5 pt-4 pb-4 border-b border-border">
                   <div className="flex items-baseline gap-2 mb-1">
                     <span className="price-display">${currentPrice.toFixed(2)}</span>
                   </div>
@@ -651,14 +818,14 @@ export default function Home() {
                           </button>
                         </SellerTooltip>
                         {selectedSeller.isRecommended && (
-                          <span className="text-[10px] font-bold text-[oklch(0.78_0.16_75)] bg-[oklch(0.96_0.05_75)] border border-[oklch(0.85_0.12_75)] px-1.5 py-0.5 rounded-full">
-                            Best price
+                          <span className="text-[10px] font-bold text-[oklch(0.52_0.18_145)] bg-[oklch(0.95_0.05_145)] border border-[oklch(0.85_0.10_145)] px-1.5 py-0.5 rounded-full">
+                            Recommended
                           </span>
                         )}
                       </div>
+                      {/* Numeric rating in purchase card — Eneba pattern */}
                       <div className="flex items-center gap-1.5 mt-0.5">
-                        <StarRating rating={selectedSeller.rating} size={11} />
-                        <span className="text-xs text-muted-foreground">{selectedSeller.rating.toFixed(2)} · {selectedSeller.ratingLabel}</span>
+                        <NumericRatingBadge rating={selectedSeller.rating} label={selectedSeller.ratingLabel} />
                       </div>
                     </div>
                     <DeliveryBadge mode={selectedSeller.deliveryMode} />
@@ -764,27 +931,37 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* You might also like */}
+              {/* Also available — Eneba pattern + Baymard cross-navigation */}
               <div className="bg-white rounded-2xl border border-border p-4 animate-scale-in" style={{ animationDelay: "80ms" }}>
-                <p className="section-label mb-3">You might also like</p>
-                <div className="space-y-2">
-                  {relatedProducts.map((product) => (
-                    <a
-                      key={product.id}
-                      href="#"
-                      className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-muted transition-colors group"
-                      onClick={(e) => { e.preventDefault(); toast.info("Feature coming soon", { duration: 1500 }); }}
-                    >
-                      <div className="w-9 h-9 rounded-lg bg-[oklch(0.94_0.02_250)] flex items-center justify-center flex-shrink-0 border border-border">
-                        <span className="text-xs font-bold text-muted-foreground">{product.name.charAt(0)}</span>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-medium text-foreground truncate group-hover:text-[oklch(0.52_0.18_145)] transition-colors">{product.name}</p>
-                        <p className="text-xs text-muted-foreground">from ${product.fromPrice.toFixed(2)}</p>
-                      </div>
-                      <ChevronRight size={14} className="text-muted-foreground/50 group-hover:text-[oklch(0.52_0.18_145)] transition-colors flex-shrink-0" />
-                    </a>
-                  ))}
+                <p className="section-label mb-3">Also available</p>
+                <div className="space-y-1.5">
+                  {alsoAvailableItems
+                    .filter((item) => !(item.region === selectedRegion && item.duration === selectedDuration))
+                    .slice(0, 4)
+                    .map((item) => (
+                      <button
+                        key={item.id}
+                        className="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-[oklch(0.97_0.02_145)] transition-colors group text-left"
+                        onClick={() => {
+                          handleRegionChange(item.region);
+                          handleDurationChange(item.duration);
+                          toast.info(`Switched to ${item.region} · ${item.duration}`, { duration: 1500 });
+                          window.scrollTo({ top: 0, behavior: "smooth" });
+                        }}
+                      >
+                        <span className="text-lg flex-shrink-0">{item.flag}</span>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-medium text-foreground group-hover:text-[oklch(0.38_0.16_145)] transition-colors">
+                            {item.region} · {item.duration}
+                          </p>
+                          <p className="text-xs text-muted-foreground">{item.sellersCount} sellers</p>
+                        </div>
+                        <div className="text-right flex-shrink-0">
+                          <p className="text-xs font-bold text-foreground">from ${item.price.toFixed(2)}</p>
+                        </div>
+                        <ChevronRight size={13} className="text-muted-foreground/50 group-hover:text-[oklch(0.52_0.18_145)] transition-colors flex-shrink-0" />
+                      </button>
+                    ))}
                 </div>
               </div>
             </div>
@@ -808,6 +985,66 @@ export default function Home() {
         >
           <Zap size={15} strokeWidth={2.5} />
           Buy Now
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ── Review Card component — with variant tag and Helpful button ──────────────
+function ReviewCard({
+  review,
+  helpfulCount,
+  voted,
+  onHelpful,
+}: {
+  review: { id: string; author: string; country: string; rating: number; date: string; text: string; verified: boolean; variant: string };
+  helpfulCount: number;
+  voted: boolean;
+  onHelpful: () => void;
+}) {
+  return (
+    <div className="bg-white rounded-xl border border-border p-4">
+      <div className="flex items-start gap-2.5">
+        <div className="w-8 h-8 rounded-full bg-[oklch(0.94_0.04_255)] flex items-center justify-center text-xs font-bold text-[oklch(0.55_0.18_255)] flex-shrink-0">
+          {review.author.charAt(0)}
+        </div>
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-semibold text-foreground">{review.author}</span>
+            <span className="text-xs text-muted-foreground">{review.country}</span>
+            {review.verified && (
+              <span className="flex items-center gap-0.5 text-[10px] font-medium text-[oklch(0.52_0.18_145)]">
+                <ShieldCheck size={10} />Verified
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-2 mt-0.5">
+            <StarRating rating={review.rating} size={11} />
+            <span className="text-xs text-muted-foreground">{review.date}</span>
+          </div>
+        </div>
+      </div>
+      <p className="text-sm text-foreground/80 mt-3 leading-relaxed">{review.text}</p>
+
+      {/* Variant tag — Fernandes et al. 2022: relevance is one of 4 factors driving review influence */}
+      <div className="mt-2 mb-2">
+        <span className="text-[11px] text-muted-foreground bg-muted px-2 py-0.5 rounded-full">{review.variant}</span>
+      </div>
+
+      {/* Helpful button — Instant Gaming pattern: improves review quality signal without registration */}
+      <div className="flex items-center justify-end mt-1">
+        <button
+          onClick={onHelpful}
+          disabled={voted}
+          className={`flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded-full transition-all ${
+            voted
+              ? "text-[oklch(0.52_0.18_145)] bg-[oklch(0.95_0.05_145)]"
+              : "text-muted-foreground hover:text-foreground hover:bg-muted"
+          }`}
+        >
+          <ThumbsUp size={11} className={voted ? "fill-[oklch(0.52_0.18_145)]" : ""} />
+          Helpful {helpfulCount > 0 && <span>({helpfulCount})</span>}
         </button>
       </div>
     </div>
