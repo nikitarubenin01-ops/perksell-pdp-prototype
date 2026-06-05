@@ -19,6 +19,7 @@ import {
   Zap,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import SeoContent from "@/components/SeoContent";
 import SellerTooltip from "@/components/SellerTooltip";
 import ProtectionTooltip from "@/components/ProtectionTooltip";
 import StarRating from "@/components/StarRating";
@@ -749,6 +750,10 @@ export default function Home() {
                 <ChevronDown size={15} />Show all {productStats.reviewCount} reviews
               </button>
             </section>
+
+            {/* SEO Content Block — H2/H3/H4/FAQ — below reviews */}
+            <SeoContent />
+
           </div>
 
           {/* ═══════════════════════════════════════════════════════════════
