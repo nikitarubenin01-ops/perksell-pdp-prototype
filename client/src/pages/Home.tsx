@@ -280,13 +280,12 @@ export default function Home() {
 
                   {/* Title block */}
                   <div>
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <span className="text-[11px] font-semibold text-[oklch(0.52_0.18_145)] bg-[oklch(0.95_0.05_145)] px-2 py-0.5 rounded-full uppercase tracking-wide">
-                        Subscription
-                      </span>
-                    </div>
+                    {/* Breadcrumb brand line — G2A pattern: Brand > Product */}
+                    <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wide font-medium">
+                      MAX (HBO)
+                    </p>
                     <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight leading-tight">
-                      MAX (HBO) Action
+                      Buy MAX (HBO) Subscription — Cheap Price, Instant Delivery
                     </h1>
                     <div className="flex flex-wrap items-center gap-2.5 mt-2">
                       <div className="flex items-center gap-1.5">
