@@ -260,11 +260,14 @@ export default function Home() {
           ═══════════════════════════════════════════════════════════════ */}
           <div className="space-y-6">
 
-            {/* Product header */}
+            {/* ═══════════════════════════════════════════════════════════════
+                PRODUCT HERO — image left, info + variants right (Яндекс.Маркет pattern)
+            ═══════════════════════════════════════════════════════════════ */}
             <div className="animate-fade-in-up">
-              <div className="flex gap-5 items-start">
-                {/* Cover image */}
-                <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-xl flex-shrink-0 overflow-hidden border border-border shadow-md">
+              <div className="grid grid-cols-1 sm:grid-cols-[280px_1fr] gap-6 items-start">
+
+                {/* ── LEFT: Cover image ── */}
+                <div className="rounded-2xl overflow-hidden border border-border shadow-md flex-shrink-0 w-full sm:w-[280px]" style={{ aspectRatio: "3/4" }}>
                   <img
                     src="/manus-storage/max-hbo-cover_50d9d410.png"
                     alt="MAX (HBO) subscription cover"
@@ -272,242 +275,188 @@ export default function Home() {
                   />
                 </div>
 
-                {/* Info */}
-                <div className="flex-1 min-w-0 pt-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-[11px] font-semibold text-[oklch(0.52_0.18_145)] bg-[oklch(0.95_0.05_145)] px-2 py-0.5 rounded-full uppercase tracking-wide">
-                      Subscription
-                    </span>
-                  </div>
-                  <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight leading-tight">
-                    MAX (HBO) Action
-                  </h1>
+                {/* ── RIGHT: Info + variants + specs ── */}
+                <div className="flex flex-col gap-5 min-w-0">
 
-                  {/* Rating row */}
-                  <div className="flex flex-wrap items-center gap-3 mt-2">
-                    <div className="flex items-center gap-1.5">
-                      <StarRating rating={productStats.rating} size={14} />
-                      <span className="text-sm font-semibold text-[oklch(0.78_0.16_75)]">
-                        {productStats.rating}
+                  {/* Title block */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className="text-[11px] font-semibold text-[oklch(0.52_0.18_145)] bg-[oklch(0.95_0.05_145)] px-2 py-0.5 rounded-full uppercase tracking-wide">
+                        Subscription
                       </span>
-                      <a href="#reviews" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                        ({productStats.reviewCount} reviews)
-                      </a>
                     </div>
-                    <span className="text-muted-foreground text-sm">·</span>
-                    <span className="text-sm text-muted-foreground">
-                      <span className="font-semibold text-foreground">{productStats.totalSold.toLocaleString()}</span> sold
-                    </span>
-                    <span className="text-muted-foreground text-sm">·</span>
-                    <ProtectionTooltip
-                      title="Success rate"
-                      description="Percentage of orders delivered successfully without disputes across all sellers."
-                      side="bottom"
-                    >
-                      <span className="text-sm text-muted-foreground cursor-help flex items-center gap-1">
-                        <span className="font-semibold text-[oklch(0.52_0.18_145)]">{productStats.successRate}%</span> success rate
-                        <Info size={12} className="text-muted-foreground/60" />
+                    <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight leading-tight">
+                      MAX (HBO) Action
+                    </h1>
+                    <div className="flex flex-wrap items-center gap-2.5 mt-2">
+                      <div className="flex items-center gap-1.5">
+                        <StarRating rating={productStats.rating} size={13} />
+                        <span className="text-sm font-semibold text-[oklch(0.78_0.16_75)]">{productStats.rating}</span>
+                        <a href="#reviews" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                          ({productStats.reviewCount} reviews)
+                        </a>
+                      </div>
+                      <span className="text-muted-foreground text-xs">·</span>
+                      <span className="text-sm text-muted-foreground">
+                        <span className="font-semibold text-foreground">{productStats.totalSold.toLocaleString()}</span> sold
                       </span>
-                    </ProtectionTooltip>
+                    </div>
+                    <div className="flex items-center gap-1.5 mt-1.5">
+                      <TrendingUp size={12} className="text-[oklch(0.52_0.18_145)]" />
+                      <span className="text-sm text-[oklch(0.38_0.16_145)] font-semibold">{productStats.soldLast30Days} activations</span>
+                      <span className="text-sm text-muted-foreground">in the last 30 days</span>
+                    </div>
                   </div>
 
-                  {/* FOMO: activations today — Ye, Cheng & Fang: sales history drives purchase choice */}
-                  <div className="flex items-center gap-1.5 mt-2">
-                    <TrendingUp size={13} className="text-[oklch(0.52_0.18_145)]" />
-                    <span className="text-sm text-[oklch(0.38_0.16_145)] font-semibold">
-                      {productStats.soldLast30Days} activations
-                    </span>
-                    <span className="text-sm text-muted-foreground">in the last 30 days</span>
+                  {/* Region chips */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="section-label">Region</p>
+                      <ProtectionTooltip
+                        title="What is region?"
+                        description="Region determines which country or zone the subscription is valid for. Make sure to select the region that matches your account."
+                        side="left"
+                      >
+                        <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors">
+                          <HelpCircle size={11} />
+                          What is this?
+                        </button>
+                      </ProtectionTooltip>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {availableRegions.map((region) => {
+                        const hasAvailable = variants.some((v) => v.region === region && v.available);
+                        const isSelected = selectedRegion === region;
+                        return (
+                          <button
+                            key={region}
+                            onClick={() => hasAvailable && handleRegionChange(region)}
+                            disabled={!hasAvailable}
+                            className={`px-3.5 py-1.5 rounded-lg border text-sm font-medium transition-all duration-150 ${
+                              isSelected
+                                ? "border-[oklch(0.52_0.18_145)] bg-[oklch(0.97_0.03_145)] text-[oklch(0.38_0.16_145)] shadow-[0_0_0_2px_oklch(0.52_0.18_145_/_0.12)]"
+                                : hasAvailable
+                                ? "border-border bg-white text-foreground hover:border-[oklch(0.75_0.12_145)] hover:bg-[oklch(0.99_0.01_145)]"
+                                : "border-border bg-[oklch(0.97_0_0)] text-muted-foreground opacity-40 cursor-not-allowed"
+                            }`}
+                          >
+                            {region}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {selectedRegion !== "Global" && (
+                      <div className="mt-3 flex items-start gap-2 p-3 bg-[oklch(0.97_0.04_75)] border border-[oklch(0.88_0.10_75)] rounded-lg">
+                        <AlertTriangle size={13} className="text-[oklch(0.60_0.18_75)] flex-shrink-0 mt-0.5" />
+                        <p className="text-xs text-[oklch(0.45_0.12_75)] leading-relaxed">
+                          Activates only on <strong>{selectedRegion}</strong> accounts.
+                        </p>
+                      </div>
+                    )}
                   </div>
 
+                  {/* Duration chips */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="section-label">Duration</p>
+                      {activeVariant && (
+                        <span className="text-xs text-muted-foreground">{activeVariant.sellersCount} sellers</span>
+                      )}
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {DURATIONS.map((duration) => {
+                        const variant = findVariant(selectedRegion, duration);
+                        const exists = variant !== undefined;
+                        const isAvailable = variant?.available ?? false;
+                        const isSelected = selectedDuration === duration && exists;
+                        const savingsPct =
+                          baseMonthlyPrice && variant?.monthCount && variant.monthCount > 1 && isAvailable
+                            ? Math.round(((baseMonthlyPrice - variant.price / variant.monthCount) / baseMonthlyPrice) * 100)
+                            : null;
+                        return (
+                          <button
+                            key={duration}
+                            onClick={() => isAvailable && handleDurationChange(duration)}
+                            disabled={!isAvailable}
+                            className={`relative flex flex-col items-start gap-0.5 px-3.5 py-2.5 rounded-xl border transition-all duration-150 min-w-[96px] ${
+                              isSelected
+                                ? "border-[oklch(0.52_0.18_145)] bg-[oklch(0.97_0.03_145)] shadow-[0_0_0_2px_oklch(0.52_0.18_145_/_0.12)]"
+                                : isAvailable
+                                ? "border-border bg-white hover:border-[oklch(0.75_0.12_145)] hover:bg-[oklch(0.99_0.01_145)]"
+                                : "border-border bg-[oklch(0.97_0_0)] opacity-40 cursor-not-allowed"
+                            }`}
+                          >
+                            {variant?.popular && (
+                              <span className="absolute -top-2 left-2.5 text-[9px] font-bold text-white bg-[oklch(0.52_0.18_145)] px-1.5 py-0.5 rounded-full uppercase tracking-wide">
+                                Popular
+                              </span>
+                            )}
+                            {savingsPct && savingsPct > 0 && (
+                              <span className="absolute -top-2 right-2 text-[9px] font-bold text-white bg-[oklch(0.78_0.16_75)] px-1.5 py-0.5 rounded-full">
+                                -{savingsPct}%
+                              </span>
+                            )}
+                            <span className={`text-sm font-semibold leading-tight ${isSelected ? "text-[oklch(0.38_0.16_145)]" : "text-foreground"}`}>
+                              {duration}
+                            </span>
+                            {exists ? (
+                              isAvailable ? (
+                                <>
+                                  <div className="flex items-baseline gap-1">
+                                    <span className={`text-sm font-bold leading-none ${isSelected ? "text-[oklch(0.38_0.16_145)]" : "text-foreground"}`}>
+                                      ${variant!.price.toFixed(2)}
+                                    </span>
+                                    {variant!.monthCount === 1 && variant!.retailPrice > variant!.price && (
+                                      <span className="text-[10px] text-muted-foreground line-through leading-none">${variant!.retailPrice.toFixed(2)}</span>
+                                    )}
+                                  </div>
+                                  {variant!.monthCount > 1 && (
+                                    <span className={`text-[10px] font-medium leading-none ${isSelected ? "text-[oklch(0.52_0.18_145)]" : "text-muted-foreground"}`}>
+                                      ${(variant!.price / variant!.monthCount).toFixed(2)}/mo
+                                    </span>
+                                  )}
+                                </>
+                              ) : (
+                                <span className="text-xs text-muted-foreground">Out of stock</span>
+                              )
+                            ) : (
+                              <span className="text-xs text-muted-foreground">N/A</span>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Specs table — dotted leaders like Яндекс.Маркет */}
+                  <div className="space-y-0 border-t border-border pt-4">
+                    {[
+                      { label: "Category", value: "Subscriptions" },
+                      { label: "Region", value: selectedRegion },
+                      { label: "Duration", value: selectedDuration },
+                      { label: "Delivery", value: "Instant · Login credentials" },
+                      { label: "Total sales", value: `${productStats.totalSold.toLocaleString()} orders` },
+                      {
+                        label: "Sold last 30 days",
+                        value: (
+                          <span className="flex items-center gap-1 text-[oklch(0.52_0.18_145)] font-semibold">
+                            <TrendingUp size={12} />
+                            {productStats.soldLast30Days} orders
+                          </span>
+                        ),
+                      },
+                    ].map((row, i) => (
+                      <div key={i} className="flex items-baseline gap-2 py-2 border-b border-dashed border-border/60 last:border-0">
+                        <span className="text-sm text-muted-foreground whitespace-nowrap flex-shrink-0 w-32">{row.label}</span>
+                        <span className="flex-1 border-b border-dashed border-border/40 mb-1 mx-1" />
+                        <span className="text-sm font-medium text-foreground text-right">{row.value}</span>
+                      </div>
+                    ))}
+                  </div>
 
                 </div>
               </div>
             </div>
-
-            {/* ── TWO-LEVEL VARIANT SELECTOR ── */}
-            <section className="bg-white rounded-xl border border-border p-5 animate-fade-in-up" style={{ animationDelay: "50ms" }}>
-
-              {/* LEVEL 1: Region */}
-              <div className="mb-5">
-                <div className="flex items-center justify-between mb-3">
-                  <h2 className="section-label">Region</h2>
-                  <ProtectionTooltip
-                    title="What is region?"
-                    description="Region determines which country or zone the subscription is valid for. Make sure to select the region that matches your account."
-                    side="left"
-                  >
-                    <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors">
-                      <HelpCircle size={12} />
-                      What is this?
-                    </button>
-                  </ProtectionTooltip>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {availableRegions.map((region) => {
-                    const hasAvailable = variants.some((v) => v.region === region && v.available);
-                    const isSelected = selectedRegion === region;
-                    return (
-                      <button
-                        key={region}
-                        onClick={() => hasAvailable && handleRegionChange(region)}
-                        disabled={!hasAvailable}
-                        className={`
-                          px-4 py-2 rounded-lg border text-sm font-medium transition-all duration-150
-                          ${isSelected
-                            ? "border-[oklch(0.52_0.18_145)] bg-[oklch(0.97_0.03_145)] text-[oklch(0.38_0.16_145)] shadow-[0_0_0_2px_oklch(0.52_0.18_145_/_0.12)]"
-                            : hasAvailable
-                            ? "border-border bg-white text-foreground hover:border-[oklch(0.75_0.12_145)] hover:bg-[oklch(0.99_0.01_145)]"
-                            : "border-border bg-[oklch(0.97_0_0)] text-muted-foreground opacity-40 cursor-not-allowed"
-                          }
-                        `}
-                      >
-                        {region}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Divider */}
-              <div className="border-t border-border mb-5" />
-
-              {/* LEVEL 2: Duration */}
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <h2 className="section-label">Duration</h2>
-                  {activeVariant && (
-                    <span className="text-xs text-muted-foreground">
-                      {activeVariant.sellersCount} seller{activeVariant.sellersCount !== 1 ? "s" : ""}
-                    </span>
-                  )}
-                </div>
-                <div className="flex flex-wrap gap-2.5">
-                  {DURATIONS.map((duration) => {
-                    const variant = findVariant(selectedRegion, duration);
-                    const exists = variant !== undefined;
-                    const isAvailable = variant?.available ?? false;
-                    const isSelected = selectedDuration === duration && exists;
-
-                    // Savings vs 1-month price — Baymard: variations must explain differences
-                    const savingsPct =
-                      baseMonthlyPrice && variant?.monthCount && variant.monthCount > 1 && isAvailable
-                        ? Math.round(
-                            ((baseMonthlyPrice - variant.price / variant.monthCount) / baseMonthlyPrice) * 100
-                          )
-                        : null;
-
-                    return (
-                      <button
-                        key={duration}
-                        onClick={() => isAvailable && handleDurationChange(duration)}
-                        disabled={!isAvailable}
-                        className={`
-                          relative flex flex-col items-start gap-1 px-4 py-3 rounded-xl border transition-all duration-150 min-w-[110px]
-                          ${isSelected
-                            ? "border-[oklch(0.52_0.18_145)] bg-[oklch(0.97_0.03_145)] shadow-[0_0_0_2px_oklch(0.52_0.18_145_/_0.12)]"
-                            : isAvailable
-                            ? "border-border bg-white hover:border-[oklch(0.75_0.12_145)] hover:bg-[oklch(0.99_0.01_145)]"
-                            : "border-border bg-[oklch(0.97_0_0)] opacity-40 cursor-not-allowed"
-                          }
-                        `}
-                      >
-                        {/* Popular badge */}
-                        {variant?.popular && (
-                          <span className="absolute -top-2 left-3 text-[9px] font-bold text-white bg-[oklch(0.52_0.18_145)] px-1.5 py-0.5 rounded-full uppercase tracking-wide">
-                            Popular
-                          </span>
-                        )}
-
-                        {/* Savings badge — Baymard: show value difference */}
-                        {savingsPct && savingsPct > 0 && (
-                          <span className="absolute -top-2 right-2 text-[9px] font-bold text-white bg-[oklch(0.78_0.16_75)] px-1.5 py-0.5 rounded-full">
-                            -{savingsPct}%
-                          </span>
-                        )}
-
-                        <span className={`text-sm font-semibold leading-tight ${isSelected ? "text-[oklch(0.38_0.16_145)]" : "text-foreground"}`}>
-                          {duration}
-                        </span>
-
-                        {exists ? (
-                          isAvailable ? (
-                            <>
-                              <div className="flex items-baseline gap-1.5">
-                                <span className={`text-sm font-bold leading-none ${isSelected ? "text-[oklch(0.38_0.16_145)]" : "text-foreground"}`}>
-                                  ${variant!.price.toFixed(2)}
-                                </span>
-                                {/* Retail strikethrough — only for 1-month (multi-month savings shown via /mo badge) */}
-                                {variant!.monthCount === 1 && variant!.retailPrice > variant!.price && (
-                                  <span className="text-[10px] font-medium text-muted-foreground line-through leading-none">
-                                    ${variant!.retailPrice.toFixed(2)}
-                                  </span>
-                                )}
-                              </div>
-                              {variant!.monthCount > 1 && (
-                                <span className={`text-[10px] font-medium leading-none ${
-                                  isSelected ? "text-[oklch(0.52_0.18_145)]" : "text-muted-foreground"
-                                }`}>
-                                  ${(variant!.price / variant!.monthCount).toFixed(2)}/mo
-                                </span>
-                              )}
-                            </>
-                          ) : (
-                            <span className="text-xs text-muted-foreground">Out of stock</span>
-                          )
-                        ) : (
-                          <span className="text-xs text-muted-foreground">Not available</span>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Region-specific warning — NN/g: page must prevent wrong-item purchase */}
-                {selectedRegion !== "Global" && (
-                  <div className="mt-4 flex items-start gap-2.5 p-3.5 bg-[oklch(0.97_0.04_75)] border border-[oklch(0.88_0.10_75)] rounded-lg">
-                    <AlertTriangle size={14} className="text-[oklch(0.60_0.18_75)] flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-xs font-semibold text-[oklch(0.40_0.14_75)] mb-0.5">
-                        {selectedRegion} region only
-                      </p>
-                      <p className="text-xs text-[oklch(0.45_0.12_75)] leading-relaxed">
-                        This subscription activates only on accounts registered in <strong>{selectedRegion}</strong>.
-                        Make sure your MAX account was created in {selectedRegion} before purchasing.
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </section>
-
-            {/* Product details */}
-            <section className="bg-white rounded-xl border border-border p-5 animate-fade-in-up" style={{ animationDelay: "100ms" }}>
-              <h2 className="section-label mb-4">Product details</h2>
-              <div className="space-y-0">
-                {[
-                  { label: "Category", value: "Subscriptions" },
-                  { label: "Region", value: selectedRegion },
-                  { label: "Duration", value: selectedDuration },
-                  { label: "Delivery", value: "Instant · Login credentials" },
-                  { label: "Total sales", value: `${productStats.totalSold.toLocaleString()} orders` },
-                  {
-                    label: "Sold last 30 days",
-                    value: (
-                      <span className="flex items-center gap-1 text-[oklch(0.52_0.18_145)] font-semibold">
-                        <TrendingUp size={13} />
-                        {productStats.soldLast30Days} orders
-                      </span>
-                    ),
-                  },
-                ].map((row, i) => (
-                  <div key={i} className="flex items-center justify-between py-3 border-b border-border last:border-0">
-                    <span className="text-sm text-muted-foreground">{row.label}</span>
-                    <span className="text-sm font-medium text-foreground">{row.value}</span>
-                  </div>
-                ))}
-              </div>
-            </section>
 
             {/* ── OFFERS LIST ── Recommended / Other split (Baymard: visual hierarchy) */}
             <section className="animate-fade-in-up" style={{ animationDelay: "150ms" }} id="offers">
