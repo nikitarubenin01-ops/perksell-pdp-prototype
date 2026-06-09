@@ -787,13 +787,13 @@ export default function Home() {
                   <div className="flex items-baseline gap-2.5 mb-1">
                     <span className="price-display">${currentPrice.toFixed(2)}</span>
                     {activeVariant?.retailPrice && activeVariant.retailPrice > currentPrice && (
-                      <span className="text-base font-medium text-muted-foreground line-through">
+                      <span className="text-base font-medium text-muted-foreground/60 line-through">
                         ${activeVariant.retailPrice.toFixed(2)}
                       </span>
                     )}
                     {activeVariant?.retailPrice && activeVariant.retailPrice > currentPrice && (
-                      <span className="text-xs font-bold text-white bg-[oklch(0.52_0.18_145)] px-1.5 py-0.5 rounded-full">
-                        -{Math.round((1 - currentPrice / activeVariant.retailPrice) * 100)}% vs retail
+                      <span className="text-xs font-bold text-[oklch(0.45_0.22_25)] bg-[oklch(0.97_0.04_25)] px-1.5 py-0.5 rounded-full">
+                        -{Math.round((1 - currentPrice / activeVariant.retailPrice) * 100)}%
                       </span>
                     )}
                   </div>
@@ -831,10 +831,10 @@ export default function Home() {
                           </span>
                         )}
                       </div>
-                      {/* Numeric rating in purchase card — Eneba pattern */}
-                                            <div className="flex items-center gap-1.5 mt-0.5">
+                      {/* Numeric rating in purchase card */}
+                      <div className="flex items-center gap-1.5 mt-0.5">
                         <NumericRatingBadge rating={selectedSeller.rating} label={selectedSeller.ratingLabel} />
-                        <DeliveryBadge mode={selectedSeller.deliveryMode} />
+                        {selectedSeller.deliveryMode === "manual" && <DeliveryBadge mode={selectedSeller.deliveryMode} />}
                       </div>
                     </div>
                     
