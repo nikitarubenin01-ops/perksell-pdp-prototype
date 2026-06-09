@@ -332,8 +332,74 @@ export const alsoAvailableItems: AlsoAvailableItem[] = [
   { id: "aa5", region: "EU",     duration: "3 Months", price: 15.50, sellersCount: 12, flag: "🇪🇺" },
 ];
 
-export const relatedProducts = [
-  { id: "rp1", name: "MAX (HBO) VOD Account", fromPrice: 15.0 },
-  { id: "rp2", name: "DAZN VOD Account",       fromPrice: 12.99 },
-  { id: "rp3", name: "Disney Premium Account",  fromPrice: 14.99 },
+export interface RelatedProduct {
+  id: string;
+  name: string;
+  shortName: string;
+  category: string;
+  fromPrice: number;        // cheapest offer on marketplace
+  retailPrice: number;      // official monthly price
+  rating: number;           // 0–5
+  reviewCount: number;
+  sellersCount: number;
+  color: string;            // brand accent for avatar bg
+  initials: string;         // 2-char logo fallback
+  tag?: string;             // optional badge e.g. "Best value"
+}
+
+export const relatedProducts: RelatedProduct[] = [
+  {
+    id: "rp1",
+    name: "Netflix Standard · 1 Month",
+    shortName: "Netflix",
+    category: "Streaming",
+    fromPrice: 11.99,
+    retailPrice: 15.49,
+    rating: 4.7,
+    reviewCount: 3241,
+    sellersCount: 44,
+    color: "#E50914",
+    initials: "NF",
+    tag: "Most popular",
+  },
+  {
+    id: "rp2",
+    name: "Disney+ Standard · 1 Month",
+    shortName: "Disney+",
+    category: "Streaming",
+    fromPrice: 7.49,
+    retailPrice: 8.99,
+    rating: 4.5,
+    reviewCount: 1876,
+    sellersCount: 31,
+    color: "#113CCF",
+    initials: "D+",
+  },
+  {
+    id: "rp3",
+    name: "Spotify Premium · 1 Month",
+    shortName: "Spotify",
+    category: "Music",
+    fromPrice: 8.49,
+    retailPrice: 10.99,
+    rating: 4.8,
+    reviewCount: 5102,
+    sellersCount: 58,
+    color: "#1DB954",
+    initials: "SP",
+    tag: "Best value",
+  },
+  {
+    id: "rp4",
+    name: "Prime Video · 1 Month",
+    shortName: "Prime Video",
+    category: "Streaming",
+    fromPrice: 6.99,
+    retailPrice: 8.99,
+    rating: 4.4,
+    reviewCount: 987,
+    sellersCount: 19,
+    color: "#00A8E1",
+    initials: "PV",
+  },
 ];

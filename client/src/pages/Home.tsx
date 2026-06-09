@@ -28,12 +28,13 @@ import {
   DURATIONS,
   productStats,
   protectionItems,
-  alsoAvailableItems,
+  relatedProducts,
   reviews,
   sellers,
   variants,
   type Seller,
   type Variant,
+  type RelatedProduct,
 } from "@/lib/mockData";
 
 // ─── Design tokens (Perksell PDP) ───────────────────────────────────────────
@@ -897,57 +898,105 @@ export default function Home() {
                     </div>
                   )}
 
+                  {/* ScamAdviser trust signal */}
                   <div className="mt-3 pt-3 border-t border-border">
-                    <a
-                      href="#"
-                      className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        toast.info("Refund policy", {
-                          description: "Digital goods are non-refundable after delivery confirmation, unless delivery fails. Contact support within 24h.",
-                          duration: 5000,
-                        });
-                      }}
-                    >
-                      <Info size={12} />
-                      Refund policy for digital goods
-                      <ExternalLink size={10} className="ml-auto" />
-                    </a>
+                    <div className="flex items-center gap-2 mb-2.5">
+                      <div className="flex items-center gap-1.5 flex-1">
+                        <svg width="16" height="16" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <rect width="32" height="32" rx="6" fill="#E8F5E9"/>
+                          <path d="M16 4L6 8v8c0 5.5 4.3 10.7 10 12 5.7-1.3 10-6.5 10-12V8L16 4z" fill="#2E7D32"/>
+                          <path d="M13 16l2.5 2.5L20 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        <span className="text-[11px] font-semibold text-foreground">ScamAdviser</span>
+                        <span className="text-[10px] text-muted-foreground">Trust score</span>
+                        <span className="text-[11px] font-bold text-[oklch(0.52_0.18_145)]">100/100</span>
+                      </div>
+                      <a
+                        href="https://www.scamadviser.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[10px] text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        <ExternalLink size={10} />
+                      </a>
+                    </div>
+                    {/* Payment methods */}
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      {[
+                        { label: "Visa",       bg: "#1A1F71", text: "VISA",    textColor: "#fff",    w: 36 },
+                        { label: "Mastercard", bg: "#EB001B", text: "MC",      textColor: "#fff",    w: 28 },
+                        { label: "PayPal",     bg: "#003087", text: "PP",      textColor: "#009cde", w: 28 },
+                        { label: "Google Pay", bg: "#fff",    text: "G Pay",   textColor: "#3c4043", w: 36, border: true },
+                        { label: "Apple Pay",  bg: "#000",    text: "Pay",     textColor: "#fff",    w: 32 },
+                      ].map((pm) => (
+                        <div
+                          key={pm.label}
+                          className="h-5 rounded flex items-center justify-center px-1.5 flex-shrink-0"
+                          style={{
+                            background: pm.bg,
+                            width: pm.w,
+                            border: pm.border ? "1px solid #dadce0" : undefined,
+                          }}
+                          title={pm.label}
+                        >
+                          <span
+                            className="font-bold leading-none"
+                            style={{ fontSize: 8, color: pm.textColor, letterSpacing: pm.label === "Visa" ? "0.02em" : undefined }}
+                          >
+                            {pm.text}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Also available — Eneba pattern + Baymard cross-navigation */}
+              {/* Related Products — cross-sell to similar subscriptions */}
               <div className="bg-white rounded-2xl border border-border p-4 animate-scale-in" style={{ animationDelay: "80ms" }}>
-                <p className="section-label mb-3">Also available</p>
-                <div className="space-y-1.5">
-                  {alsoAvailableItems
-                    .filter((item) => !(item.region === selectedRegion && item.duration === selectedDuration))
-                    .slice(0, 4)
-                    .map((item) => (
+                <p className="section-label mb-3">You may also like</p>
+                <div className="space-y-2">
+                  {relatedProducts.map((product: RelatedProduct) => {
+                    const savePct = Math.round((1 - product.fromPrice / product.retailPrice) * 100);
+                    return (
                       <button
-                        key={item.id}
+                        key={product.id}
                         className="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-[oklch(0.97_0.02_145)] transition-colors group text-left"
-                        onClick={() => {
-                          handleRegionChange(item.region);
-                          handleDurationChange(item.duration);
-                          toast.info(`Switched to ${item.region} · ${item.duration}`, { duration: 1500 });
-                          window.scrollTo({ top: 0, behavior: "smooth" });
-                        }}
+                        onClick={() => toast.info(`${product.shortName} — coming soon`, { duration: 1500 })}
                       >
-                        <span className="text-lg flex-shrink-0">{item.flag}</span>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs font-medium text-foreground group-hover:text-[oklch(0.38_0.16_145)] transition-colors">
-                            {item.region} · {item.duration}
-                          </p>
-                          <p className="text-xs text-muted-foreground">{item.sellersCount} sellers</p>
+                        {/* Brand avatar */}
+                        <div
+                          className="w-9 h-9 rounded-lg flex items-center justify-center text-white font-bold text-[11px] flex-shrink-0"
+                          style={{ background: product.color }}
+                        >
+                          {product.initials}
                         </div>
+                        {/* Info */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <p className="text-xs font-semibold text-foreground group-hover:text-[oklch(0.38_0.16_145)] transition-colors leading-tight">
+                              {product.shortName}
+                            </p>
+                            {product.tag && (
+                              <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full bg-[oklch(0.95_0.05_145)] text-[oklch(0.38_0.16_145)] leading-none">
+                                {product.tag}
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-1 mt-0.5">
+                            <Star size={9} className="fill-[oklch(0.78_0.16_75)] text-[oklch(0.78_0.16_75)]" />
+                            <span className="text-[10px] text-muted-foreground">{product.rating.toFixed(1)} · {product.sellersCount} sellers</span>
+                          </div>
+                        </div>
+                        {/* Price */}
                         <div className="text-right flex-shrink-0">
-                          <p className="text-xs font-bold text-foreground">from ${item.price.toFixed(2)}</p>
+                          <p className="text-xs font-bold text-foreground">from ${product.fromPrice.toFixed(2)}</p>
+                          <p className="text-[10px] text-[oklch(0.52_0.18_145)] font-medium">−{savePct}% vs retail</p>
                         </div>
                         <ChevronRight size={13} className="text-muted-foreground/50 group-hover:text-[oklch(0.52_0.18_145)] transition-colors flex-shrink-0" />
                       </button>
-                    ))}
+                    );
+                  })}
                 </div>
               </div>
             </div>
