@@ -345,6 +345,7 @@ export interface RelatedProduct {
   color: string;            // brand accent for avatar bg
   initials: string;         // 2-char logo fallback
   tag?: string;             // optional badge e.g. "Best value"
+  imageUrl: string;         // cover image for card
 }
 
 export const relatedProducts: RelatedProduct[] = [
@@ -361,6 +362,7 @@ export const relatedProducts: RelatedProduct[] = [
     color: "#E50914",
     initials: "NF",
     tag: "Most popular",
+    imageUrl: "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=400&h=280&fit=crop",
   },
   {
     id: "rp2",
@@ -374,6 +376,7 @@ export const relatedProducts: RelatedProduct[] = [
     sellersCount: 31,
     color: "#113CCF",
     initials: "D+",
+    imageUrl: "https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?w=400&h=280&fit=crop",
   },
   {
     id: "rp3",
@@ -388,6 +391,7 @@ export const relatedProducts: RelatedProduct[] = [
     color: "#1DB954",
     initials: "SP",
     tag: "Best value",
+    imageUrl: "https://images.unsplash.com/photo-1611339555312-e607c8352fd7?w=400&h=280&fit=crop",
   },
   {
     id: "rp4",
@@ -401,5 +405,20 @@ export const relatedProducts: RelatedProduct[] = [
     sellersCount: 19,
     color: "#00A8E1",
     initials: "PV",
+    imageUrl: "https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?w=400&h=280&fit=crop",
+  },
+  {
+    id: "rp5",
+    name: "Apple TV+ · 1 Month",
+    shortName: "Apple TV+",
+    category: "Streaming",
+    fromPrice: 5.99,
+    retailPrice: 9.99,
+    rating: 4.3,
+    reviewCount: 642,
+    sellersCount: 14,
+    color: "#555555",
+    initials: "TV",
+    imageUrl: "https://images.unsplash.com/photo-1586899028174-e7098604235b?w=400&h=280&fit=crop",
   },
 ];
