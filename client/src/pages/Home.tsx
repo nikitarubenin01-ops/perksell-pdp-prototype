@@ -140,14 +140,6 @@ export default function Home() {
   const [helpfulCounts, setHelpfulCounts] = useState<Record<string, number>>(
     Object.fromEntries(reviews.map((r) => [r.id, r.helpfulCount]))
   );
-  const [galleryIndex, setGalleryIndex] = useState(0);
-
-  const galleryImages = [
-    { src: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663184201642/K5FN7FArfd6V2nEWk3iymQ/max-hbo-cover-MBA5PMuuXF7BQiaAH9hakp.webp', label: 'MAX (HBO) — Brand' },
-    { src: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663184201642/K5FN7FArfd6V2nEWk3iymQ/max-hbo-tv-VEZLRArS3xkfEwo2mKniy5.webp', label: 'MAX on TV' },
-    { src: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663184201642/K5FN7FArfd6V2nEWk3iymQ/max-hbo-laptop-TyrQTeUMzxmEji8ezvdN8g.webp', label: 'MAX on Laptop' },
-    { src: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663184201642/K5FN7FArfd6V2nEWk3iymQ/max-hbo-mobile-dNKPjoxD9uzDe4WBY3ThXw.webp', label: 'MAX on Mobile' },
-  ];
 
   function flashCard() {
     setCardFlash(true);
@@ -270,129 +262,66 @@ export default function Home() {
 
             {/* Product header */}
             <div className="animate-fade-in-up">
-              {/* Title + meta above image */}
-              <div className="mb-4">
-                <div className="flex items-center gap-2 mb-1.5">
-                  <span className="text-[11px] font-semibold text-[oklch(0.52_0.18_145)] bg-[oklch(0.95_0.05_145)] px-2 py-0.5 rounded-full uppercase tracking-wide">
-                    Subscription
-                  </span>
-                </div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight leading-tight mb-2">
-                  MAX (HBO) Action
-                </h1>
-                {/* Rating row */}
-                <div className="flex flex-wrap items-center gap-3">
-                  <div className="flex items-center gap-1.5">
-                    <StarRating rating={productStats.rating} size={14} />
-                    <span className="text-sm font-semibold text-[oklch(0.78_0.16_75)]">
-                      {productStats.rating}
-                    </span>
-                    <a href="#reviews" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                      ({productStats.reviewCount} reviews)
-                    </a>
-                  </div>
-                  <span className="text-muted-foreground text-sm">·</span>
-                  <span className="text-sm text-muted-foreground">
-                    <span className="font-semibold text-foreground">{productStats.totalSold.toLocaleString()}</span> sold
-                  </span>
-                  <span className="text-muted-foreground text-sm">·</span>
-                  <ProtectionTooltip
-                    title="Success rate"
-                    description="Percentage of orders delivered successfully without disputes across all sellers."
-                    side="bottom"
-                  >
-                    <span className="text-sm text-muted-foreground cursor-help flex items-center gap-1">
-                      <span className="font-semibold text-[oklch(0.52_0.18_145)]">{productStats.successRate}%</span> success rate
-                      <Info size={12} className="text-muted-foreground/60" />
-                    </span>
-                  </ProtectionTooltip>
-                  <span className="text-muted-foreground text-sm">·</span>
-                  <div className="flex items-center gap-1">
-                    <TrendingUp size={12} className="text-[oklch(0.52_0.18_145)]" />
-                    <span className="text-sm text-[oklch(0.38_0.16_145)] font-semibold">{productStats.soldLast30Days}</span>
-                    <span className="text-sm text-muted-foreground">last 30 days</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Image + characteristics side by side (G2A / Eneba pattern) */}
-              <div className="grid grid-cols-1 sm:grid-cols-[320px_1fr] gap-4">
-                {/* Main image + gallery */}
-                <div>
-                  {/* Main image */}
-                  <div
-                    className="w-full rounded-xl overflow-hidden border border-border shadow-sm bg-[oklch(0.12_0.04_255)] cursor-pointer"
-                    style={{ aspectRatio: '16/9' }}
-                    onClick={() => setGalleryIndex(0)}
-                  >
-                    <img
-                      src={galleryImages[galleryIndex].src}
-                      alt={galleryImages[galleryIndex].label}
-                      className="w-full h-full object-cover transition-opacity duration-200"
-                    />
-                  </div>
-                  {/* Thumbnail gallery */}
-                  <div className="flex gap-2 mt-2 overflow-x-auto pb-1">
-                    {galleryImages.map((img, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => setGalleryIndex(idx)}
-                        className={`flex-shrink-0 w-16 h-10 rounded-md overflow-hidden border-2 transition-all duration-150 ${
-                          galleryIndex === idx
-                            ? 'border-[oklch(0.52_0.18_145)] shadow-[0_0_0_1px_oklch(0.52_0.18_145_/_0.3)]'
-                            : 'border-border hover:border-[oklch(0.75_0.12_145)]'
-                        }`}
-                      >
-                        <img src={img.src} alt={img.label} className="w-full h-full object-cover" />
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Product characteristics — G2A/Eneba pattern: 2-col icon grid */}
-                <div className="grid grid-cols-1 xs:grid-cols-2 gap-3 content-start">
-                  {[
-                    {
-                      icon: <span className="text-base">🌍</span>,
-                      label: 'Region',
-                      value: selectedRegion,
-                      sub: selectedRegion !== 'Global' ? 'Check region restrictions' : 'Works worldwide',
-                      subHref: '#',
-                    },
-                    {
-                      icon: <span className="text-base">📱</span>,
-                      label: 'Works on',
-                      value: 'All devices',
-                      sub: 'TV · Phone · PC · Tablet',
-                    },
-                    {
-                      icon: <span className="text-base">⚡</span>,
-                      label: 'Delivery',
-                      value: 'Instant',
-                      sub: 'Login credentials',
-                    },
-                    {
-                      icon: <span className="text-base">🔄</span>,
-                      label: 'Replacements',
-                      value: 'Unlimited',
-                      sub: 'If access stops working',
-                    },
-                  ].map((item, i) => (
-                    <div key={i} className="flex gap-3 p-3 rounded-lg bg-white border border-border">
-                      <div className="w-8 h-8 rounded-lg bg-[oklch(0.97_0.02_145)] flex items-center justify-center flex-shrink-0">
-                        {item.icon}
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-xs text-muted-foreground leading-none mb-0.5">{item.label}</p>
-                        <p className="text-sm font-semibold text-foreground leading-tight">{item.value}</p>
-                        {item.sub && (
-                          item.subHref
-                            ? <a href={item.subHref} className="text-xs text-[oklch(0.52_0.18_145)] hover:underline">{item.sub}</a>
-                            : <p className="text-xs text-muted-foreground">{item.sub}</p>
-                        )}
-                      </div>
+              <div className="flex gap-5 items-start">
+                {/* Image */}
+                <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-xl bg-gradient-to-br from-[oklch(0.25_0.06_255)] to-[oklch(0.18_0.04_250)] flex items-center justify-center flex-shrink-0 border border-border overflow-hidden shadow-sm">
+                  <div className="text-center">
+                    <div className="w-12 h-12 mx-auto rounded-lg bg-white/10 flex items-center justify-center mb-1">
+                      <span className="text-white text-lg font-bold">M</span>
                     </div>
-                  ))}
+                    <span className="text-white/60 text-[10px]">MAX</span>
+                  </div>
+                </div>
+
+                {/* Info */}
+                <div className="flex-1 min-w-0 pt-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-[11px] font-semibold text-[oklch(0.52_0.18_145)] bg-[oklch(0.95_0.05_145)] px-2 py-0.5 rounded-full uppercase tracking-wide">
+                      Subscription
+                    </span>
+                  </div>
+                  <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight leading-tight">
+                    MAX (HBO) Action
+                  </h1>
+
+                  {/* Rating row */}
+                  <div className="flex flex-wrap items-center gap-3 mt-2">
+                    <div className="flex items-center gap-1.5">
+                      <StarRating rating={productStats.rating} size={14} />
+                      <span className="text-sm font-semibold text-[oklch(0.78_0.16_75)]">
+                        {productStats.rating}
+                      </span>
+                      <a href="#reviews" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                        ({productStats.reviewCount} reviews)
+                      </a>
+                    </div>
+                    <span className="text-muted-foreground text-sm">·</span>
+                    <span className="text-sm text-muted-foreground">
+                      <span className="font-semibold text-foreground">{productStats.totalSold.toLocaleString()}</span> sold
+                    </span>
+                    <span className="text-muted-foreground text-sm">·</span>
+                    <ProtectionTooltip
+                      title="Success rate"
+                      description="Percentage of orders delivered successfully without disputes across all sellers."
+                      side="bottom"
+                    >
+                      <span className="text-sm text-muted-foreground cursor-help flex items-center gap-1">
+                        <span className="font-semibold text-[oklch(0.52_0.18_145)]">{productStats.successRate}%</span> success rate
+                        <Info size={12} className="text-muted-foreground/60" />
+                      </span>
+                    </ProtectionTooltip>
+                  </div>
+
+                  {/* FOMO: activations today — Ye, Cheng & Fang: sales history drives purchase choice */}
+                  <div className="flex items-center gap-1.5 mt-2">
+                    <TrendingUp size={13} className="text-[oklch(0.52_0.18_145)]" />
+                    <span className="text-sm text-[oklch(0.38_0.16_145)] font-semibold">
+                      {productStats.soldLast30Days} activations
+                    </span>
+                    <span className="text-sm text-muted-foreground">in the last 30 days</span>
+                  </div>
+
+
                 </div>
               </div>
             </div>
@@ -559,11 +488,19 @@ export default function Home() {
               <div className="space-y-0">
                 {[
                   { label: "Category", value: "Subscriptions" },
+                  { label: "Region", value: selectedRegion },
                   { label: "Duration", value: selectedDuration },
+                  { label: "Delivery", value: "Instant · Login credentials" },
                   { label: "Total sales", value: `${productStats.totalSold.toLocaleString()} orders` },
-                  { label: "Platforms", value: "iOS · Android · Web · Smart TV · PS5 · Xbox" },
-                  { label: "Languages", value: "30+ languages" },
-                  { label: "Simultaneous streams", value: "Up to 3 screens" },
+                  {
+                    label: "Sold last 30 days",
+                    value: (
+                      <span className="flex items-center gap-1 text-[oklch(0.52_0.18_145)] font-semibold">
+                        <TrendingUp size={13} />
+                        {productStats.soldLast30Days} orders
+                      </span>
+                    ),
+                  },
                 ].map((row, i) => (
                   <div key={i} className="flex items-center justify-between py-3 border-b border-border last:border-0">
                     <span className="text-sm text-muted-foreground">{row.label}</span>
