@@ -280,10 +280,6 @@ export default function Home() {
 
                   {/* Title block */}
                   <div>
-                    {/* Breadcrumb brand line — G2A pattern: Brand > Product */}
-                    <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wide font-medium">
-                      MAX (HBO)
-                    </p>
                     <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight leading-tight">
                       Buy MAX (HBO) Subscription — Cheap Price, Instant Delivery
                     </h1>
