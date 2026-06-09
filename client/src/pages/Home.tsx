@@ -290,8 +290,8 @@ export default function Home() {
                       </span>
                     </div>
                     <div className="flex items-center gap-1.5 mt-1.5">
-                      <TrendingUp size={12} className="text-[oklch(0.52_0.18_145)]" />
-                      <span className="text-sm text-[oklch(0.38_0.16_145)] font-semibold">{productStats.soldLast30Days} activations</span>
+                      <TrendingUp size={12} className="text-[oklch(0.65_0.18_60)]" />
+                      <span className="text-sm text-[oklch(0.50_0.18_60)] font-semibold">{productStats.soldLast30Days} activations</span>
                       <span className="text-sm text-muted-foreground">in the last 30 days</span>
                     </div>
                   </div>
@@ -481,8 +481,8 @@ export default function Home() {
                           <Info size={12} className="text-muted-foreground/60" />
                         </button>
                       </SellerTooltip>
-                      <span className="text-[10px] font-bold text-[oklch(0.52_0.18_145)] bg-[oklch(0.95_0.05_145)] border border-[oklch(0.85_0.10_145)] px-1.5 py-0.5 rounded-full uppercase tracking-wide">
-                        Best price
+                          <span className="text-[10px] font-bold text-[oklch(0.52_0.18_145)] bg-[oklch(0.95_0.05_145)] border border-[oklch(0.85_0.10_145)] px-1.5 py-0.5 rounded-full uppercase tracking-wide">
+                        Most orders
                       </span>
                     </div>
                     <div className="flex items-center gap-2 mt-1 flex-wrap">
@@ -498,7 +498,7 @@ export default function Home() {
                       {activeVariant && activeVariant.retailPrice > recommendedSeller.price && (
                         <div className="flex items-center justify-end gap-1">
                           <span className="text-[10px] text-muted-foreground line-through">${activeVariant.retailPrice.toFixed(2)}</span>
-                          <span className="text-[10px] font-bold text-[oklch(0.45_0.22_25)]">
+                          <span className="text-[10px] font-bold text-white bg-[oklch(0.45_0.22_25)] px-1 py-0.5 rounded">
                             -{Math.round((1 - recommendedSeller.price / activeVariant.retailPrice) * 100)}%
                           </span>
                         </div>
@@ -564,7 +564,7 @@ export default function Home() {
                           {activeVariant && activeVariant.retailPrice > seller.price && (
                             <div className="flex items-center justify-end gap-1">
                               <span className="text-[10px] text-muted-foreground line-through">${activeVariant.retailPrice.toFixed(2)}</span>
-                              <span className="text-[10px] font-bold text-[oklch(0.45_0.22_25)]">
+                              <span className="text-[10px] font-bold text-white bg-[oklch(0.45_0.22_25)] px-1 py-0.5 rounded">
                                 -{Math.round((1 - seller.price / activeVariant.retailPrice) * 100)}%
                               </span>
                             </div>
@@ -787,12 +787,12 @@ export default function Home() {
                   <div className="flex items-baseline gap-2.5 mb-1">
                     <span className="price-display">${currentPrice.toFixed(2)}</span>
                     {activeVariant?.retailPrice && activeVariant.retailPrice > currentPrice && (
-                      <span className="text-base font-medium text-muted-foreground/60 line-through">
+                      <span className="text-base font-medium text-muted-foreground line-through">
                         ${activeVariant.retailPrice.toFixed(2)}
                       </span>
                     )}
                     {activeVariant?.retailPrice && activeVariant.retailPrice > currentPrice && (
-                      <span className="text-xs font-bold text-[oklch(0.45_0.22_25)] bg-[oklch(0.97_0.04_25)] px-1.5 py-0.5 rounded-full">
+                      <span className="text-sm font-bold text-[oklch(0.45_0.22_25)] bg-[oklch(0.95_0.06_25)] px-2 py-0.5 rounded-full">
                         -{Math.round((1 - currentPrice / activeVariant.retailPrice) * 100)}%
                       </span>
                     )}
@@ -826,7 +826,7 @@ export default function Home() {
                           </button>
                         </SellerTooltip>
                         {selectedSeller.isRecommended && (
-                          <span className="text-[10px] font-bold text-[oklch(0.52_0.18_145)] bg-[oklch(0.95_0.05_145)] border border-[oklch(0.85_0.10_145)] px-1.5 py-0.5 rounded-full">
+                          <span className="text-[10px] font-bold text-[oklch(0.25_0.04_240)] bg-[oklch(0.93_0.02_240)] border border-[oklch(0.85_0.03_240)] px-1.5 py-0.5 rounded-full">
                             Most orders
                           </span>
                         )}
