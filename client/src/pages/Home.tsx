@@ -157,10 +157,11 @@ export default function Home() {
   // All regions
   const availableRegions = useMemo(() => getAvailableRegions(), []);
 
-  // Savings comparison for duration chips
+  // Savings comparison for duration chips — use 6 Months as base since 1 Month is removed
   const baseMonthlyPrice = useMemo(() => {
-    const oneMonth = findVariant(selectedRegion, "1 Month");
-    return oneMonth?.available ? oneMonth.price : null;
+    const sixMonth = findVariant(selectedRegion, "6 Months");
+    if (sixMonth?.available) return sixMonth.price / 6;
+    return null;
   }, [selectedRegion]);
 
   function handleRegionChange(region: string) {
@@ -793,7 +794,7 @@ export default function Home() {
                     )}
                     {activeVariant?.retailPrice && activeVariant.retailPrice > currentPrice && (
                       <span className="text-sm font-bold text-[oklch(0.45_0.22_25)] bg-[oklch(0.95_0.06_25)] px-2 py-0.5 rounded-full">
-                        -{Math.round((1 - currentPrice / activeVariant.retailPrice) * 100)}%
+                        -{Math.round((1 - currentPrice / activeVariant.retailPrice) * 100)}% vs official
                       </span>
                     )}
                   </div>

@@ -57,7 +57,7 @@ export interface AlsoAvailableItem {
 export const REGIONS = ["Global", "Spain", "US", "EU"];
 
 // All durations available for this product
-export const DURATIONS = ["1 Month", "3 Months", "6 Months", "12 Months"];
+export const DURATIONS = ["6 Months", "12 Months"];
 
 // Full variant matrix — not every combination exists
 export const variants: Variant[] = [
@@ -65,12 +65,12 @@ export const variants: Variant[] = [
   { id: "global-1m",  region: "Global", duration: "1 Month",   monthCount: 1,  price: 14.67, retailPrice: 15.99,  available: true,  popular: false, sellersCount: 51 },
   { id: "global-3m",  region: "Global", duration: "3 Months",  monthCount: 3,  price: 16.19, retailPrice: 47.97,  available: true,  popular: false, sellersCount: 28 },
   { id: "global-6m",  region: "Global", duration: "6 Months",  monthCount: 6,  price: 28.99, retailPrice: 95.94,  available: true,  popular: false, sellersCount: 14 },
-  { id: "global-12m", region: "Global", duration: "12 Months", monthCount: 12, price: 49.99, retailPrice: 191.88, available: true,  popular: true,  sellersCount: 31 },
+  { id: "global-12m", region: "Global", duration: "12 Months", monthCount: 12, price: 49.99, retailPrice: 191.88, available: true,  popular: false, sellersCount: 31 },
   // Spain — MAX Standard ES: €13.99/mo (max.com/es)
   { id: "es-1m",      region: "Spain",  duration: "1 Month",   monthCount: 1,  price: 11.49, retailPrice: 13.99,  available: true,  popular: false, sellersCount: 18 },
   { id: "es-3m",      region: "Spain",  duration: "3 Months",  monthCount: 3,  price: 13.20, retailPrice: 41.97,  available: true,  popular: false, sellersCount: 9  },
   { id: "es-6m",      region: "Spain",  duration: "6 Months",  monthCount: 6,  price: 23.50, retailPrice: 83.94,  available: false, popular: false, sellersCount: 0  },
-  { id: "es-12m",     region: "Spain",  duration: "12 Months", monthCount: 12, price: 39.99, retailPrice: 167.88, available: true,  popular: true,  sellersCount: 14 },
+  { id: "es-12m",     region: "Spain",  duration: "12 Months", monthCount: 12, price: 39.99, retailPrice: 167.88, available: true,  popular: false, sellersCount: 14 },
   // US — MAX Standard US: $15.99/mo (max.com)
   { id: "us-1m",      region: "US",     duration: "1 Month",   monthCount: 1,  price: 12.49, retailPrice: 15.99, available: true,  popular: false, sellersCount: 11 },
   { id: "us-3m",      region: "US",     duration: "3 Months",  monthCount: 3,  price: 14.80, retailPrice: 47.97, available: false, popular: false, sellersCount: 0  },
