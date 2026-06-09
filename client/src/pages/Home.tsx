@@ -429,30 +429,12 @@ export default function Home() {
                   </div>
 
                   {/* Specs table — dotted leaders like Яндекс.Маркет */}
-                  <div className="space-y-0 border-t border-border pt-4">
-                    {[
-                      { label: "Category", value: "Subscriptions" },
-                      { label: "Region", value: selectedRegion },
-                      { label: "Duration", value: selectedDuration },
-                      { label: "Delivery", value: "Instant · Login credentials" },
-                      { label: "Total sales", value: `${productStats.totalSold.toLocaleString()} orders` },
-                      {
-                        label: "Sold last 30 days",
-                        value: (
-                          <span className="flex items-center gap-1 text-[oklch(0.52_0.18_145)] font-semibold">
-                            <TrendingUp size={12} />
-                            {productStats.soldLast30Days} orders
-                          </span>
-                        ),
-                      },
-                    ].map((row, i) => (
-                      <div key={i} className="flex items-baseline gap-2 py-2 border-b border-dashed border-border/60 last:border-0">
-                        <span className="text-sm text-muted-foreground whitespace-nowrap flex-shrink-0 w-32">{row.label}</span>
-                        <span className="flex-1 border-b border-dashed border-border/40 mb-1 mx-1" />
-                        <span className="text-sm font-medium text-foreground text-right">{row.value}</span>
-                      </div>
-                    ))}
-                  </div>
+                  <SpecsTable
+                    selectedRegion={selectedRegion}
+                    selectedDuration={selectedDuration}
+                    totalSold={productStats.totalSold}
+                    soldLast30Days={productStats.soldLast30Days}
+                  />
 
                 </div>
               </div>
@@ -1066,6 +1048,86 @@ function ReviewCard({
           Helpful {helpfulCount > 0 && <span>({helpfulCount})</span>}
         </button>
       </div>
+    </div>
+  );
+}
+
+// ── SpecsTable — dotted leaders + expandable "All characteristics" ────────────
+function SpecsTable({
+  selectedRegion,
+  selectedDuration,
+  totalSold,
+  soldLast30Days,
+}: {
+  selectedRegion: string;
+  selectedDuration: string;
+  totalSold: number;
+  soldLast30Days: number;
+}) {
+  const [expanded, setExpanded] = useState(false);
+
+  const mainRows: { label: string; value: React.ReactNode }[] = [
+    { label: "Region", value: selectedRegion },
+    { label: "Duration", value: selectedDuration },
+    { label: "Delivery", value: "Instant · Login credentials" },
+    {
+      label: "Total sales",
+      value: `${totalSold.toLocaleString()} orders`,
+    },
+    {
+      label: "Sold last 30 days",
+      value: (
+        <span className="flex items-center gap-1 text-[oklch(0.52_0.18_145)] font-semibold">
+          <TrendingUp size={12} />
+          {soldLast30Days} orders
+        </span>
+      ),
+    },
+  ];
+
+  const extraRows: { label: string; value: React.ReactNode }[] = [
+    { label: "Platforms", value: "Web, iOS, Android, Smart TV, Consoles" },
+    { label: "Languages", value: "English, Spanish, French, Portuguese" },
+    { label: "Streams", value: "Up to 3 simultaneous streams" },
+    { label: "Activation", value: "Login credentials · Instant access" },
+    { label: "Replacements", value: "Unlimited — if access stops working" },
+    { label: "Content", value: "HBO Originals, Warner Bros., DC, Max Originals" },
+  ];
+
+  const rows = expanded ? [...mainRows, ...extraRows] : mainRows;
+
+  return (
+    <div className="border-t border-border pt-4">
+      <div className="space-y-0">
+        {rows.map((row, i) => (
+          <div
+            key={i}
+            className="flex items-baseline gap-2 py-2 border-b border-dashed border-border/60 last:border-0"
+          >
+            <span className="text-sm text-muted-foreground whitespace-nowrap flex-shrink-0 w-32">
+              {row.label}
+            </span>
+            <span className="flex-1 border-b border-dashed border-border/40 mb-1 mx-1" />
+            <span className="text-sm font-medium text-foreground text-right">{row.value}</span>
+          </div>
+        ))}
+      </div>
+      <button
+        className="mt-3 flex items-center gap-1 text-sm font-medium text-[oklch(0.52_0.18_145)] hover:text-[oklch(0.38_0.16_145)] transition-colors"
+        onClick={() => setExpanded(!expanded)}
+      >
+        {expanded ? (
+          <>
+            <ChevronUp size={14} />
+            Hide characteristics
+          </>
+        ) : (
+          <>
+            <ChevronDown size={14} />
+            All characteristics ›
+          </>
+        )}
+      </button>
     </div>
   );
 }
