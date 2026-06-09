@@ -666,6 +666,88 @@ export default function Home() {
               </div>
             </section>
 
+            {/* ── YOU MAY ALSO LIKE — full-width product cards with hover reveal ── */}
+            <section className="animate-fade-in-up" style={{ animationDelay: "200ms" }}>
+              <div className="flex items-baseline justify-between mb-5">
+                <h2 className="text-xl font-bold text-foreground">You may also like</h2>
+                <span className="text-sm text-muted-foreground">Similar subscriptions</span>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                {relatedProducts.map((product: RelatedProduct) => {
+                  const savePct = Math.round((1 - product.fromPrice / product.retailPrice) * 100);
+                  return (
+                    <div
+                      key={product.id}
+                      className="group relative rounded-xl overflow-hidden border border-border bg-white cursor-pointer"
+                      style={{ boxShadow: "0 1px 4px oklch(0 0 0 / 0.06)" }}
+                      onClick={() => toast.info(`${product.shortName} — coming soon`, { duration: 1500 })}
+                    >
+                      {/* Cover image */}
+                      <div className="relative overflow-hidden" style={{ aspectRatio: "16/10" }}>
+                        <img
+                          src={product.imageUrl}
+                          alt={product.shortName}
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                        {/* Dark overlay on hover */}
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300" />
+                        {/* Discount badge */}
+                        <div className="absolute top-2 left-2">
+                          <span className="text-[10px] font-bold text-white bg-[oklch(0.45_0.22_25)] px-1.5 py-0.5 rounded-full">
+                            -{savePct}%
+                          </span>
+                        </div>
+                        {/* Tag badge */}
+                        {product.tag && (
+                          <div className="absolute top-2 right-2">
+                            <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full bg-[oklch(0.95_0.05_145)] text-[oklch(0.38_0.16_145)] leading-none">
+                              {product.tag}
+                            </span>
+                          </div>
+                        )}
+                        {/* Hover CTA buttons */}
+                        <div className="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-200 ease-out p-2 flex flex-col gap-1.5">
+                          <button className="w-full py-1.5 text-[11px] font-bold text-white bg-[oklch(0.45_0.22_145)] rounded-lg hover:bg-[oklch(0.38_0.16_145)] transition-colors">
+                            Buy Now
+                          </button>
+                          <button className="w-full py-1.5 text-[11px] font-semibold text-white border border-white/60 rounded-lg hover:bg-white/10 transition-colors">
+                            View offers
+                          </button>
+                        </div>
+                      </div>
+                      {/* Card body */}
+                      <div className="p-3">
+                        {/* Brand row */}
+                        <div className="flex items-center gap-1.5 mb-1.5">
+                          <div
+                            className="w-4 h-4 rounded flex items-center justify-center text-white text-[8px] font-bold flex-shrink-0"
+                            style={{ background: product.color }}
+                          >
+                            {product.initials[0]}
+                          </div>
+                          <span className="text-[10px] text-muted-foreground">{product.category}</span>
+                        </div>
+                        <p className="text-sm font-semibold text-foreground leading-tight mb-2 group-hover:text-[oklch(0.38_0.16_145)] transition-colors">
+                          {product.shortName}
+                        </p>
+                        {/* Price row */}
+                        <div className="flex items-baseline gap-1.5">
+                          <span className="text-xs text-muted-foreground">from</span>
+                          <span className="text-sm font-bold text-foreground">${product.fromPrice.toFixed(2)}</span>
+                          <span className="text-[10px] text-muted-foreground line-through">${product.retailPrice.toFixed(2)}</span>
+                        </div>
+                        {/* Rating */}
+                        <div className="flex items-center gap-1 mt-1.5">
+                          <Star size={9} className="fill-[oklch(0.78_0.16_75)] text-[oklch(0.78_0.16_75)]" />
+                          <span className="text-[10px] text-muted-foreground">{product.rating.toFixed(1)} · {product.sellersCount} sellers</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+
             {/* ── REVIEWS — two-column desktop layout (Instant Gaming pattern) ── */}
             <section className="animate-fade-in-up" style={{ animationDelay: "200ms" }} id="reviews">
               <div className="flex items-center justify-between mb-4">
@@ -747,89 +829,7 @@ export default function Home() {
               </button>
             </section>
 
-            {/* ── YOU MAY ALSO LIKE — full-width product cards with hover reveal ── */}
-            <section className="animate-fade-in-up" style={{ animationDelay: "200ms" }}>
-              <div className="flex items-baseline justify-between mb-5">
-                <h2 className="text-xl font-bold text-foreground">You may also like</h2>
-                <span className="text-sm text-muted-foreground">Similar subscriptions</span>
-              </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-                {relatedProducts.map((product: RelatedProduct) => {
-                  const savePct = Math.round((1 - product.fromPrice / product.retailPrice) * 100);
-                  return (
-                    <div
-                      key={product.id}
-                      className="group relative rounded-xl overflow-hidden border border-border bg-white cursor-pointer"
-                      style={{ boxShadow: "0 1px 4px oklch(0 0 0 / 0.06)" }}
-                      onClick={() => toast.info(`${product.shortName} — coming soon`, { duration: 1500 })}
-                    >
-                      {/* Cover image */}
-                      <div className="relative overflow-hidden" style={{ aspectRatio: "16/10" }}>
-                        <img
-                          src={product.imageUrl}
-                          alt={product.shortName}
-                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        />
-                        {/* Dark overlay on hover */}
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300" />
-                        {/* Discount badge */}
-                        <div className="absolute top-2 left-2">
-                          <span className="text-[10px] font-bold text-white bg-[oklch(0.45_0.22_25)] px-1.5 py-0.5 rounded-full">
-                            -{savePct}%
-                          </span>
-                        </div>
-                        {/* Tag badge */}
-                        {product.tag && (
-                          <div className="absolute top-2 right-2">
-                            <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full bg-[oklch(0.95_0.05_145)] text-[oklch(0.38_0.16_145)] leading-none">
-                              {product.tag}
-                            </span>
-                          </div>
-                        )}
-                        {/* Hover CTA buttons — выплывают снизу */}
-                        <div className="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-200 ease-out p-2 flex flex-col gap-1.5">
-                          <button className="w-full py-1.5 text-[11px] font-bold text-white bg-[oklch(0.45_0.22_145)] rounded-lg hover:bg-[oklch(0.38_0.16_145)] transition-colors">
-                            Buy Now
-                          </button>
-                          <button className="w-full py-1.5 text-[11px] font-semibold text-white border border-white/60 rounded-lg hover:bg-white/10 transition-colors">
-                            View offers
-                          </button>
-                        </div>
-                      </div>
-                      {/* Card body */}
-                      <div className="p-3">
-                        {/* Brand row */}
-                        <div className="flex items-center gap-1.5 mb-1.5">
-                          <div
-                            className="w-4 h-4 rounded flex items-center justify-center text-white text-[8px] font-bold flex-shrink-0"
-                            style={{ background: product.color }}
-                          >
-                            {product.initials[0]}
-                          </div>
-                          <span className="text-[10px] text-muted-foreground">{product.category}</span>
-                        </div>
-                        <p className="text-sm font-semibold text-foreground leading-tight mb-2 group-hover:text-[oklch(0.38_0.16_145)] transition-colors">
-                          {product.shortName}
-                        </p>
-                        {/* Price row */}
-                        <div className="flex items-baseline gap-1.5">
-                          <span className="text-xs text-muted-foreground">from</span>
-                          <span className="text-sm font-bold text-foreground">${product.fromPrice.toFixed(2)}</span>
-                          <span className="text-[10px] text-muted-foreground line-through">${product.retailPrice.toFixed(2)}</span>
-                        </div>
-                        {/* Rating */}
-                        <div className="flex items-center gap-1 mt-1.5">
-                          <Star size={9} className="fill-[oklch(0.78_0.16_75)] text-[oklch(0.78_0.16_75)]" />
-                          <span className="text-[10px] text-muted-foreground">{product.rating.toFixed(1)} · {product.sellersCount} sellers</span>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
-
-            {/* SEO Content Block — H2/H3/H4/FAQ — below related products */}
+            {/* SEO Content Block — H2/H3/H4/FAQ — below reviews */}
             <SeoContent />
 
           </div>
