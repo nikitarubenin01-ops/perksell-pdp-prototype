@@ -266,14 +266,8 @@ export default function Home() {
             <div className="animate-fade-in-up">
               <div className="grid grid-cols-1 sm:grid-cols-[280px_1fr] gap-6 items-start">
 
-                {/* ── LEFT: Cover image ── */}
-                <div className="rounded-2xl overflow-hidden border border-border shadow-md flex-shrink-0 w-full sm:w-[280px]" style={{ aspectRatio: "3/4" }}>
-                  <img
-                    src="/manus-storage/max-hbo-cover_50d9d410.png"
-                    alt="MAX (HBO) subscription cover"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+                {/* ── LEFT: Cover image + thumbnails gallery ── */}
+                <ProductGallery />
 
                 {/* ── RIGHT: Info + variants + specs ── */}
                 <div className="flex flex-col gap-5 min-w-0">
@@ -1123,6 +1117,79 @@ function SpecsTable({
           </>
         )}
       </button>
+    </div>
+  );
+}
+
+// ── ProductGallery — main image + thumbnails below (G2A/Steam pattern) ────────
+const GALLERY_IMAGES = [
+  {
+    src: "/manus-storage/max-hbo-cover_50d9d410.png",
+    alt: "MAX (HBO) subscription cover",
+    label: "Cover",
+  },
+  {
+    src: "/manus-storage/max-screen1_4ba2a694.jpg",
+    alt: "MAX interface — home screen",
+    label: "Interface",
+  },
+  {
+    src: "/manus-storage/max-screen2_8bf1d120.jpg",
+    alt: "MAX mobile app",
+    label: "Mobile",
+  },
+  {
+    src: "/manus-storage/max-screen3_2fac21f1.png",
+    alt: "MAX content library",
+    label: "Content",
+  },
+];
+
+function ProductGallery() {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const active = GALLERY_IMAGES[activeIdx];
+
+  return (
+    <div className="flex flex-col gap-2 flex-shrink-0 w-full sm:w-[280px]">
+      {/* Main image */}
+      <div
+        className="rounded-2xl overflow-hidden border border-border shadow-md w-full"
+        style={{ aspectRatio: "3/4" }}
+      >
+        <img
+          src={active.src}
+          alt={active.alt}
+          className="w-full h-full object-cover transition-opacity duration-200"
+          key={active.src}
+        />
+      </div>
+
+      {/* Thumbnails */}
+      <div className="flex gap-2">
+        {GALLERY_IMAGES.map((img, i) => (
+          <button
+            key={i}
+            onClick={() => setActiveIdx(i)}
+            className={`relative flex-1 rounded-lg overflow-hidden border-2 transition-all duration-150 ${
+              i === activeIdx
+                ? "border-[oklch(0.52_0.18_145)] shadow-[0_0_0_2px_oklch(0.52_0.18_145_/_0.15)]"
+                : "border-border hover:border-[oklch(0.75_0.12_145)]"
+            }`}
+            style={{ aspectRatio: "1/1" }}
+            title={img.label}
+          >
+            <img
+              src={img.src}
+              alt={img.label}
+              className="w-full h-full object-cover"
+            />
+            {/* Active overlay */}
+            {i === activeIdx && (
+              <div className="absolute inset-0 bg-[oklch(0.52_0.18_145_/_0.08)]" />
+            )}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
