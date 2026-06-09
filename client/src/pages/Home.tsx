@@ -104,7 +104,6 @@ function NumericRatingBadge({ rating, label }: { rating: number; label: string }
       style={{ color, background: bg }}
     >
       <span className="text-[12px] font-bold">{score.toFixed(1)}</span>
-      <span className="opacity-70">/10</span>
     </span>
   );
 }
@@ -496,7 +495,14 @@ export default function Home() {
                   <div className="flex items-center gap-2 flex-shrink-0">
                     <div className="text-right mr-1">
                       <div className="text-base font-bold text-foreground leading-tight">${recommendedSeller.price.toFixed(2)}</div>
-                      <div className="text-[10px] text-[oklch(0.52_0.18_145)] font-medium">Best price</div>
+                      {activeVariant && activeVariant.retailPrice > recommendedSeller.price && (
+                        <div className="flex items-center justify-end gap-1">
+                          <span className="text-[10px] text-muted-foreground line-through">${activeVariant.retailPrice.toFixed(2)}</span>
+                          <span className="text-[10px] font-bold text-[oklch(0.45_0.22_25)]">
+                            -{Math.round((1 - recommendedSeller.price / activeVariant.retailPrice) * 100)}%
+                          </span>
+                        </div>
+                      )}
                     </div>
                     <button
                       className="offer-cart-btn"
@@ -547,7 +553,7 @@ export default function Home() {
                         </div>
                         <div className="flex items-center gap-2 mt-1 flex-wrap">
                           <NumericRatingBadge rating={seller.rating} label={seller.ratingLabel} />
-                          <DeliveryBadge mode={seller.deliveryMode} />
+                          {seller.deliveryMode === "manual" && <DeliveryBadge mode={seller.deliveryMode} />}
                           <span className="text-[11px] text-muted-foreground">{seller.totalOrders.toLocaleString()} orders</span>
                         </div>
                       </div>
@@ -555,6 +561,14 @@ export default function Home() {
                       <div className="flex items-center gap-2 flex-shrink-0">
                         <div className="text-right mr-1">
                           <div className="text-base font-bold text-foreground leading-tight">${seller.price.toFixed(2)}</div>
+                          {activeVariant && activeVariant.retailPrice > seller.price && (
+                            <div className="flex items-center justify-end gap-1">
+                              <span className="text-[10px] text-muted-foreground line-through">${activeVariant.retailPrice.toFixed(2)}</span>
+                              <span className="text-[10px] font-bold text-[oklch(0.45_0.22_25)]">
+                                -{Math.round((1 - seller.price / activeVariant.retailPrice) * 100)}%
+                              </span>
+                            </div>
+                          )}
                         </div>
                         <button
                           className="offer-cart-btn"
