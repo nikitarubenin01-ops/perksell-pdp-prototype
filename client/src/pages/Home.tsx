@@ -263,14 +263,13 @@ export default function Home() {
             {/* Product header */}
             <div className="animate-fade-in-up">
               <div className="flex gap-5 items-start">
-                {/* Image */}
-                <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-xl bg-gradient-to-br from-[oklch(0.25_0.06_255)] to-[oklch(0.18_0.04_250)] flex items-center justify-center flex-shrink-0 border border-border overflow-hidden shadow-sm">
-                  <div className="text-center">
-                    <div className="w-12 h-12 mx-auto rounded-lg bg-white/10 flex items-center justify-center mb-1">
-                      <span className="text-white text-lg font-bold">M</span>
-                    </div>
-                    <span className="text-white/60 text-[10px]">MAX</span>
-                  </div>
+                {/* Cover image */}
+                <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-xl flex-shrink-0 overflow-hidden border border-border shadow-md">
+                  <img
+                    src="/manus-storage/max-hbo-cover_50d9d410.png"
+                    alt="MAX (HBO) subscription cover"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
 
                 {/* Info */}
@@ -748,9 +747,6 @@ export default function Home() {
               </button>
             </section>
 
-            {/* SEO Content Block — H2/H3/H4/FAQ — below reviews */}
-            <SeoContent />
-
             {/* ── YOU MAY ALSO LIKE — full-width product cards with hover reveal ── */}
             <section className="animate-fade-in-up" style={{ animationDelay: "200ms" }}>
               <div className="flex items-baseline justify-between mb-5">
@@ -833,6 +829,9 @@ export default function Home() {
               </div>
             </section>
 
+            {/* SEO Content Block — H2/H3/H4/FAQ — below related products */}
+            <SeoContent />
+
           </div>
 
           {/* ═══════════════════════════════════════════════════════════════
@@ -894,7 +893,7 @@ export default function Home() {
                         </SellerTooltip>
                         {selectedSeller.isRecommended && (
                           <span className="text-[10px] font-bold text-[oklch(0.52_0.18_145)] bg-[oklch(0.95_0.05_145)] border border-[oklch(0.85_0.10_145)] px-1.5 py-0.5 rounded-full">
-                            Recommended
+                            Most orders
                           </span>
                         )}
                       </div>
