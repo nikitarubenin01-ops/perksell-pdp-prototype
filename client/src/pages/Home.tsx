@@ -487,7 +487,7 @@ export default function Home() {
                       </span>
                     </div>
                     <div className="flex items-center gap-2 mt-1 flex-wrap">
-                      <span className="text-[11px] font-semibold text-[oklch(0.52_0.18_145)]">{recommendedSeller.successRate}% delivery</span>
+                      <span className="text-[11px] font-semibold text-[oklch(0.52_0.18_145)]">{recommendedSeller.successRate}%</span>
                       {recommendedSeller.deliveryMode === "manual" && <DeliveryBadge mode={recommendedSeller.deliveryMode} />}
                       <span className="text-[11px] text-muted-foreground">{recommendedSeller.itemSalesLast30} sold this month</span>
                     </div>
@@ -553,7 +553,7 @@ export default function Home() {
                           </SellerTooltip>
                         </div>
                         <div className="flex items-center gap-2 mt-1 flex-wrap">
-                          <span className="text-[11px] font-semibold text-[oklch(0.52_0.18_145)]">{seller.successRate}% delivery</span>
+                          <span className="text-[11px] font-semibold text-[oklch(0.52_0.18_145)]">{seller.successRate}%</span>
                           {seller.deliveryMode === "manual" && <DeliveryBadge mode={seller.deliveryMode} />}
                           <span className="text-[11px] text-muted-foreground">{seller.totalOrders.toLocaleString()} orders</span>
                         </div>
@@ -833,7 +833,7 @@ export default function Home() {
                         )}
                       </div>
                       <div className="flex items-center gap-1.5 mt-0.5">
-                        <span className="text-[11px] font-semibold text-[oklch(0.52_0.18_145)]">{selectedSeller.successRate}% delivery</span>
+                        <span className="text-[11px] font-semibold text-[oklch(0.52_0.18_145)]">{selectedSeller.successRate}%</span>
                         {selectedSeller.deliveryMode === "manual" && <DeliveryBadge mode={selectedSeller.deliveryMode} />}
                       </div>
                     </div>
