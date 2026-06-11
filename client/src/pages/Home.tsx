@@ -1173,10 +1173,9 @@ function ProductGallery() {
 
   return (
     <div className="flex flex-col gap-2 flex-shrink-0 w-full sm:w-[280px]">
-      {/* Main image */}
+      {/* Main image — on mobile compact ~25vh (16:9), on desktop 3:4 */}
       <div
-        className="rounded-2xl overflow-hidden border border-border shadow-md w-full"
-        style={{ aspectRatio: "3/4" }}
+        className="rounded-xl sm:rounded-2xl overflow-hidden border border-border shadow-md w-full gallery-main-image"
       >
         <img
           src={active.src}
@@ -1186,18 +1185,18 @@ function ProductGallery() {
         />
       </div>
 
-      {/* Thumbnails */}
-      <div className="flex gap-2">
+      {/* Thumbnails — horizontal scroll on mobile */}
+      <div className="flex gap-1.5 overflow-x-auto pb-0.5 scrollbar-none">
         {GALLERY_IMAGES.map((img, i) => (
           <button
             key={i}
             onClick={() => setActiveIdx(i)}
-            className={`relative flex-1 rounded-lg overflow-hidden border-2 transition-all duration-150 ${
+            className={`relative flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all duration-150 ${
               i === activeIdx
                 ? "border-[oklch(0.52_0.18_145)] shadow-[0_0_0_2px_oklch(0.52_0.18_145_/_0.15)]"
                 : "border-border hover:border-[oklch(0.75_0.12_145)]"
             }`}
-            style={{ aspectRatio: "1/1" }}
+            style={{ width: 52, height: 52, aspectRatio: "1/1" }}
             title={img.label}
           >
             <img
@@ -1205,7 +1204,6 @@ function ProductGallery() {
               alt={img.label}
               className="w-full h-full object-cover"
             />
-            {/* Active overlay */}
             {i === activeIdx && (
               <div className="absolute inset-0 bg-[oklch(0.52_0.18_145_/_0.08)]" />
             )}

@@ -386,3 +386,19 @@
     }
   }
 }
+
+/* Scrollbar hide */
+.scrollbar-none { scrollbar-width: none; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
+
+/* Gallery: compact on mobile (16:9), tall on desktop (3:4) */
+.gallery-main-image {
+  aspect-ratio: 16/9;
+  max-height: 50vw;
+}
+@media (min-width: 640px) {
+  .gallery-main-image {
+    aspect-ratio: 3/4;
+    max-height: none;
+  }
+}
