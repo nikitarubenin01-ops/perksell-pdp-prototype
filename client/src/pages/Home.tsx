@@ -471,58 +471,61 @@ export default function Home() {
                   className={`seller-row border-[oklch(0.85_0.10_145)] bg-[oklch(0.99_0.01_145)] ${selectedSeller.id === recommendedSeller.id ? "selected" : ""}`}
                   onClick={() => { setSelectedSeller(recommendedSeller); flashCard(); }}
                 >
-                  <SellerTooltip seller={recommendedSeller}>
-                    <button onClick={(e) => e.stopPropagation()} className="flex-shrink-0">
-                      <SellerAvatar seller={recommendedSeller} size={36} />
-                    </button>
-                  </SellerTooltip>
-
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5 min-w-0">
+                  {/* Top row: avatar + name + metrics */}
+                  <div className="flex items-center gap-3 w-full sm:flex-1 sm:min-w-0">
+                    <SellerTooltip seller={recommendedSeller}>
+                      <button onClick={(e) => e.stopPropagation()} className="flex-shrink-0">
+                        <SellerAvatar seller={recommendedSeller} size={36} />
+                      </button>
+                    </SellerTooltip>
+                    <div className="min-w-0">
                       <SellerTooltip seller={recommendedSeller}>
-                        <button onClick={(e) => e.stopPropagation()} className="flex items-center gap-1 hover:underline min-w-0 shrink">
+                        <button onClick={(e) => e.stopPropagation()} className="flex items-center gap-1 hover:underline min-w-0">
                           <span className="text-sm font-semibold text-foreground truncate">{recommendedSeller.name}</span>
                           <Info size={12} className="text-muted-foreground/60 flex-shrink-0" />
                         </button>
                       </SellerTooltip>
-                    </div>
-                    <div className="flex items-center gap-1 mt-0.5 flex-nowrap">
-                      <span className="text-[11px] font-semibold text-[oklch(0.52_0.18_145)] whitespace-nowrap">{recommendedSeller.successRate}%</span>
-                      <span className="text-[11px] text-muted-foreground/50">·</span>
-                      <span className="text-[11px] text-muted-foreground whitespace-nowrap">{recommendedSeller.totalOrders.toLocaleString()} orders</span>
-                      {recommendedSeller.deliveryMode === "manual" && <DeliveryBadge mode={recommendedSeller.deliveryMode} />}
+                      <div className="flex items-center gap-1 mt-0.5 flex-nowrap">
+                        <span className="text-[11px] font-semibold text-[oklch(0.52_0.18_145)] whitespace-nowrap">{recommendedSeller.successRate}%</span>
+                        <span className="text-[11px] text-muted-foreground/50">·</span>
+                        <span className="text-[11px] text-muted-foreground whitespace-nowrap">{recommendedSeller.totalOrders.toLocaleString()} orders</span>
+                        {recommendedSeller.deliveryMode === "manual" && <DeliveryBadge mode={recommendedSeller.deliveryMode} />}
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    <div className="text-right mr-1">
-                      {(() => { const rp = getSellerPrice(recommendedSeller); return (<>
-                      <div className="text-base font-bold text-foreground leading-tight">${rp.toFixed(2)}</div>
-                      {activeVariant && activeVariant.retailPrice > rp && (
-                        <div className="flex items-center justify-end gap-1">
-                          <span className="text-[10px] text-muted-foreground line-through">${activeVariant.retailPrice.toFixed(2)}</span>
-                          <span className="text-[10px] font-bold text-white bg-[oklch(0.45_0.22_25)] px-1 py-0.5 rounded">
-                            -{Math.round((1 - rp / activeVariant.retailPrice) * 100)}%
-                          </span>
-                        </div>
-                      )}
-                      </>); })()}
+                  {/* Price row (mobile: below seller, desktop: right side) */}
+                  {(() => { const rp = getSellerPrice(recommendedSeller); return (
+                    <div className="flex items-center justify-between w-full mt-3 sm:mt-0 sm:w-auto sm:flex-shrink-0 sm:gap-2">
+                      <div className="sm:text-right sm:mr-1">
+                        <div className="text-lg font-bold text-foreground leading-tight">${rp.toFixed(2)}</div>
+                        {activeVariant && activeVariant.retailPrice > rp && (
+                          <div className="flex items-center gap-1">
+                            <span className="text-[11px] text-muted-foreground line-through">${activeVariant.retailPrice.toFixed(2)}</span>
+                            <span className="text-[11px] font-bold text-white bg-[oklch(0.45_0.22_25)] px-1.5 py-0.5 rounded">
+                              -{Math.round((1 - rp / activeVariant.retailPrice) * 100)}%
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          className="offer-cart-btn"
+                          onClick={(e) => { e.stopPropagation(); toast.success("Added to cart", { duration: 1500 }); }}
+                          title="Add to cart"
+                        >
+                          <ShoppingCart size={14} />
+                        </button>
+                        <button
+                          className="offer-buy-btn"
+                          onClick={(e) => { e.stopPropagation(); handleOfferBuy(recommendedSeller); }}
+                        >
+                          <Zap size={12} strokeWidth={2.5} />
+                          Buy Now
+                        </button>
+                      </div>
                     </div>
-                    <button
-                      className="offer-cart-btn"
-                      onClick={(e) => { e.stopPropagation(); toast.success("Added to cart", { duration: 1500 }); }}
-                      title="Add to cart"
-                    >
-                      <ShoppingCart size={14} />
-                    </button>
-                    <button
-                      className="offer-buy-btn"
-                      onClick={(e) => { e.stopPropagation(); handleOfferBuy(recommendedSeller); }}
-                    >
-                      <Zap size={12} strokeWidth={2.5} />
-                      Buy Now
-                    </button>
-                  </div>
+                  ); })()}
                 </div>
               </div>
 
@@ -540,58 +543,61 @@ export default function Home() {
                       className={`seller-row ${selectedSeller.id === seller.id && selectedSeller.price === seller.price ? "selected" : ""}`}
                       onClick={() => { setSelectedSeller(seller); flashCard(); }}
                     >
-                      <SellerTooltip seller={seller}>
-                        <button onClick={(e) => e.stopPropagation()} className="flex-shrink-0">
-                          <SellerAvatar seller={seller} size={36} />
-                        </button>
-                      </SellerTooltip>
-
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-1.5 min-w-0">
+                      {/* Top row: avatar + name + metrics */}
+                      <div className="flex items-center gap-3 w-full sm:flex-1 sm:min-w-0">
+                        <SellerTooltip seller={seller}>
+                          <button onClick={(e) => e.stopPropagation()} className="flex-shrink-0">
+                            <SellerAvatar seller={seller} size={36} />
+                          </button>
+                        </SellerTooltip>
+                        <div className="min-w-0">
                           <SellerTooltip seller={seller}>
-                            <button onClick={(e) => e.stopPropagation()} className="flex items-center gap-1 hover:underline min-w-0 shrink">
+                            <button onClick={(e) => e.stopPropagation()} className="flex items-center gap-1 hover:underline min-w-0">
                               <span className="text-sm font-semibold text-foreground truncate">{seller.name}</span>
                               <Info size={12} className="text-muted-foreground/60 flex-shrink-0" />
                             </button>
                           </SellerTooltip>
-                        </div>
-                        <div className="flex items-center gap-1 mt-0.5 flex-nowrap">
-                          <span className="text-[11px] font-semibold text-[oklch(0.52_0.18_145)] whitespace-nowrap">{seller.successRate}%</span>
-                          <span className="text-[11px] text-muted-foreground/50">·</span>
-                          <span className="text-[11px] text-muted-foreground whitespace-nowrap">{seller.totalOrders.toLocaleString()} orders</span>
-                          {seller.deliveryMode === "manual" && <DeliveryBadge mode={seller.deliveryMode} />}
+                          <div className="flex items-center gap-1 mt-0.5 flex-nowrap">
+                            <span className="text-[11px] font-semibold text-[oklch(0.52_0.18_145)] whitespace-nowrap">{seller.successRate}%</span>
+                            <span className="text-[11px] text-muted-foreground/50">·</span>
+                            <span className="text-[11px] text-muted-foreground whitespace-nowrap">{seller.totalOrders.toLocaleString()} orders</span>
+                            {seller.deliveryMode === "manual" && <DeliveryBadge mode={seller.deliveryMode} />}
+                          </div>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2 flex-shrink-0">
-                        <div className="text-right mr-1">
-                          {(() => { const sp = getSellerPrice(seller); return (<>
-                          <div className="text-base font-bold text-foreground leading-tight">${sp.toFixed(2)}</div>
-                          {activeVariant && activeVariant.retailPrice > sp && (
-                            <div className="flex items-center justify-end gap-1">
-                              <span className="text-[10px] text-muted-foreground line-through">${activeVariant.retailPrice.toFixed(2)}</span>
-                              <span className="text-[10px] font-bold text-white bg-[oklch(0.45_0.22_25)] px-1 py-0.5 rounded">
-                                -{Math.round((1 - sp / activeVariant.retailPrice) * 100)}%
-                              </span>
-                            </div>
-                          )}
-                          </>); })()}
+                      {/* Price + buttons row (mobile: below, desktop: right) */}
+                      {(() => { const sp = getSellerPrice(seller); return (
+                        <div className="flex items-center justify-between w-full mt-3 sm:mt-0 sm:w-auto sm:flex-shrink-0 sm:gap-2">
+                          <div className="sm:text-right sm:mr-1">
+                            <div className="text-lg font-bold text-foreground leading-tight">${sp.toFixed(2)}</div>
+                            {activeVariant && activeVariant.retailPrice > sp && (
+                              <div className="flex items-center gap-1">
+                                <span className="text-[11px] text-muted-foreground line-through">${activeVariant.retailPrice.toFixed(2)}</span>
+                                <span className="text-[11px] font-bold text-white bg-[oklch(0.45_0.22_25)] px-1.5 py-0.5 rounded">
+                                  -{Math.round((1 - sp / activeVariant.retailPrice) * 100)}%
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <button
+                              className="offer-cart-btn"
+                              onClick={(e) => { e.stopPropagation(); toast.success("Added to cart", { duration: 1500 }); }}
+                              title="Add to cart"
+                            >
+                              <ShoppingCart size={14} />
+                            </button>
+                            <button
+                              className="offer-buy-btn"
+                              onClick={(e) => { e.stopPropagation(); handleOfferBuy(seller); }}
+                            >
+                              <Zap size={12} strokeWidth={2.5} />
+                              Buy Now
+                            </button>
+                          </div>
                         </div>
-                        <button
-                          className="offer-cart-btn"
-                          onClick={(e) => { e.stopPropagation(); toast.success("Added to cart", { duration: 1500 }); }}
-                          title="Add to cart"
-                        >
-                          <ShoppingCart size={14} />
-                        </button>
-                        <button
-                          className="offer-buy-btn"
-                          onClick={(e) => { e.stopPropagation(); handleOfferBuy(seller); }}
-                        >
-                          <Zap size={12} strokeWidth={2.5} />
-                          Buy Now
-                        </button>
-                      </div>
+                      ); })()}
                     </div>
                   ))}
                 </div>

@@ -198,14 +198,22 @@
 
   .seller-row {
     display: flex;
-    align-items: center;
-    gap: 12px;
+    flex-direction: column;
+    gap: 0;
     padding: 14px 16px;
     border: 1px solid var(--border);
     border-radius: 10px;
     transition: all 150ms cubic-bezier(0.23, 1, 0.32, 1);
     cursor: pointer;
     background: white;
+  }
+
+  @media (min-width: 640px) {
+    .seller-row {
+      flex-direction: row;
+      align-items: center;
+      gap: 12px;
+    }
   }
 
   .seller-row:hover {
