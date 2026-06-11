@@ -986,12 +986,21 @@ export default function Home() {
       {/* Mobile sticky bar */}
       <div className="mobile-sticky-bar lg:hidden">
         <div className="flex-1 min-w-0">
-          <div className="flex items-baseline gap-2">
-            <span className="text-lg font-bold text-foreground leading-tight">${currentPrice.toFixed(2)}</span>
-            {activeVariant?.retailPrice && activeVariant.retailPrice > currentPrice && (
-              <span className="text-xs font-semibold text-[oklch(0.52_0.18_145)] whitespace-nowrap">
-                Save ${(activeVariant.retailPrice - currentPrice).toFixed(0)}
-              </span>
+          <div className="flex items-baseline gap-1.5">
+            {activeVariant && activeVariant.monthCount > 1 ? (
+              <>
+                <span className="text-lg font-bold text-foreground leading-tight">
+                  ${(currentPrice / activeVariant.monthCount).toFixed(2)}
+                  <span className="text-xs font-normal text-muted-foreground">/mo</span>
+                </span>
+                {activeVariant.retailPrice > currentPrice && (
+                  <span className="text-xs font-semibold text-[oklch(0.52_0.18_145)] whitespace-nowrap">
+                    · Save ${(activeVariant.retailPrice - currentPrice).toFixed(0)}
+                  </span>
+                )}
+              </>
+            ) : (
+              <span className="text-lg font-bold text-foreground leading-tight">${currentPrice.toFixed(2)}</span>
             )}
           </div>
           <div className="text-[11px] text-muted-foreground">{selectedDuration} · {selectedRegion}</div>
