@@ -1073,8 +1073,6 @@ function SpecsTable({
   const [expanded, setExpanded] = useState(false);
 
   const mainRows: { label: string; value: React.ReactNode }[] = [
-    { label: "Region", value: selectedRegion },
-    { label: "Duration", value: selectedDuration },
     { label: "Delivery", value: "Instant · Login credentials" },
     {
       label: "Total sales",
@@ -1092,6 +1090,8 @@ function SpecsTable({
   ];
 
   const extraRows: { label: string; value: React.ReactNode }[] = [
+    { label: "Region", value: selectedRegion },
+    { label: "Duration", value: selectedDuration },
     { label: "Platforms", value: "Web, iOS, Android, Smart TV, Consoles" },
     { label: "Languages", value: "English, Spanish, French, Portuguese" },
     { label: "Streams", value: "Up to 3 simultaneous streams" },
