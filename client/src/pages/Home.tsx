@@ -489,7 +489,7 @@ export default function Home() {
                     <div className="flex items-center gap-2 mt-1 flex-wrap">
                       <span className="text-[11px] font-semibold text-[oklch(0.52_0.18_145)]">{recommendedSeller.successRate}%</span>
                       {recommendedSeller.deliveryMode === "manual" && <DeliveryBadge mode={recommendedSeller.deliveryMode} />}
-                      <span className="text-[11px] text-muted-foreground">{recommendedSeller.itemSalesLast30} sold this month</span>
+                       <span className="text-[11px] text-muted-foreground">{recommendedSeller.totalOrders.toLocaleString()} orders</span>
                     </div>
                   </div>
 
@@ -611,13 +611,14 @@ export default function Home() {
                 <h2 className="text-xl font-bold text-foreground">You may also like</h2>
                 <span className="text-sm text-muted-foreground">Similar subscriptions</span>
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+              <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-3 lg:grid-cols-5">
+                <style>{`.similar-card { flex: 0 0 calc(40vw); min-width: 140px; max-width: 180px; } @media (min-width: 640px) { .similar-card { flex: unset; min-width: unset; max-width: unset; } }`}</style>
                 {relatedProducts.map((product: RelatedProduct) => {
                   const savePct = Math.round((1 - product.fromPrice / product.retailPrice) * 100);
                   return (
                     <div
                       key={product.id}
-                      className="group relative rounded-xl overflow-hidden border border-border bg-white cursor-pointer"
+                      className="similar-card group relative rounded-xl overflow-hidden border border-border bg-white cursor-pointer"
                       style={{ boxShadow: "0 1px 4px oklch(0 0 0 / 0.06)" }}
                       onClick={() => toast.info(`${product.shortName} — coming soon`, { duration: 1500 })}
                     >
