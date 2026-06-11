@@ -937,32 +937,13 @@ export default function Home() {
                       </a>
                     </div>
                     {/* Payment methods */}
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      {[
-                        { label: "Visa",       bg: "#1A1F71", text: "VISA",    textColor: "#fff",    w: 36 },
-                        { label: "Mastercard", bg: "#EB001B", text: "MC",      textColor: "#fff",    w: 28 },
-                        { label: "PayPal",     bg: "#003087", text: "PP",      textColor: "#009cde", w: 28 },
-                        { label: "Google Pay", bg: "#fff",    text: "G Pay",   textColor: "#3c4043", w: 36, border: true },
-                        { label: "Apple Pay",  bg: "#000",    text: "Pay",     textColor: "#fff",    w: 32 },
-                      ].map((pm) => (
-                        <div
-                          key={pm.label}
-                          className="h-5 rounded flex items-center justify-center px-1.5 flex-shrink-0"
-                          style={{
-                            background: pm.bg,
-                            width: pm.w,
-                            border: pm.border ? "1px solid #dadce0" : undefined,
-                          }}
-                          title={pm.label}
-                        >
-                          <span
-                            className="font-bold leading-none"
-                            style={{ fontSize: 8, color: pm.textColor, letterSpacing: pm.label === "Visa" ? "0.02em" : undefined }}
-                          >
-                            {pm.text}
-                          </span>
-                        </div>
-                      ))}
+                    <div className="flex items-center">
+                      <img
+                        src="/manus-storage/payment-methods_4efdbbb7.png"
+                        alt="Payment methods: Visa, Mastercard, Google Pay, Apple Pay, Crypto and more"
+                        className="h-7 w-auto object-contain"
+                        style={{ maxWidth: 260 }}
+                      />
                     </div>
                   </div>
                 </div>
