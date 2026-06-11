@@ -486,10 +486,11 @@ export default function Home() {
                         </button>
                       </SellerTooltip>
                     </div>
-                    <div className="flex items-center gap-2 mt-1 flex-wrap">
+                    <div className="flex items-center gap-1 mt-0.5">
                       <span className="text-[11px] font-semibold text-[oklch(0.52_0.18_145)]">{recommendedSeller.successRate}%</span>
+                      <span className="text-[11px] text-muted-foreground/50">·</span>
+                      <span className="text-[11px] text-muted-foreground">{recommendedSeller.totalOrders.toLocaleString()} orders</span>
                       {recommendedSeller.deliveryMode === "manual" && <DeliveryBadge mode={recommendedSeller.deliveryMode} />}
-                       <span className="text-[11px] text-muted-foreground">{recommendedSeller.totalOrders.toLocaleString()} orders</span>
                     </div>
                   </div>
 
@@ -554,10 +555,11 @@ export default function Home() {
                             </button>
                           </SellerTooltip>
                         </div>
-                        <div className="flex items-center gap-2 mt-1 flex-wrap">
+                        <div className="flex items-center gap-1 mt-0.5">
                           <span className="text-[11px] font-semibold text-[oklch(0.52_0.18_145)]">{seller.successRate}%</span>
-                          {seller.deliveryMode === "manual" && <DeliveryBadge mode={seller.deliveryMode} />}
+                          <span className="text-[11px] text-muted-foreground/50">·</span>
                           <span className="text-[11px] text-muted-foreground">{seller.totalOrders.toLocaleString()} orders</span>
+                          {seller.deliveryMode === "manual" && <DeliveryBadge mode={seller.deliveryMode} />}
                         </div>
                       </div>
 
