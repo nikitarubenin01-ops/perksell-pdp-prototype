@@ -986,8 +986,15 @@ export default function Home() {
       {/* Mobile sticky bar */}
       <div className="mobile-sticky-bar lg:hidden">
         <div className="flex-1 min-w-0">
-          <div className="text-lg font-bold text-foreground leading-tight">${currentPrice.toFixed(2)}</div>
-          <div className="text-xs text-muted-foreground truncate">{selectedSeller.name} · {selectedDuration} · {selectedRegion}</div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-lg font-bold text-foreground leading-tight">${currentPrice.toFixed(2)}</span>
+            {activeVariant?.retailPrice && activeVariant.retailPrice > currentPrice && (
+              <span className="text-xs font-semibold text-[oklch(0.52_0.18_145)] whitespace-nowrap">
+                Save ${(activeVariant.retailPrice - currentPrice).toFixed(0)}
+              </span>
+            )}
+          </div>
+          <div className="text-[11px] text-muted-foreground">{selectedDuration} · {selectedRegion}</div>
         </div>
         <button className="offer-cart-btn flex-shrink-0" onClick={handleAddToCart} style={{ width: 44, height: 44 }}>
           <ShoppingCart size={16} />
