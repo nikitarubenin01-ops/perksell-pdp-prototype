@@ -359,7 +359,7 @@ export default function Home() {
                         const isAvailable = variant?.available ?? false;
                         const isSelected = selectedDuration === duration && exists;
                         const savingsPct =
-                          baseMonthlyPrice && variant?.monthCount && variant.monthCount > 1 && isAvailable
+                          baseMonthlyPrice && variant?.monthCount && variant.monthCount > 6 && isAvailable
                             ? Math.round(((baseMonthlyPrice - variant.price / variant.monthCount) / baseMonthlyPrice) * 100)
                             : null;
                         return (
