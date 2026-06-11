@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import {
   AlertTriangle,
   ChevronDown,
+  ChevronLeft,
   ChevronRight,
   ChevronUp,
   Clock,
@@ -1171,44 +1172,53 @@ function ProductGallery() {
   const [activeIdx, setActiveIdx] = useState(0);
   const active = GALLERY_IMAGES[activeIdx];
 
+  const prev = () => setActiveIdx(i => (i - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length);
+  const next = () => setActiveIdx(i => (i + 1) % GALLERY_IMAGES.length);
+
   return (
     <div className="flex flex-col gap-2 flex-shrink-0 w-full sm:w-[280px]">
-      {/* Main image — on mobile compact ~25vh (16:9), on desktop 3:4 */}
-      <div
-        className="rounded-xl sm:rounded-2xl overflow-hidden border border-border shadow-md w-full gallery-main-image"
-      >
+      {/* Main image with prev/next arrows */}
+      <div className="relative rounded-xl sm:rounded-2xl overflow-hidden border border-border shadow-md w-full gallery-main-image group">
         <img
           src={active.src}
           alt={active.alt}
           className="w-full h-full object-cover transition-opacity duration-200"
           key={active.src}
         />
-      </div>
 
-      {/* Thumbnails — horizontal scroll on mobile */}
-      <div className="flex gap-1.5 overflow-x-auto pb-0.5 scrollbar-none">
-        {GALLERY_IMAGES.map((img, i) => (
-          <button
-            key={i}
-            onClick={() => setActiveIdx(i)}
-            className={`relative flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all duration-150 ${
-              i === activeIdx
-                ? "border-[oklch(0.52_0.18_145)] shadow-[0_0_0_2px_oklch(0.52_0.18_145_/_0.15)]"
-                : "border-border hover:border-[oklch(0.75_0.12_145)]"
-            }`}
-            style={{ width: 52, height: 52, aspectRatio: "1/1" }}
-            title={img.label}
-          >
-            <img
-              src={img.src}
-              alt={img.label}
-              className="w-full h-full object-cover"
+        {/* Left arrow */}
+        <button
+          onClick={prev}
+          className="absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/50 hover:bg-black/70 flex items-center justify-center text-white transition-all duration-150 opacity-0 group-hover:opacity-100 sm:opacity-60 sm:group-hover:opacity-100"
+          aria-label="Previous image"
+        >
+          <ChevronLeft size={16} />
+        </button>
+
+        {/* Right arrow */}
+        <button
+          onClick={next}
+          className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/50 hover:bg-black/70 flex items-center justify-center text-white transition-all duration-150 opacity-0 group-hover:opacity-100 sm:opacity-60 sm:group-hover:opacity-100"
+          aria-label="Next image"
+        >
+          <ChevronRight size={16} />
+        </button>
+
+        {/* Dot indicators */}
+        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+          {GALLERY_IMAGES.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setActiveIdx(i)}
+              className={`rounded-full transition-all duration-150 ${
+                i === activeIdx
+                  ? "w-4 h-1.5 bg-white"
+                  : "w-1.5 h-1.5 bg-white/50 hover:bg-white/75"
+              }`}
+              aria-label={`Image ${i + 1}`}
             />
-            {i === activeIdx && (
-              <div className="absolute inset-0 bg-[oklch(0.52_0.18_145_/_0.08)]" />
-            )}
-          </button>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
