@@ -1205,8 +1205,8 @@ function ProductGallery() {
           <ChevronRight size={16} />
         </button>
 
-        {/* Dot indicators */}
-        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+        {/* Dot indicators — mobile only */}
+        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 sm:hidden">
           {GALLERY_IMAGES.map((_, i) => (
             <button
               key={i}
@@ -1220,6 +1220,29 @@ function ProductGallery() {
             />
           ))}
         </div>
+      </div>
+
+      {/* Thumbnails — desktop only */}
+      <div className="hidden sm:flex gap-2 mt-1">
+        {GALLERY_IMAGES.map((img, i) => (
+          <button
+            key={i}
+            onClick={() => setActiveIdx(i)}
+            className={`relative rounded-lg overflow-hidden border-2 transition-all duration-150 flex-shrink-0 ${
+              i === activeIdx
+                ? "border-[oklch(0.52_0.18_145)] shadow-sm"
+                : "border-border hover:border-muted-foreground/40"
+            }`}
+            style={{ width: 56, height: 56 }}
+            aria-label={img.label}
+          >
+            <img
+              src={img.src}
+              alt={img.alt}
+              className="w-full h-full object-cover"
+            />
+          </button>
+        ))}
       </div>
     </div>
   );
