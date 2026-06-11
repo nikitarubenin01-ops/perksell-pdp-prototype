@@ -227,14 +227,16 @@ export default function Home() {
   function handleOfferBuy(seller: Seller) {
     setSelectedSeller(seller);
     flashCard();
-    toast.success(`Selected ${seller.name} · $${seller.price}`, {
+    toast.success(`Selected ${seller.name} · $${getSellerPrice(seller)}`, {
       description: "Scroll up to confirm purchase",
       duration: 2000,
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  const currentPrice = activeVariant?.available ? activeVariant.price : selectedSeller.price;
+  const getSellerPrice = (seller: typeof selectedSeller) =>
+    seller.prices?.[selectedDuration] ?? seller.price;
+  const currentPrice = activeVariant?.available ? activeVariant.price : getSellerPrice(selectedSeller);
 
   return (
     <div className="min-h-screen bg-[oklch(0.98_0.002_240)]">
@@ -492,15 +494,17 @@ export default function Home() {
 
                   <div className="flex items-center gap-2 flex-shrink-0">
                     <div className="text-right mr-1">
-                      <div className="text-base font-bold text-foreground leading-tight">${recommendedSeller.price.toFixed(2)}</div>
-                      {activeVariant && activeVariant.retailPrice > recommendedSeller.price && (
+                      {(() => { const rp = getSellerPrice(recommendedSeller); return (<>
+                      <div className="text-base font-bold text-foreground leading-tight">${rp.toFixed(2)}</div>
+                      {activeVariant && activeVariant.retailPrice > rp && (
                         <div className="flex items-center justify-end gap-1">
                           <span className="text-[10px] text-muted-foreground line-through">${activeVariant.retailPrice.toFixed(2)}</span>
                           <span className="text-[10px] font-bold text-white bg-[oklch(0.45_0.22_25)] px-1 py-0.5 rounded">
-                            -{Math.round((1 - recommendedSeller.price / activeVariant.retailPrice) * 100)}%
+                            -{Math.round((1 - rp / activeVariant.retailPrice) * 100)}%
                           </span>
                         </div>
                       )}
+                      </>); })()}
                     </div>
                     <button
                       className="offer-cart-btn"
@@ -558,15 +562,17 @@ export default function Home() {
 
                       <div className="flex items-center gap-2 flex-shrink-0">
                         <div className="text-right mr-1">
-                          <div className="text-base font-bold text-foreground leading-tight">${seller.price.toFixed(2)}</div>
-                          {activeVariant && activeVariant.retailPrice > seller.price && (
+                          {(() => { const sp = getSellerPrice(seller); return (<>
+                          <div className="text-base font-bold text-foreground leading-tight">${sp.toFixed(2)}</div>
+                          {activeVariant && activeVariant.retailPrice > sp && (
                             <div className="flex items-center justify-end gap-1">
                               <span className="text-[10px] text-muted-foreground line-through">${activeVariant.retailPrice.toFixed(2)}</span>
                               <span className="text-[10px] font-bold text-white bg-[oklch(0.45_0.22_25)] px-1 py-0.5 rounded">
-                                -{Math.round((1 - seller.price / activeVariant.retailPrice) * 100)}%
+                                -{Math.round((1 - sp / activeVariant.retailPrice) * 100)}%
                               </span>
                             </div>
                           )}
+                          </>); })()}
                         </div>
                         <button
                           className="offer-cart-btn"
@@ -950,8 +956,7 @@ export default function Home() {
                       {/* Apple Pay */}
                       <svg height="20" viewBox="0 0 52 24" xmlns="http://www.w3.org/2000/svg" aria-label="Apple Pay">
                         <rect width="52" height="24" rx="3" fill="black"/>
-                        <text x="26" y="16" textAnchor="middle" fill="white" fontSize="9" fontFamily="-apple-system,Arial,sans-serif" fontWeight="500"> Pay</text>
-                        <text x="12" y="15" textAnchor="middle" fill="white" fontSize="11" fontFamily="-apple-system,Arial,sans-serif"></text>
+                        <text x="26" y="16" textAnchor="middle" fill="white" fontSize="9" fontFamily="-apple-system,Arial,sans-serif" fontWeight="500">{"\uF8FF Pay"}</text>
                       </svg>
                       {/* PayPal */}
                       <svg height="20" viewBox="0 0 52 24" xmlns="http://www.w3.org/2000/svg" aria-label="PayPal">

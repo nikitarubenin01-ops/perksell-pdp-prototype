@@ -22,7 +22,8 @@ export interface Seller {
   successRate: number;
   deliveryMode: "instant" | "manual";
   deliveryTime: string;
-  price: number;
+  price: number; // base price (1 Month / default)
+  prices?: Record<string, number>; // prices by duration key
   isRecommended?: boolean;
   verifiedSince: string;
   verificationDetails: string[];
@@ -97,6 +98,7 @@ export const sellers: Seller[] = [
     deliveryMode: "instant",
     deliveryTime: "< 1 min",
     price: 14.67,
+    prices: { "6 Months": 28.99, "12 Months": 49.99 },
     isRecommended: true,
     verifiedSince: "Mar 2022",
     verificationDetails: [
@@ -124,6 +126,7 @@ export const sellers: Seller[] = [
     deliveryMode: "instant",
     deliveryTime: "< 2 min",
     price: 15.20,
+    prices: { "6 Months": 30.40, "12 Months": 52.99 },
     verifiedSince: "Jun 2022",
     verificationDetails: [
       "Identity verified by Perksell",
@@ -149,6 +152,7 @@ export const sellers: Seller[] = [
     deliveryMode: "instant",
     deliveryTime: "< 2 min",
     price: 16.19,
+    prices: { "6 Months": 32.38, "12 Months": 55.99 },
     verifiedSince: "Aug 2022",
     verificationDetails: [
       "Identity verified by Perksell",
@@ -174,6 +178,7 @@ export const sellers: Seller[] = [
     deliveryMode: "manual",
     deliveryTime: "up to 15 min",
     price: 13.99,
+    prices: { "6 Months": 27.98, "12 Months": 47.99 },
     verifiedSince: "Jan 2023",
     verificationDetails: [
       "Identity verified by Perksell",
@@ -199,6 +204,7 @@ export const sellers: Seller[] = [
     deliveryMode: "instant",
     deliveryTime: "< 3 min",
     price: 14.20,
+    prices: { "6 Months": 28.40, "12 Months": 50.99 },
     verifiedSince: "Apr 2023",
     verificationDetails: [
       "Identity verified by Perksell",
