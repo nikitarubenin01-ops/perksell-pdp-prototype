@@ -478,18 +478,18 @@ export default function Home() {
                   </SellerTooltip>
 
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
+                    <div className="flex items-center gap-1.5 min-w-0">
                       <SellerTooltip seller={recommendedSeller}>
-                        <button onClick={(e) => e.stopPropagation()} className="flex items-center gap-1.5 hover:underline">
-                          <span className="text-sm font-semibold text-foreground">{recommendedSeller.name}</span>
-                          <Info size={12} className="text-muted-foreground/60" />
+                        <button onClick={(e) => e.stopPropagation()} className="flex items-center gap-1 hover:underline min-w-0 shrink">
+                          <span className="text-sm font-semibold text-foreground truncate">{recommendedSeller.name}</span>
+                          <Info size={12} className="text-muted-foreground/60 flex-shrink-0" />
                         </button>
                       </SellerTooltip>
                     </div>
-                    <div className="flex items-center gap-1 mt-0.5">
-                      <span className="text-[11px] font-semibold text-[oklch(0.52_0.18_145)]">{recommendedSeller.successRate}%</span>
+                    <div className="flex items-center gap-1 mt-0.5 flex-nowrap">
+                      <span className="text-[11px] font-semibold text-[oklch(0.52_0.18_145)] whitespace-nowrap">{recommendedSeller.successRate}%</span>
                       <span className="text-[11px] text-muted-foreground/50">·</span>
-                      <span className="text-[11px] text-muted-foreground">{recommendedSeller.totalOrders.toLocaleString()} orders</span>
+                      <span className="text-[11px] text-muted-foreground whitespace-nowrap">{recommendedSeller.totalOrders.toLocaleString()} orders</span>
                       {recommendedSeller.deliveryMode === "manual" && <DeliveryBadge mode={recommendedSeller.deliveryMode} />}
                     </div>
                   </div>
@@ -547,18 +547,18 @@ export default function Home() {
                       </SellerTooltip>
 
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
+                        <div className="flex items-center gap-1.5 min-w-0">
                           <SellerTooltip seller={seller}>
-                            <button onClick={(e) => e.stopPropagation()} className="flex items-center gap-1.5 hover:underline">
-                              <span className="text-sm font-semibold text-foreground">{seller.name}</span>
-                              <Info size={12} className="text-muted-foreground/60" />
+                            <button onClick={(e) => e.stopPropagation()} className="flex items-center gap-1 hover:underline min-w-0 shrink">
+                              <span className="text-sm font-semibold text-foreground truncate">{seller.name}</span>
+                              <Info size={12} className="text-muted-foreground/60 flex-shrink-0" />
                             </button>
                           </SellerTooltip>
                         </div>
-                        <div className="flex items-center gap-1 mt-0.5">
-                          <span className="text-[11px] font-semibold text-[oklch(0.52_0.18_145)]">{seller.successRate}%</span>
+                        <div className="flex items-center gap-1 mt-0.5 flex-nowrap">
+                          <span className="text-[11px] font-semibold text-[oklch(0.52_0.18_145)] whitespace-nowrap">{seller.successRate}%</span>
                           <span className="text-[11px] text-muted-foreground/50">·</span>
-                          <span className="text-[11px] text-muted-foreground">{seller.totalOrders.toLocaleString()} orders</span>
+                          <span className="text-[11px] text-muted-foreground whitespace-nowrap">{seller.totalOrders.toLocaleString()} orders</span>
                           {seller.deliveryMode === "manual" && <DeliveryBadge mode={seller.deliveryMode} />}
                         </div>
                       </div>
