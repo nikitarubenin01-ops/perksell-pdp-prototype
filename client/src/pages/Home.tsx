@@ -483,7 +483,7 @@ export default function Home() {
                         </button>
                       </SellerTooltip>
                           <span className="text-[10px] font-bold text-[oklch(0.52_0.18_145)] bg-[oklch(0.95_0.05_145)] border border-[oklch(0.85_0.10_145)] px-1.5 py-0.5 rounded-full uppercase tracking-wide">
-                        Most orders
+                        Recommended
                       </span>
                     </div>
                     <div className="flex items-center gap-2 mt-1 flex-wrap">
@@ -827,7 +827,7 @@ export default function Home() {
                         </SellerTooltip>
                         {selectedSeller.isRecommended && (
                           <span className="text-[10px] font-bold text-[oklch(0.25_0.04_240)] bg-[oklch(0.93_0.02_240)] border border-[oklch(0.85_0.03_240)] px-1.5 py-0.5 rounded-full">
-                            Most orders
+                            Recommended
                           </span>
                         )}
                       </div>
