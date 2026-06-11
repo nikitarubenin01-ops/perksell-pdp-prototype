@@ -482,9 +482,6 @@ export default function Home() {
                           <Info size={12} className="text-muted-foreground/60" />
                         </button>
                       </SellerTooltip>
-                          <span className="text-[10px] font-bold text-[oklch(0.52_0.18_145)] bg-[oklch(0.95_0.05_145)] border border-[oklch(0.85_0.10_145)] px-1.5 py-0.5 rounded-full uppercase tracking-wide">
-                        Recommended
-                      </span>
                     </div>
                     <div className="flex items-center gap-2 mt-1 flex-wrap">
                       <span className="text-[11px] font-semibold text-[oklch(0.52_0.18_145)]">{recommendedSeller.successRate}%</span>
