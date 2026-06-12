@@ -819,8 +819,7 @@ export default function Home() {
                     )}
                   </div>
                   <p className="text-xs text-muted-foreground mt-0.5">
-                    Best price of {activeVariant?.sellersCount ?? productStats.sellerCount} sellers
-                    {" · "}<span className="font-medium text-foreground">{selectedDuration} · {selectedRegion}</span>
+                    <span className="font-medium text-foreground">{selectedDuration} · {selectedRegion}</span>
                   </p>
                 </div>
 
@@ -1101,10 +1100,6 @@ function SpecsTable({
 
   const mainRows: { label: string; value: React.ReactNode }[] = [
     { label: "Delivery", value: "Instant · Login credentials" },
-    {
-      label: "Total sales",
-      value: `${totalSold.toLocaleString()} orders`,
-    },
     {
       label: "Sold last 30 days",
       value: (
