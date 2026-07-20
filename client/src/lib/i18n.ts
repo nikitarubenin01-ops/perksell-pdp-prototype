@@ -116,6 +116,11 @@ export const translations = {
     tooltipRecommendTitle: 'How we recommend',
     tooltipRecommendDesc: 'Recommended offer is selected by Perksell based on price, seller reliability, delivery success rate, and dispute history — not by payment.',
 
+    // Social proof urgency block
+    viewingNow: (n: number) => `${n} people viewing right now`,
+    lastPurchase: (t: string) => `Last purchase ${t}`,
+    boughtToday: (n: number) => `${n} bought today`,
+
     // Misc
     vsOfficial: 'vs official',
   },
@@ -234,6 +239,11 @@ export const translations = {
     tooltipOffersDesc: 'Múltiples vendedores verificados ofrecen el mismo producto a distintos precios. Todos pasan la verificación de Perksell. Tú eliges a quién comprar.',
     tooltipRecommendTitle: 'Cómo recomendamos',
     tooltipRecommendDesc: 'La oferta recomendada es seleccionada por Perksell en base al precio, fiabilidad del vendedor, tasa de entrega exitosa e historial de disputas — no por pago.',
+
+    // Social proof urgency block
+    viewingNow: (n: number) => `${n} personas viendo ahora`,
+    lastPurchase: (t: string) => `Última compra ${t}`,
+    boughtToday: (n: number) => `${n} compras hoy`,
 
     // Misc
     vsOfficial: 'vs oficial',

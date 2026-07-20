@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   AlertTriangle,
   ChevronDown,
@@ -134,6 +134,20 @@ export default function Home() {
   const [helpfulCounts, setHelpfulCounts] = useState<Record<string, number>>(
     Object.fromEntries(reviews.map((r) => [r.id, r.helpfulCount]))
   );
+
+  // Social proof — live-ish viewer count simulation
+  const [viewingNow, setViewingNow] = useState(productStats.viewingNow);
+  const [lastPurchaseTime, setLastPurchaseTime] = useState(selectedSeller.lastSale);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Drift ±1-2 viewers every 8-15s to feel alive
+      setViewingNow(prev => Math.max(8, Math.min(22, prev + (Math.random() > 0.5 ? 1 : -1))));
+    }, 10000 + Math.random() * 5000);
+    return () => clearInterval(interval);
+  }, []);
+  useEffect(() => {
+    setLastPurchaseTime(selectedSeller.lastSale);
+  }, [selectedSeller]);
 
   function flashCard() {
     setCardFlash(true);
@@ -843,6 +857,23 @@ export default function Home() {
                         <span className="text-[11px] text-muted-foreground">{selectedSeller.totalOrders.toLocaleString()} orders</span>
                         {selectedSeller.deliveryMode === "manual" && <DeliveryBadge mode={selectedSeller.deliveryMode} />}
                       </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Social proof urgency block */}
+                <div className="px-5 pt-3 pb-1">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <div className="flex items-center gap-1.5">
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[oklch(0.52_0.18_145)] opacity-60"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-[oklch(0.52_0.18_145)]"></span>
+                      </span>
+                      <span className="font-medium text-foreground">{t.viewingNow(viewingNow)}</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-muted-foreground">
+                      <Clock size={10} />
+                      <span>{t.lastPurchase(lastPurchaseTime)}</span>
                     </div>
                   </div>
                 </div>

@@ -296,6 +296,7 @@ export const productStats = {
   successRate: 98.7,
   platformBuyersTotal: 50000,
   platformRating: 4.8,
+  viewingNow: 14,
 };
 
 export const protectionItems = [
