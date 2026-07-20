@@ -37,6 +37,7 @@ import {
   type Variant,
   type RelatedProduct,
 } from "@/lib/mockData";
+import { useLocale } from "@/contexts/LocaleContext";
 
 // ─── Design tokens (Perksell PDP) ───────────────────────────────────────────
 // Primary green: oklch(0.52 0.18 145)  — CTA, success, verified
@@ -128,6 +129,7 @@ function getAvailableRegions(): string[] {
 }
 
 export default function Home() {
+  const { t, locale } = useLocale();
   const [selectedRegion, setSelectedRegion] = useState<string>("Global");
   const [selectedDuration, setSelectedDuration] = useState<string>("12 Months");
   const [selectedSeller, setSelectedSeller] = useState<Seller>(sellers[0]);
@@ -246,9 +248,9 @@ export default function Home() {
       {/* Breadcrumb */}
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-3">
         <nav className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <a href="#" className="hover:text-foreground transition-colors">Home</a>
+          <a href="#" className="hover:text-foreground transition-colors">{t.home}</a>
           <ChevronRight size={12} />
-          <a href="#" className="hover:text-foreground transition-colors">Subscriptions</a>
+          <a href="#" className="hover:text-foreground transition-colors">{t.subscriptions}</a>
           <ChevronRight size={12} />
           <span className="text-foreground font-medium">MAX (HBO) Action</span>
         </nav>
@@ -278,32 +280,32 @@ export default function Home() {
                   {/* Title block */}
                   <div>
                     <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight leading-tight">
-                      Buy MAX (HBO) Subscription — Cheap Price, Instant Delivery
+                      {t.h1}
                     </h1>
                     <div className="flex flex-wrap items-center gap-2.5 mt-2">
                       <div className="flex items-center gap-1.5">
                         <StarRating rating={productStats.rating} size={13} />
                         <span className="text-sm font-semibold text-[oklch(0.78_0.16_75)]">{productStats.rating}</span>
                         <a href="#reviews" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                          ({productStats.reviewCount} reviews)
+                          ({productStats.reviewCount} {t.reviews})
                         </a>
                       </div>
                       <span className="text-muted-foreground text-xs">·</span>
                       <span className="text-sm text-muted-foreground">
-                        <span className="font-semibold text-foreground">{productStats.totalSold.toLocaleString()}</span> sold
+                        <span className="font-semibold text-foreground">{productStats.totalSold.toLocaleString()}</span> {t.sold}
                       </span>
                     </div>
                     <div className="flex items-center gap-1.5 mt-1.5">
                       <TrendingUp size={12} className="text-[oklch(0.65_0.18_60)]" />
-                      <span className="text-sm text-[oklch(0.50_0.18_60)] font-semibold">{productStats.soldLast30Days} activations</span>
-                      <span className="text-sm text-muted-foreground">in the last 30 days</span>
+                      <span className="text-sm text-[oklch(0.50_0.18_60)] font-semibold">{productStats.soldLast30Days}</span>
+                      <span className="text-sm text-muted-foreground">{t.activationsLastMonth}</span>
                     </div>
                   </div>
 
                   {/* Region chips */}
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <p className="section-label">Region</p>
+                      <p className="section-label">{t.regionLabel}</p>
                       <ProtectionTooltip
                         title="What is region?"
                         description="Region determines which country or zone the subscription is valid for. Make sure to select the region that matches your account."
@@ -311,7 +313,7 @@ export default function Home() {
                       >
                         <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors">
                           <HelpCircle size={11} />
-                          What is this?
+                          {t.whatIsThis}
                         </button>
                       </ProtectionTooltip>
                     </div>
@@ -350,9 +352,9 @@ export default function Home() {
                   {/* Duration chips */}
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <p className="section-label">Duration</p>
+                      <p className="section-label">{t.durationLabel}</p>
                       {activeVariant && (
-                        <span className="text-xs text-muted-foreground">{activeVariant.sellersCount} sellers</span>
+                        <span className="text-xs text-muted-foreground">{activeVariant.sellersCount} {t.sellers}</span>
                       )}
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -409,10 +411,10 @@ export default function Home() {
                                   )}
                                 </>
                               ) : (
-                                <span className="text-xs text-muted-foreground">Out of stock</span>
+                                <span className="text-xs text-muted-foreground">{locale === 'es' ? 'Sin stock' : 'Out of stock'}</span>
                               )
                             ) : (
-                              <span className="text-xs text-muted-foreground">N/A</span>
+                              <span className="text-xs text-muted-foreground">{locale === 'es' ? 'N/D' : 'N/A'}</span>
                             )}
                           </button>
                         );
@@ -436,9 +438,9 @@ export default function Home() {
             <section className="animate-fade-in-up" style={{ animationDelay: "150ms" }} id="offers">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="section-label">
-                  Available offers
+                  {t.availableOffers}
                   <span className="ml-2 text-xs font-normal text-muted-foreground normal-case tracking-normal">
-                    {activeVariant?.sellersCount ?? productStats.sellerCount} sellers
+                    {activeVariant?.sellersCount ?? productStats.sellerCount} {t.sellers}
                   </span>
                 </h2>
                 <ProtectionTooltip
@@ -448,7 +450,7 @@ export default function Home() {
                 >
                   <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors">
                     <HelpCircle size={13} />
-                    How this works
+                    {t.howThisWorks}
                   </button>
                 </ProtectionTooltip>
               </div>
@@ -457,7 +459,7 @@ export default function Home() {
               <div className="mb-2">
                 <div className="flex items-center gap-2 mb-1.5">
                   <span className="text-[11px] font-bold text-[oklch(0.52_0.18_145)] uppercase tracking-wide">
-                    Recommended
+                    {t.recommended}
                   </span>
                   <ProtectionTooltip
                     title="How we recommend"
@@ -511,8 +513,8 @@ export default function Home() {
                       <div className="flex items-center gap-2">
                         <button
                           className="offer-cart-btn"
-                          onClick={(e) => { e.stopPropagation(); toast.success("Added to cart", { duration: 1500 }); }}
-                          title="Add to cart"
+                          onClick={(e) => { e.stopPropagation(); toast.success(t.addedToCart, { duration: 1500 }); }}
+                          title={t.addToCart}
                         >
                           <ShoppingCart size={14} />
                         </button>
@@ -521,7 +523,7 @@ export default function Home() {
                           onClick={(e) => { e.stopPropagation(); handleOfferBuy(recommendedSeller); }}
                         >
                           <Zap size={12} strokeWidth={2.5} />
-                          Buy Now
+                          {t.buyNow}
                         </button>
                       </div>
                     </div>
@@ -533,7 +535,7 @@ export default function Home() {
               <div>
                 <div className="flex items-center gap-2 mb-1.5 mt-3">
                   <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wide">
-                    Other offers
+                    {t.otherOffers}
                   </span>
                 </div>
                 <div className="space-y-2">
@@ -607,7 +609,7 @@ export default function Home() {
                     className="w-full mt-3 py-3 text-sm font-medium text-muted-foreground hover:text-foreground border border-border rounded-xl hover:border-[oklch(0.75_0.12_145)] hover:bg-[oklch(0.99_0.01_145)] transition-all flex items-center justify-center gap-2"
                     onClick={() => setShowAllOffers(!showAllOffers)}
                   >
-                    {showAllOffers ? <><ChevronUp size={15} />Show less</> : <><ChevronDown size={15} />Show {otherSellers.length - 2} more offers</>}
+                    {showAllOffers ? <><ChevronUp size={15} />{t.showLess}</> : <><ChevronDown size={15} />{t.showMoreOffers(otherSellers.length - 2)}</>}
                   </button>
                 )}
               </div>
@@ -616,8 +618,8 @@ export default function Home() {
             {/* ── YOU MAY ALSO LIKE — full-width product cards with hover reveal ── */}
             <section className="animate-fade-in-up" style={{ animationDelay: "200ms" }}>
               <div className="flex items-baseline justify-between mb-5">
-                <h2 className="text-xl font-bold text-foreground">You may also like</h2>
-                <span className="text-sm text-muted-foreground">Similar subscriptions</span>
+                <h2 className="text-xl font-bold text-foreground">{t.youMayAlsoLike}</h2>
+                <span className="text-sm text-muted-foreground">{t.similarSubscriptions}</span>
               </div>
               <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-3 lg:grid-cols-5">
                 <style>{`.similar-card { flex: 0 0 calc(40vw); min-width: 140px; max-width: 180px; } @media (min-width: 640px) { .similar-card { flex: unset; min-width: unset; max-width: unset; } }`}</style>
@@ -656,10 +658,10 @@ export default function Home() {
                         {/* Hover CTA buttons */}
                         <div className="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-200 ease-out p-2 flex flex-col gap-1.5">
                           <button className="w-full py-1.5 text-[11px] font-bold text-white bg-[oklch(0.45_0.22_145)] rounded-lg hover:bg-[oklch(0.38_0.16_145)] transition-colors">
-                            Buy Now
+                            {t.buyNow}
                           </button>
                           <button className="w-full py-1.5 text-[11px] font-semibold text-white border border-white/60 rounded-lg hover:bg-white/10 transition-colors">
-                            View offers
+                            {locale === 'es' ? 'Ver ofertas' : 'View offers'}
                           </button>
                         </div>
                       </div>
@@ -680,7 +682,7 @@ export default function Home() {
                         </p>
                         {/* Price row */}
                         <div className="flex items-baseline gap-1.5">
-                          <span className="text-xs text-muted-foreground">from</span>
+                          <span className="text-xs text-muted-foreground">{t.from}</span>
                           <span className="text-sm font-bold text-foreground">${product.fromPrice.toFixed(2)}</span>
                           <span className="text-[10px] text-muted-foreground line-through">${product.retailPrice.toFixed(2)}</span>
                         </div>
@@ -700,9 +702,9 @@ export default function Home() {
             <section className="animate-fade-in-up" style={{ animationDelay: "200ms" }} id="reviews">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="section-label">
-                  Buyer reviews
+                  {t.buyerReviews}
                   <span className="ml-2 text-xs font-normal text-muted-foreground normal-case tracking-normal">
-                    {productStats.reviewCount} verified
+                    {productStats.reviewCount} {t.verified}
                   </span>
                 </h2>
                 <div className="flex items-center gap-1.5">
@@ -738,7 +740,7 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Left: Most helpful */}
                 <div>
-                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2.5">Most helpful</p>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2.5">{locale === 'es' ? 'Más útiles' : 'Most helpful'}</p>
                   <div className="space-y-3">
                     {sortedByHelpful.slice(0, 3).map((review) => (
                       <ReviewCard
@@ -754,7 +756,7 @@ export default function Home() {
 
                 {/* Right: Most recent */}
                 <div>
-                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2.5">Most recent</p>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2.5">{locale === 'es' ? 'Más recientes' : 'Most recent'}</p>
                   <div className="space-y-3">
                     {sortedByRecent.slice(0, 3).map((review) => (
                       <ReviewCard
@@ -773,7 +775,7 @@ export default function Home() {
                 className="w-full mt-4 py-3 text-sm font-medium text-muted-foreground hover:text-foreground border border-border rounded-xl hover:border-[oklch(0.75_0.12_145)] transition-all flex items-center justify-center gap-2"
                 onClick={() => toast.info(`All ${productStats.reviewCount} reviews`, { description: "Full review page coming soon", duration: 2000 })}
               >
-                <ChevronDown size={15} />Show all {productStats.reviewCount} reviews
+                <ChevronDown size={15} />{t.showAllReviews} ({productStats.reviewCount})
               </button>
             </section>
 
@@ -807,14 +809,14 @@ export default function Home() {
                     )}
                     {activeVariant?.retailPrice && activeVariant.retailPrice > currentPrice && (
                       <span className="text-sm font-bold text-[oklch(0.45_0.22_25)] bg-[oklch(0.95_0.06_25)] px-2 py-0.5 rounded-full">
-                        -{Math.round((1 - currentPrice / activeVariant.retailPrice) * 100)}% vs official
+                        -{Math.round((1 - currentPrice / activeVariant.retailPrice) * 100)}% {t.vsOfficial}
                       </span>
                     )}
                   </div>
                   <div className="flex items-baseline gap-2 mt-0.5">
                     {activeVariant && activeVariant.monthCount > 1 && (
                       <span className="text-sm text-[oklch(0.52_0.18_145)] font-semibold">
-                        ${(activeVariant.price / activeVariant.monthCount).toFixed(2)}/mo
+                        ${(activeVariant.price / activeVariant.monthCount).toFixed(2)}{t.perMonth}
                       </span>
                     )}
                   </div>
@@ -839,7 +841,7 @@ export default function Home() {
                         </SellerTooltip>
                         {selectedSeller.isRecommended && (
                           <span className="text-[10px] font-bold text-[oklch(0.25_0.04_240)] bg-[oklch(0.93_0.02_240)] border border-[oklch(0.85_0.03_240)] px-1.5 py-0.5 rounded-full">
-                            Recommended
+                            {t.recommendedBadge}
                           </span>
                         )}
                       </div>
@@ -857,7 +859,7 @@ export default function Home() {
                 <div className="px-5 py-4 space-y-2.5">
                   <button className="btn-buy-now" onClick={handleBuyNow}>
                     <Zap size={16} strokeWidth={2.5} />
-                    Buy Now
+                    {t.buyNowBtn}
                   </button>
                   <button
                     className="btn-add-cart"
@@ -865,19 +867,19 @@ export default function Home() {
                     style={addedToCart ? { background: "oklch(0.95 0.05 145)", borderColor: "oklch(0.52 0.18 145)" } : {}}
                   >
                     <ShoppingCart size={15} />
-                    {addedToCart ? "Added to cart!" : "Add to Cart"}
+                    {addedToCart ? t.addedToCart + '!' : t.addToCartBtn}
                   </button>
                 </div>
 
                 {/* Protection */}
                 <div className="px-5 pb-4">
                   <div className="flex items-center justify-between mb-2">
-                    <p className="section-label">Buyer protection</p>
+                    <p className="section-label">{t.buyerProtection}</p>
                     <button
                       className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
                       onClick={() => setShowProtectionDetails(!showProtectionDetails)}
                     >
-                      {showProtectionDetails ? "Hide" : "Details"}
+                      {showProtectionDetails ? (locale === 'es' ? 'Ocultar' : 'Hide') : t.details}
                       {showProtectionDetails ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
                     </button>
                   </div>
@@ -887,13 +889,13 @@ export default function Home() {
                     <ProtectionTooltip title={PROTECTION_TOOLTIPS.delivery.title} description={PROTECTION_TOOLTIPS.delivery.description} side="bottom">
                       <button className="flex flex-col items-center gap-1 p-2.5 rounded-lg bg-[oklch(0.97_0.003_240)] hover:bg-[oklch(0.95_0.04_145)] transition-colors text-center">
                         <ShieldCheck size={16} className="text-[oklch(0.52_0.18_145)]" />
-                        <span className="text-[10px] font-medium text-muted-foreground leading-tight">Delivery guarantee</span>
+                        <span className="text-[10px] font-medium text-muted-foreground leading-tight">{t.deliveryGuarantee}</span>
                       </button>
                     </ProtectionTooltip>
                     <ProtectionTooltip title={PROTECTION_TOOLTIPS.verified.title} description={PROTECTION_TOOLTIPS.verified.description} side="bottom">
                       <button className="flex flex-col items-center gap-1 p-2.5 rounded-lg bg-[oklch(0.97_0.003_240)] hover:bg-[oklch(0.94_0.04_255)] transition-colors text-center">
                         <Lock size={16} className="text-[oklch(0.55_0.18_255)]" />
-                        <span className="text-[10px] font-medium text-muted-foreground leading-tight">Verified sellers</span>
+                        <span className="text-[10px] font-medium text-muted-foreground leading-tight">{t.verifiedSellers}</span>
                       </button>
                     </ProtectionTooltip>
                   </div>
@@ -929,7 +931,7 @@ export default function Home() {
                           <path d="M13 16l2.5 2.5L20 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                         <span className="text-[11px] font-semibold text-foreground">ScamAdviser</span>
-                        <span className="text-[10px] text-muted-foreground">Trust score</span>
+                        <span className="text-[10px] text-muted-foreground">{t.trustScore}</span>
                         <span className="text-[11px] font-bold text-[oklch(0.52_0.18_145)]">100/100</span>
                       </div>
                       <a
@@ -996,13 +998,13 @@ export default function Home() {
           <div className="flex items-baseline gap-1.5 flex-wrap">
             <span className="text-lg font-bold text-foreground leading-tight">${currentPrice.toFixed(2)}</span>
             {activeVariant && activeVariant.monthCount > 1 && (
-              <span className="text-xs text-muted-foreground whitespace-nowrap">
-                ${(currentPrice / activeVariant.monthCount).toFixed(2)}/mo
+                    <span className="text-xs text-muted-foreground whitespace-nowrap">
+                ${(currentPrice / activeVariant.monthCount).toFixed(2)}{t.perMonth}
               </span>
             )}
             {activeVariant?.retailPrice && activeVariant.retailPrice > currentPrice && (
               <span className="text-xs font-semibold text-[oklch(0.52_0.18_145)] whitespace-nowrap">
-                Save ${(activeVariant.retailPrice - currentPrice).toFixed(0)}
+                {t.savingsLabel(`$${(activeVariant.retailPrice - currentPrice).toFixed(0)}`)}
               </span>
             )}
           </div>
@@ -1017,7 +1019,7 @@ export default function Home() {
           onClick={handleBuyNow}
         >
           <Zap size={15} strokeWidth={2.5} />
-          Buy Now
+          {t.buyNowBtn}
         </button>
       </div>
     </div>
@@ -1036,6 +1038,7 @@ function ReviewCard({
   voted: boolean;
   onHelpful: () => void;
 }) {
+  const { t } = useLocale();
   return (
     <div className="bg-white rounded-xl border border-border p-4">
       <div className="flex items-start gap-2.5">
@@ -1048,7 +1051,7 @@ function ReviewCard({
             <span className="text-xs text-muted-foreground">{review.country}</span>
             {review.verified && (
               <span className="flex items-center gap-0.5 text-[10px] font-medium text-[oklch(0.52_0.18_145)]">
-                <ShieldCheck size={10} />Verified
+                <ShieldCheck size={10} />{t.verified}
               </span>
             )}
           </div>
@@ -1077,7 +1080,7 @@ function ReviewCard({
           }`}
         >
           <ThumbsUp size={11} className={voted ? "fill-[oklch(0.52_0.18_145)]" : ""} />
-          Helpful {helpfulCount > 0 && <span>({helpfulCount})</span>}
+          {t.helpful} {helpfulCount > 0 && <span>({helpfulCount})</span>}
         </button>
       </div>
     </div>
@@ -1096,28 +1099,29 @@ function SpecsTable({
   totalSold: number;
   soldLast30Days: number;
 }) {
+  const { t } = useLocale();
   const [expanded, setExpanded] = useState(false);
 
   const mainRows: { label: string; value: React.ReactNode }[] = [
-    { label: "Delivery", value: "Instant · Login credentials" },
+    { label: t.delivery, value: t.deliveryValue },
     {
-      label: "Sold last 30 days",
+      label: t.soldLast30Days,
       value: (
         <span className="flex items-center gap-1 text-[oklch(0.52_0.18_145)] font-semibold">
           <TrendingUp size={12} />
-          {soldLast30Days} orders
+          {soldLast30Days} {t.orders}
         </span>
       ),
     },
   ];
 
   const extraRows: { label: string; value: React.ReactNode }[] = [
-    { label: "Region", value: selectedRegion },
-    { label: "Duration", value: selectedDuration },
-    { label: "Platforms", value: "Web, iOS, Android, Smart TV, Consoles" },
+    { label: t.region, value: selectedRegion },
+    { label: t.duration, value: selectedDuration },
+    { label: t.platform, value: "Web, iOS, Android, Smart TV, Consoles" },
     { label: "Languages", value: "English, Spanish, French, Portuguese" },
     { label: "Streams", value: "Up to 3 simultaneous streams" },
-    { label: "Activation", value: "Login credentials · Instant access" },
+    { label: t.activation, value: t.deliveryValue },
     { label: "Replacements", value: "Unlimited — if access stops working" },
     { label: "Content", value: "HBO Originals, Warner Bros., DC, Max Originals" },
   ];
@@ -1147,12 +1151,12 @@ function SpecsTable({
         {expanded ? (
           <>
             <ChevronUp size={14} />
-            Hide characteristics
+            {t.hideCharacteristics}
           </>
         ) : (
           <>
             <ChevronDown size={14} />
-            All characteristics ›
+            {t.allCharacteristics} ›
           </>
         )}
       </button>
