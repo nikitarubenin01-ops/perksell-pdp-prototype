@@ -297,6 +297,7 @@ export const productStats = {
   platformBuyersTotal: 50000,
   platformRating: 4.8,
   viewingNow: 14,
+  lastPurchaseAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
 };
 
 export const protectionItems = [

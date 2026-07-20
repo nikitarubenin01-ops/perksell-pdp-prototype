@@ -135,19 +135,50 @@ export default function Home() {
     Object.fromEntries(reviews.map((r) => [r.id, r.helpfulCount]))
   );
 
-  // Social proof — live-ish viewer count simulation
-  const [viewingNow, setViewingNow] = useState(productStats.viewingNow);
-  const [lastPurchaseTime, setLastPurchaseTime] = useState(selectedSeller.lastSale);
+  // Social proof — derived from real product sales data
+  // Viewers: min(35, max(5, round(dailySales * 1.5))) — proportional, capped at 35
+  // Last purchase: minutesSinceRealPurchase % avgMinutesBetweenSales — never shows "days ago"
+  const salesPerDay = productStats.soldLast30Days / 30;
+  const baseViewers = Math.min(35, Math.max(5, Math.round(salesPerDay * 1.5)));
+  const minutesBetweenSales = Math.round(24 * 60 / salesPerDay);
+
+  function formatLastPurchase(minutes: number): string {
+    if (minutes < 60) return `${minutes} min ago`;
+    if (minutes < 240) return `${Math.round(minutes / 60)} hours ago`;
+    return 'today';
+  }
+
+  const [viewingNow, setViewingNow] = useState(baseViewers);
+  const [lastPurchaseMinutes, setLastPurchaseMinutes] = useState(1);
+
   useEffect(() => {
-    const interval = setInterval(() => {
-      // Drift ±1-2 viewers every 8-15s to feel alive
-      setViewingNow(prev => Math.max(8, Math.min(22, prev + (Math.random() > 0.5 ? 1 : -1))));
+    const initialViewers = baseViewers + Math.round((Math.random() - 0.5) * 4);
+    setViewingNow(Math.min(35, Math.max(5, initialViewers)));
+
+    const minutesSinceReal = Math.round((Date.now() - new Date(productStats.lastPurchaseAt).getTime()) / 60000);
+    const initialMinutes = Math.max(1, minutesSinceReal % minutesBetweenSales);
+    setLastPurchaseMinutes(initialMinutes);
+  }, [baseViewers, minutesBetweenSales]);
+
+  useEffect(() => {
+    const driftInterval = setInterval(() => {
+      setViewingNow(prev => {
+        const next = prev + (Math.random() > 0.5 ? 1 : -1);
+        return Math.min(baseViewers + 4, Math.max(baseViewers - 3, next));
+      });
     }, 10000 + Math.random() * 5000);
-    return () => clearInterval(interval);
-  }, []);
+    return () => clearInterval(driftInterval);
+  }, [baseViewers]);
+
   useEffect(() => {
-    setLastPurchaseTime(selectedSeller.lastSale);
-  }, [selectedSeller]);
+    const tickInterval = setInterval(() => {
+      setLastPurchaseMinutes(prev => {
+        const next = prev + 1;
+        return next >= minutesBetweenSales ? 1 : next;
+      });
+    }, 60000);
+    return () => clearInterval(tickInterval);
+  }, [minutesBetweenSales]);
 
   function flashCard() {
     setCardFlash(true);
@@ -863,7 +894,7 @@ export default function Home() {
 
                 {/* Social proof urgency block */}
                 <div className="px-5 pt-3 pb-1">
-                  <div className="flex items-center justify-between text-[11px]">
+                  <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between text-[11px]">
                     <div className="flex items-center gap-1.5">
                       <span className="relative flex h-2 w-2">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[oklch(0.52_0.18_145)] opacity-60"></span>
@@ -873,7 +904,7 @@ export default function Home() {
                     </div>
                     <div className="flex items-center gap-1 text-muted-foreground">
                       <Clock size={10} />
-                      <span>{t.lastPurchase(lastPurchaseTime)}</span>
+                      <span>{t.lastPurchase(formatLastPurchase(lastPurchaseMinutes))}</span>
                     </div>
                   </div>
                 </div>
