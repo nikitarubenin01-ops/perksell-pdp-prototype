@@ -94,6 +94,28 @@ export const translations = {
     instant: 'Instant',
     manual: 'Manual',
 
+    // Protection items (expanded list)
+    protectionItems: [
+      { title: 'Access guarantee', description: 'If your access stops working at any point during the subscription period, the seller provides a replacement at no extra cost. If unresolved within 24h, Perksell issues a full refund.' },
+      { title: 'Instant access delivery', description: 'Login credentials are delivered automatically after payment confirmation. You get immediate access — usually under 1 minute for instant sellers.' },
+      { title: 'Escrow payment', description: 'Your payment is held securely by Perksell until access is confirmed. Sellers receive funds only after successful delivery — your money is protected at every step.' },
+      { title: 'Support within 2h', description: 'Our team responds to access issues within 2 hours. Replacement requests and disputes are resolved within 24–48 hours.' },
+    ],
+
+    // Protection tooltips
+    tooltipDeliveryTitle: 'Access guarantee',
+    tooltipDeliveryDesc: 'If your access stops working at any point during the subscription period, the seller provides a replacement at no extra cost. If unresolved within 24h, Perksell issues a full refund.',
+    tooltipSecureTitle: 'Escrow payment',
+    tooltipSecureDesc: 'Your payment is held securely by Perksell and only released to the seller after access is confirmed. Sellers cannot access funds until you receive your order.',
+    tooltipVerifiedTitle: 'Verified sellers',
+    tooltipVerifiedDesc: 'All sellers pass identity verification, payment method checks, and maintain a minimum 97% delivery success rate to stay listed on Perksell.',
+    tooltipRegionTitle: 'What is region?',
+    tooltipRegionDesc: 'Region determines which country or zone the subscription is valid for. Make sure to select the region that matches your account.',
+    tooltipOffersTitle: 'How offers work',
+    tooltipOffersDesc: 'Multiple verified sellers list the same product at different prices. All sellers pass Perksell verification. You choose who to buy from.',
+    tooltipRecommendTitle: 'How we recommend',
+    tooltipRecommendDesc: 'Recommended offer is selected by Perksell based on price, seller reliability, delivery success rate, and dispute history — not by payment.',
+
     // Misc
     vsOfficial: 'vs official',
   },
@@ -190,6 +212,28 @@ export const translations = {
     // Delivery modes
     instant: 'Instantánea',
     manual: 'Manual',
+
+    // Protection items (expanded list)
+    protectionItems: [
+      { title: 'Garantía de acceso', description: 'Si tu acceso deja de funcionar en cualquier momento durante el período de suscripción, el vendedor proporciona un reemplazo sin coste adicional. Si no se resuelve en 24h, Perksell emite un reembolso completo.' },
+      { title: 'Entrega instantánea de acceso', description: 'Las credenciales de acceso se entregan automáticamente tras la confirmación del pago. Obtienes acceso inmediato — normalmente en menos de 1 minuto para vendedores instantáneos.' },
+      { title: 'Pago en custodia', description: 'Tu pago es retenido de forma segura por Perksell hasta que se confirma el acceso. Los vendedores reciben los fondos solo después de una entrega exitosa — tu dinero está protegido en cada paso.' },
+      { title: 'Soporte en 2h', description: 'Nuestro equipo responde a los problemas de acceso en 2 horas. Las solicitudes de reemplazo y disputas se resuelven en 24–48 horas.' },
+    ],
+
+    // Protection tooltips
+    tooltipDeliveryTitle: 'Garantía de acceso',
+    tooltipDeliveryDesc: 'Si tu acceso deja de funcionar, el vendedor proporciona un reemplazo sin coste. Si no se resuelve en 24h, Perksell emite un reembolso completo.',
+    tooltipSecureTitle: 'Pago en custodia',
+    tooltipSecureDesc: 'Tu pago es retenido por Perksell y solo se libera al vendedor tras confirmar el acceso. Los vendedores no pueden acceder a los fondos hasta que recibas tu pedido.',
+    tooltipVerifiedTitle: 'Vendedores verificados',
+    tooltipVerifiedDesc: 'Todos los vendedores pasan verificación de identidad y mantienen una tasa mínima del 97% de entrega exitosa para estar listados en Perksell.',
+    tooltipRegionTitle: '¿Qué es la región?',
+    tooltipRegionDesc: 'La región determina en qué país o zona es válida la suscripción. Asegúrate de seleccionar la región que coincide con tu cuenta.',
+    tooltipOffersTitle: 'Cómo funcionan las ofertas',
+    tooltipOffersDesc: 'Múltiples vendedores verificados ofrecen el mismo producto a distintos precios. Todos pasan la verificación de Perksell. Tú eliges a quién comprar.',
+    tooltipRecommendTitle: 'Cómo recomendamos',
+    tooltipRecommendDesc: 'La oferta recomendada es seleccionada por Perksell en base al precio, fiabilidad del vendedor, tasa de entrega exitosa e historial de disputas — no por pago.',
 
     // Misc
     vsOfficial: 'vs oficial',

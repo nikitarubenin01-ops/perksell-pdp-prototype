@@ -46,23 +46,14 @@ import { useLocale } from "@/contexts/LocaleContext";
 // Background:    oklch(0.98 0.002 240) — page bg
 // ─────────────────────────────────────────────────────────────────────────────
 
-const PROTECTION_TOOLTIPS: Record<string, { title: string; description: string }> = {
-  delivery: {
-    title: "Access guarantee",
-    description:
-      "If your access stops working at any point during the subscription period, the seller provides a replacement at no extra cost. If unresolved within 24h, Perksell issues a full refund.",
-  },
-  secure: {
-    title: "Escrow payment",
-    description:
-      "Your payment is held securely by Perksell and only released to the seller after access is confirmed. Sellers cannot access funds until you receive your order.",
-  },
-  verified: {
-    title: "Verified sellers",
-    description:
-      "All sellers pass identity verification, payment method checks, and maintain a minimum 97% delivery success rate to stay listed on Perksell.",
-  },
-};
+function useProtectionTooltips() {
+  const { t } = useLocale();
+  return {
+    delivery: { title: t.tooltipDeliveryTitle, description: t.tooltipDeliveryDesc },
+    secure:   { title: t.tooltipSecureTitle,   description: t.tooltipSecureDesc   },
+    verified: { title: t.tooltipVerifiedTitle, description: t.tooltipVerifiedDesc },
+  };
+}
 
 function SellerAvatar({ seller, size = 32 }: { seller: Seller; size?: number }) {
   return (
@@ -130,6 +121,7 @@ function getAvailableRegions(): string[] {
 
 export default function Home() {
   const { t, locale } = useLocale();
+  const PROTECTION_TOOLTIPS = useProtectionTooltips();
   const [selectedRegion, setSelectedRegion] = useState<string>("Global");
   const [selectedDuration, setSelectedDuration] = useState<string>("12 Months");
   const [selectedSeller, setSelectedSeller] = useState<Seller>(sellers[0]);
@@ -307,8 +299,8 @@ export default function Home() {
                     <div className="flex items-center justify-between mb-2">
                       <p className="section-label">{t.regionLabel}</p>
                       <ProtectionTooltip
-                        title="What is region?"
-                        description="Region determines which country or zone the subscription is valid for. Make sure to select the region that matches your account."
+                        title={t.tooltipRegionTitle}
+                        description={t.tooltipRegionDesc}
                         side="left"
                       >
                         <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors">
@@ -444,8 +436,8 @@ export default function Home() {
                   </span>
                 </h2>
                 <ProtectionTooltip
-                  title="How offers work"
-                  description="Multiple verified sellers list the same product at different prices. All sellers pass Perksell verification. You choose who to buy from."
+                  title={t.tooltipOffersTitle}
+                  description={t.tooltipOffersDesc}
                   side="left"
                 >
                   <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors">
@@ -462,8 +454,8 @@ export default function Home() {
                     {t.recommended}
                   </span>
                   <ProtectionTooltip
-                    title="How we recommend"
-                    description="Recommended offer is selected by Perksell based on price, seller reliability, delivery success rate, and dispute history — not by payment."
+                    title={t.tooltipRecommendTitle}
+                    description={t.tooltipRecommendDesc}
                     side="right"
                   >
                     <Info size={11} className="text-muted-foreground/50 cursor-help" />
@@ -906,14 +898,15 @@ export default function Home() {
                         const Icon = item.icon === "shield" ? ShieldCheck : item.icon === "zap" ? Zap : item.icon === "lock" ? Lock : Headphones;
                         const iconColor = item.color === "green" ? "oklch(0.52 0.18 145)" : item.color === "amber" ? "oklch(0.78 0.16 75)" : item.color === "blue" ? "oklch(0.55 0.18 255)" : "oklch(0.6 0.18 295)";
                         const iconBg = item.color === "green" ? "oklch(0.95 0.05 145)" : item.color === "amber" ? "oklch(0.96 0.05 75)" : item.color === "blue" ? "oklch(0.94 0.04 255)" : "oklch(0.94 0.04 295)";
+                        const localizedItem = t.protectionItems[i];
                         return (
                           <div key={i} className="flex items-start gap-3 p-3 border-b border-border last:border-0 bg-white">
                             <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: iconBg }}>
                               <Icon size={13} style={{ color: iconColor }} />
                             </div>
                             <div>
-                              <p className="text-xs font-semibold text-foreground">{item.title}</p>
-                              <p className="text-[11px] text-muted-foreground leading-relaxed mt-0.5">{item.description}</p>
+                              <p className="text-xs font-semibold text-foreground">{localizedItem?.title ?? item.title}</p>
+                              <p className="text-[11px] text-muted-foreground leading-relaxed mt-0.5">{localizedItem?.description ?? item.description}</p>
                             </div>
                           </div>
                         );
