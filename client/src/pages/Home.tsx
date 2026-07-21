@@ -850,16 +850,16 @@ export default function Home() {
                         ${activeVariant.retailPrice.toFixed(2)}
                       </span>
                     )}
-                    {activeVariant?.retailPrice && activeVariant.retailPrice > currentPrice && (
-                      <span className="text-sm font-bold text-[oklch(0.45_0.22_25)] bg-[oklch(0.95_0.06_25)] px-2 py-0.5 rounded-full">
-                        -{Math.round((1 - currentPrice / activeVariant.retailPrice) * 100)}% {t.vsOfficial}
-                      </span>
-                    )}
                   </div>
-                  <div className="flex items-baseline gap-2 mt-0.5">
+                  <div className="flex items-center gap-2 mt-0.5">
                     {activeVariant && activeVariant.monthCount > 1 && (
                       <span className="text-sm text-[oklch(0.52_0.18_145)] font-semibold">
                         ${(activeVariant.price / activeVariant.monthCount).toFixed(2)}{t.perMonth}
+                      </span>
+                    )}
+                    {activeVariant?.retailPrice && activeVariant.retailPrice > currentPrice && (
+                      <span className="text-sm font-semibold text-[oklch(0.42_0.18_145)]">
+                        {t.savingsLabel(`$${(activeVariant.retailPrice - currentPrice).toFixed(0)}`)}
                       </span>
                     )}
                   </div>
