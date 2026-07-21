@@ -337,6 +337,12 @@ export default function Home() {
                       <span className="text-sm text-[oklch(0.50_0.18_60)] font-semibold">{productStats.soldLast30Days}</span>
                       <span className="text-sm text-muted-foreground">{t.activationsLastMonth}</span>
                     </div>
+
+                    {/* Mobile-only social proof — last purchase only */}
+                    <div className="flex items-center gap-1 mt-2 sm:hidden text-[11px] text-muted-foreground">
+                      <Clock size={10} />
+                      <span>{t.lastPurchase(formatLastPurchase(lastPurchaseMinutes))}</span>
+                    </div>
                   </div>
 
                   {/* Region chips */}
@@ -892,20 +898,11 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Social proof urgency block */}
+                {/* Social proof — last purchase only */}
                 <div className="px-5 pt-3 pb-1">
-                  <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between text-[11px]">
-                    <div className="flex items-center gap-1.5">
-                      <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[oklch(0.52_0.18_145)] opacity-60"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-[oklch(0.52_0.18_145)]"></span>
-                      </span>
-                      <span className="font-medium text-foreground">{t.viewingNow(viewingNow)}</span>
-                    </div>
-                    <div className="flex items-center gap-1 text-muted-foreground">
-                      <Clock size={10} />
-                      <span>{t.lastPurchase(formatLastPurchase(lastPurchaseMinutes))}</span>
-                    </div>
+                  <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
+                    <Clock size={10} />
+                    <span>{t.lastPurchase(formatLastPurchase(lastPurchaseMinutes))}</span>
                   </div>
                 </div>
 
