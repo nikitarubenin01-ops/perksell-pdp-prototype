@@ -883,7 +883,7 @@ export default function Home() {
                           </button>
                         </SellerTooltip>
                         {selectedSeller.isRecommended && (
-                          <span className="text-[10px] font-bold text-[oklch(0.35_0.18_145)] bg-[oklch(0.94_0.06_145)] border border-[oklch(0.80_0.10_145)] px-1.5 py-0.5 rounded-full">
+                          <span className="text-[10px] font-semibold text-[oklch(0.35_0.02_240)] bg-[oklch(0.93_0.01_240)] border border-[oklch(0.82_0.02_240)] px-1.5 py-0.5 rounded-full">
                             {t.recommendedBadge}
                           </span>
                         )}
