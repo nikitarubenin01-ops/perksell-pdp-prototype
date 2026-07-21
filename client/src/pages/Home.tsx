@@ -339,8 +339,8 @@ export default function Home() {
                     </div>
 
                     {/* Mobile-only social proof — last purchase only */}
-                    <div className="flex items-center gap-1 mt-2 sm:hidden text-[11px] text-muted-foreground">
-                      <Clock size={10} />
+                    <div className="flex items-center gap-1 mt-2 sm:hidden text-[11px] text-foreground/60">
+                      <ShoppingCart size={10} strokeWidth={2} />
                       <span>{t.lastPurchase(formatLastPurchase(lastPurchaseMinutes))}</span>
                     </div>
                   </div>
@@ -900,8 +900,8 @@ export default function Home() {
 
                 {/* Social proof — last purchase only */}
                 <div className="px-5 pt-3 pb-1">
-                  <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
-                    <Clock size={10} />
+                  <div className="flex items-center gap-1 text-[11px] text-foreground/60">
+                    <ShoppingCart size={10} strokeWidth={2} />
                     <span>{t.lastPurchase(formatLastPurchase(lastPurchaseMinutes))}</span>
                   </div>
                 </div>
