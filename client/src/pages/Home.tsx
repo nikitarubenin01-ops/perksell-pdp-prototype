@@ -869,10 +869,10 @@ export default function Home() {
                 </div>
 
                 {/* Selected seller */}
-                <div className="px-5 py-4 border-b border-border">
+                <div className="px-5 py-3 border-b border-border">
                   <div className="flex items-center gap-3">
                     <SellerTooltip seller={selectedSeller}>
-                      <button className="flex-shrink-0"><SellerAvatar seller={selectedSeller} size={38} /></button>
+                      <button className="flex-shrink-0"><SellerAvatar seller={selectedSeller} size={40} /></button>
                     </SellerTooltip>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
@@ -883,25 +883,24 @@ export default function Home() {
                           </button>
                         </SellerTooltip>
                         {selectedSeller.isRecommended && (
-                          <span className="text-[10px] font-bold text-[oklch(0.25_0.04_240)] bg-[oklch(0.93_0.02_240)] border border-[oklch(0.85_0.03_240)] px-1.5 py-0.5 rounded-full">
+                          <span className="text-[10px] font-bold text-[oklch(0.35_0.18_145)] bg-[oklch(0.94_0.06_145)] border border-[oklch(0.80_0.10_145)] px-1.5 py-0.5 rounded-full">
                             {t.recommendedBadge}
                           </span>
                         )}
                       </div>
                       <div className="flex items-center gap-1.5 mt-0.5">
-                        <span className="text-[11px] font-semibold text-[oklch(0.52_0.18_145)]">{selectedSeller.successRate}%</span>
+                        <span className="text-[12px] font-bold text-[oklch(0.42_0.18_145)]">{selectedSeller.successRate}%</span>
                         <span className="text-[11px] text-muted-foreground">·</span>
-                        <span className="text-[11px] text-muted-foreground">{selectedSeller.totalOrders.toLocaleString()} orders</span>
-                        {selectedSeller.deliveryMode === "manual" && <DeliveryBadge mode={selectedSeller.deliveryMode} />}
+                        <span className="text-[11px] text-muted-foreground">{selectedSeller.totalOrders.toLocaleString()} {t.orders}</span>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Social proof — last purchase only */}
-                <div className="px-5 pt-3 pb-1">
-                  <div className="flex items-center gap-1 text-[11px] text-foreground/60">
-                    <ShoppingCart size={10} strokeWidth={2} />
+                {/* Social proof — last purchase */}
+                <div className="px-5 py-2.5 border-b border-border">
+                  <div className="flex items-center gap-1.5 text-[11px] text-foreground/70">
+                    <ShoppingCart size={11} strokeWidth={2} className="text-[oklch(0.52_0.18_145)]" />
                     <span>{t.lastPurchase(formatLastPurchase(lastPurchaseMinutes))}</span>
                   </div>
                 </div>
