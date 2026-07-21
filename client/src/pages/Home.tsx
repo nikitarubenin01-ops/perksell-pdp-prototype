@@ -851,16 +851,19 @@ export default function Home() {
                       </span>
                     )}
                   </div>
-                  <div className="flex items-center gap-2 mt-0.5">
+                  <div className="flex items-center gap-1.5 mt-0.5">
                     {activeVariant && activeVariant.monthCount > 1 && (
-                      <span className="text-sm text-[oklch(0.52_0.18_145)] font-semibold">
+                      <span className="text-base font-bold text-[oklch(0.42_0.18_145)]">
                         ${(activeVariant.price / activeVariant.monthCount).toFixed(2)}{t.perMonth}
                       </span>
                     )}
                     {activeVariant?.retailPrice && activeVariant.retailPrice > currentPrice && (
-                      <span className="text-sm font-semibold text-[oklch(0.42_0.18_145)]">
-                        {t.savingsLabel(`$${(activeVariant.retailPrice - currentPrice).toFixed(0)}`)}
-                      </span>
+                      <>
+                        <span className="text-xs text-muted-foreground">·</span>
+                        <span className="text-xs font-medium text-[oklch(0.52_0.18_145)]">
+                          {t.savingsLabel(`$${(activeVariant.retailPrice - currentPrice).toFixed(0)}`)}
+                        </span>
+                      </>
                     )}
                   </div>
                   <p className="text-xs text-muted-foreground mt-0.5">
@@ -1046,20 +1049,27 @@ export default function Home() {
       {/* Mobile sticky bar */}
       <div className="mobile-sticky-bar lg:hidden">
         <div className="flex-1 min-w-0">
-          <div className="flex items-baseline gap-1.5 flex-wrap">
+          <div className="flex items-baseline gap-2">
             <span className="text-lg font-bold text-foreground leading-tight">${currentPrice.toFixed(2)}</span>
+            {activeVariant?.retailPrice && activeVariant.retailPrice > currentPrice && (
+              <span className="text-xs text-muted-foreground line-through">${activeVariant.retailPrice.toFixed(2)}</span>
+            )}
+          </div>
+          <div className="flex items-center gap-1.5 mt-0">
             {activeVariant && activeVariant.monthCount > 1 && (
-                    <span className="text-xs text-muted-foreground whitespace-nowrap">
+              <span className="text-xs font-bold text-[oklch(0.42_0.18_145)] whitespace-nowrap">
                 ${(currentPrice / activeVariant.monthCount).toFixed(2)}{t.perMonth}
               </span>
             )}
             {activeVariant?.retailPrice && activeVariant.retailPrice > currentPrice && (
-              <span className="text-xs font-semibold text-[oklch(0.52_0.18_145)] whitespace-nowrap">
-                {t.savingsLabel(`$${(activeVariant.retailPrice - currentPrice).toFixed(0)}`)}
-              </span>
+              <>
+                <span className="text-[10px] text-muted-foreground">·</span>
+                <span className="text-xs font-medium text-[oklch(0.52_0.18_145)] whitespace-nowrap">
+                  {t.savingsLabel(`$${(activeVariant.retailPrice - currentPrice).toFixed(0)}`)}
+                </span>
+              </>
             )}
           </div>
-          <div className="text-[11px] text-muted-foreground">{selectedDuration} · {selectedRegion}</div>
         </div>
         <button className="offer-cart-btn flex-shrink-0" onClick={handleAddToCart} style={{ width: 44, height: 44 }}>
           <ShoppingCart size={16} />
