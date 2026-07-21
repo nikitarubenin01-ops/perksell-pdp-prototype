@@ -900,7 +900,7 @@ export default function Home() {
                 {/* Social proof — last purchase */}
                 <div className="px-5 py-2.5 border-b border-border">
                   <div className="flex items-center gap-1.5 text-[11px] text-foreground/70">
-                    <ShoppingCart size={11} strokeWidth={2} />
+                    <ShoppingCart size={11} strokeWidth={2} className="text-[oklch(0.52_0.18_145)]" />
                     <span>{t.lastPurchase(formatLastPurchase(lastPurchaseMinutes))}</span>
                   </div>
                 </div>
